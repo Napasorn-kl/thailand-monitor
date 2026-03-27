@@ -1513,8 +1513,7 @@ function setGraphOverlay(mode,btn){
   btn.classList.add('active');
   const nds=window._graphNodes;
   if(!nds)return;
-  const OIL_COL  ={H:'#ef4444',M:'#f59e0b',L:'#94a3b8','+':`#059669`};
-  const GOLD_TIER={score=>score>=70?'#b7791f':score>=40?'#d97706':score>=20?'#f59e0b':'#94a3b8'};
+  const OIL_COL={H:'#ef4444',M:'#f59e0b',L:'#94a3b8','+':`#059669`};
   nds.forEach(n=>{
     if(!n._origCol)n._origCol=n.col;
     if(mode==='normal'){ n.col=n._origCol; return; }
