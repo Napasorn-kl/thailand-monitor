@@ -2606,14 +2606,14 @@ async function lazyGovData(){
 /* ═══════ NEWS FEED ═══════ */
 /* RSS sources — whitelist only, ordered by relevance */
 const NEWS_SOURCES=[
-  {id:'bkbiz',   name:'กรุงเทพธุรกิจ', color:'#0891b2',
+  {id:'bkbiz',      name:'กรุงเทพธุรกิจ', color:'#0891b2',
    url:'https://www.bangkokbiznews.com/rss/data/bangkokbiznews.xml'},
-  {id:'prachachat',name:'ประชาชาติ',   color:'#d97706',
+  {id:'prachachat', name:'ประชาชาติธุรกิจ',color:'#d97706',
    url:'https://www.prachachat.net/feed'},
-  {id:'bkpost',  name:'Bangkok Post',  color:'#dc2626',
-   url:'https://www.bangkokpost.com/rss/data/business.xml'},
-  {id:'nation',  name:'The Nation',    color:'#7c3aed',
-   url:'https://www.nationthailand.com/rss/business'},
+  {id:'bkpost',     name:'Bangkok Post',   color:'#dc2626',
+   url:'https://www.bangkokpost.com/rss/data/economy.xml'},
+  {id:'bbcthai',    name:'BBC ไทย',        color:'#7c3aed',
+   url:'https://feeds.bbci.co.uk/thai/rss.xml'},
 ];
 
 /* Keyword maps for category filtering */
@@ -2625,31 +2625,47 @@ const NEWS_KEYWORDS={
   invest:['หุ้น','ตลาดหลักทรัพย์','set','ลงทุน','กองทุน','invest','stock','fund','etf','foreign','fdI','เงินลงทุน'],
 };
 
-const NEWS_CACHE_KEY='tm_news_v1';
+const NEWS_CACHE_KEY='tm_news_v2'; // bump version to clear old broken cache
 const NEWS_CACHE_TTL=15*60*1000; // 15 min
 let _newsItems=[];
 let _newsDone=false;
 let _newsFilter='all';
 
-/* Fetch one RSS feed via CORS proxy, returns array of item objects */
+/* Fetch one RSS feed — allorigins.win for browser (no CORS issue), direct for Electron */
 async function fetchOneRSS(src){
-  const url=CORS+encodeURIComponent(src.url);
-  const r=await fetch(url,{signal:AbortSignal.timeout(8000)});
-  if(!r.ok) throw new Error('HTTP '+r.status);
-  const txt=await r.text();
-  // Strip CORS proxy HTML wrapper if present
-  const xmlStart=txt.indexOf('<?xml');
-  const rssStart=txt.indexOf('<rss');
-  const feedStart=txt.indexOf('<feed');
-  const startIdx=xmlStart>=0?xmlStart:Math.max(rssStart,feedStart);
+  const RSS_PROXY='https://api.allorigins.win/raw?url=';
+  const fetchUrl=IS_ELECTRON ? src.url : RSS_PROXY+encodeURIComponent(src.url);
+
+  // Manual timeout (AbortSignal.timeout not available in all Chromium versions)
+  const ctrl=new AbortController();
+  const tid=setTimeout(()=>ctrl.abort(),10000);
+  let txt='';
+  try{
+    const r=await fetch(fetchUrl,{signal:ctrl.signal});
+    clearTimeout(tid);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    txt=await r.text();
+  }catch(e){clearTimeout(tid);throw e;}
+
+  // Find XML root (strip any proxy HTML wrapper)
+  const xmlIdx=txt.indexOf('<?xml');
+  const rssIdx=txt.indexOf('<rss');
+  const feedIdx=txt.indexOf('<feed');
+  const candidates=[xmlIdx,rssIdx,feedIdx].filter(i=>i>=0);
+  const startIdx=candidates.length?Math.min(...candidates):0;
   const clean=startIdx>0?txt.slice(startIdx):txt;
+
   const doc=new DOMParser().parseFromString(clean,'text/xml');
+  if(doc.querySelector('parsererror')){throw new Error('XML parse error');}
+
   const items=[...doc.querySelectorAll('item,entry')];
-  return items.slice(0,12).map(el=>{
+  return items.slice(0,15).map(el=>{
     const title=(el.querySelector('title')?.textContent||'').replace(/<!\[CDATA\[|\]\]>/g,'').trim();
-    const link=(el.querySelector('link')?.textContent||el.querySelector('link')?.getAttribute('href')||'').trim();
+    const linkEl=el.querySelector('link');
+    const link=(linkEl?.textContent?.trim()||linkEl?.getAttribute('href')||'').trim();
     const pub=el.querySelector('pubDate,published,updated')?.textContent||'';
-    const desc=(el.querySelector('description,summary,content')?.textContent||'').replace(/<[^>]+>/g,'').replace(/<!\[CDATA\[|\]\]>/g,'').trim().slice(0,180);
+    const rawDesc=el.querySelector('description,summary,content')?.textContent||'';
+    const desc=rawDesc.replace(/<!\[CDATA\[|\]\]>/g,'').replace(/<[^>]+>/g,'').trim().slice(0,200);
     return{title,link,desc,pub,srcId:src.id,srcName:src.name,srcColor:src.color};
   }).filter(i=>i.title&&i.link);
 }
@@ -2690,15 +2706,21 @@ async function fetchAllNews(force=false){
   const results=await Promise.allSettled(NEWS_SOURCES.map(s=>fetchOneRSS(s)));
   let all=[];
   results.forEach((r,i)=>{
-    if(r.status==='fulfilled') all.push(...r.value);
-    else console.warn('[News]',NEWS_SOURCES[i].id,'failed:',r.reason?.message);
+    if(r.status==='fulfilled'){
+      console.info('[News] ✓',NEWS_SOURCES[i].id,'→',r.value.length,'items');
+      all.push(...r.value);
+    } else {
+      console.warn('[News] ✗',NEWS_SOURCES[i].id,'→',r.reason?.message||r.reason);
+    }
   });
+  console.info('[News] total items fetched:',all.length);
   // Sort newest first
   all.sort((a,b)=>new Date(b.pub)-new Date(a.pub));
   // Tag categories
   all=all.map(it=>({...it,cat:categoriseItem(it)}));
   _newsItems=all;
   try{ localStorage.setItem(NEWS_CACHE_KEY,JSON.stringify({ts:Date.now(),items:all})); }catch(e){}
+  if(!all.length) console.error('[News] ทุก feed ล้มเหลว — ตรวจสอบ network / CORS proxy');
   return all;
 }
 
@@ -2786,9 +2808,12 @@ async function lazyNews(){
   if(_newsDone) return;
   _newsDone=true;
   const c=document.getElementById('news-feed-container');
-  if(c) c.innerHTML=`<div class="news-loading"><i data-lucide="loader-2" class="lc" style="width:18px;height:18px;animation:spin .8s linear infinite;"></i>กำลังโหลดข่าว...</div>`;
-  initIcons();
+  if(c){c.innerHTML=`<div class="news-loading"><i data-lucide="loader-2" class="lc" style="width:18px;height:18px;animation:spin .8s linear infinite;"></i>กำลังโหลดข่าว...</div>`;initIcons();}
   await fetchAllNews(false);
+  if(!_newsItems.length){
+    if(c) c.innerHTML=`<div class="news-empty"><i data-lucide="wifi-off" class="lc" style="width:28px;height:28px;opacity:.3;"></i><div style="font-weight:600;margin-top:4px;">ไม่สามารถโหลดข่าวได้</div><div style="font-size:11px;color:var(--t3);margin-top:4px;">กด "รีเฟรช" เพื่อลองอีกครั้ง หรือตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</div></div>`;
+    initIcons();return;
+  }
   renderNewsFeed(_newsItems,_newsFilter);
   renderNewsSnippet('news-oil-items','energy');
   renderNewsSnippet('news-gold-items','gold');
