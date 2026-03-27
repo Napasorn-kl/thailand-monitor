@@ -41,30 +41,49 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 
 /* CONTENT */
 .content{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px 28px;}
-.content::-webkit-scrollbar{width:5px;}
-.content::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:3px;}
-.content::-webkit-scrollbar-track{background:transparent;}
+.content::-webkit-scrollbar{width:4px;}
+.content::-webkit-scrollbar-thumb{background:rgba(0,0,0,.1);border-radius:4px;}
+.content::-webkit-scrollbar-track{background:transparent;margin:4px 0;}
 
-/* BOTTOM NAV — two-tier */
-.bnav{background:rgba(255,255,255,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column;flex-shrink:0;box-shadow:0 -1px 0 rgba(0,0,0,.04),0 -6px 20px rgba(0,0,0,.05);position:relative;z-index:10;}
-/* Core row */
-.bnav-core-row{display:flex;align-items:center;padding:0 16px;height:50px;gap:2px;border-bottom:1px solid rgba(0,0,0,.06);}
-/* ADV row */
-.bnav-adv-row{display:flex;align-items:center;padding:0 16px;height:38px;gap:2px;background:linear-gradient(90deg,rgba(217,119,6,.04),rgba(217,119,6,.02));}
-.bnav-adv-lbl{font-size:8px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#c9a227;padding:0 10px 0 2px;flex-shrink:0;opacity:.8;}
-/* All tabs */
-.ntab{padding:0 12px;height:34px;display:inline-flex;align-items:center;font-size:13px;font-weight:500;color:var(--t3);cursor:pointer;border:none;border-radius:9px;transition:all .17s cubic-bezier(.4,0,.2,1);background:none;font-family:'Inter','Sarabun',sans-serif;white-space:nowrap;position:relative;}
-.ntab:hover{color:var(--t1);background:rgba(0,0,0,.05);}
-.ntab.active{color:var(--cyan);font-weight:700;background:rgba(8,145,178,.1);}
-/* ADV row tabs — slightly compact */
-.bnav-adv-row .ntab{height:28px;font-size:12px;padding:0 10px;}
-.bnav-adv-row .ntab .lc svg{width:13px;height:13px;}
-.ntab.adv{color:#c09a2a;}
-.ntab.adv:hover{color:#92650a;background:rgba(180,120,0,.07);}
-.ntab.adv.active{color:var(--gold);background:rgba(217,119,6,.12);font-weight:700;}
-/* Settings push-right */
-.bnav-spacer{flex:1;}
-.ndiv{width:1px;height:20px;background:rgba(0,0,0,.08);margin:0 4px;flex-shrink:0;}
+/* ── APP BODY ── */
+.app-body{flex:1;display:flex;overflow:hidden;}
+
+/* ── LEFT SIDEBAR ── */
+.sidebar{width:60px;background:rgba(255,255,255,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-right:1px solid rgba(0,0,0,.07);display:flex;flex-direction:column;padding:8px 6px 12px;flex-shrink:0;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);box-shadow:1px 0 0 rgba(0,0,0,.04),4px 0 20px rgba(0,0,0,.04);z-index:20;position:relative;}
+.sidebar:hover{width:220px;}
+/* Section label */
+.sb-sec-lbl{font-size:8px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--t3);padding:8px 10px 4px;white-space:nowrap;overflow:hidden;opacity:0;transition:opacity .15s ease;flex-shrink:0;}
+.sidebar:hover .sb-sec-lbl{opacity:1;}
+.sb-sec-lbl.adv{color:#c9a227;}
+/* Divider */
+.sb-div{height:1px;background:rgba(0,0,0,.07);margin:6px 4px;flex-shrink:0;}
+/* Nav button */
+.sb-tab{display:flex;align-items:center;gap:11px;height:38px;padding:0 10px;border-radius:9px;border:none;background:none;cursor:pointer;width:100%;text-align:left;white-space:nowrap;overflow:hidden;font-family:'Inter','Sarabun',sans-serif;font-size:13px;font-weight:500;color:var(--t3);transition:all .15s cubic-bezier(.4,0,.2,1);flex-shrink:0;}
+.sb-tab:hover{background:rgba(0,0,0,.05);color:var(--t1);}
+.sb-tab.active{background:rgba(8,145,178,.1);color:var(--cyan);font-weight:700;}
+.sb-tab.adv{color:#c09a2a;}
+.sb-tab.adv:hover{background:rgba(180,120,0,.07);color:#92650a;}
+.sb-tab.adv.active{background:rgba(217,119,6,.12);color:var(--gold);font-weight:700;}
+/* Icon */
+.sb-tab .lc{flex-shrink:0;}
+.sb-tab .lc svg{width:17px;height:17px;opacity:.7;transition:opacity .15s;}
+.sb-tab:hover .lc svg,.sb-tab.active .lc svg{opacity:1;}
+/* Label fades in on expand */
+.sb-lbl{opacity:0;transition:opacity .15s ease .03s;pointer-events:none;}
+.sidebar:hover .sb-lbl{opacity:1;}
+/* Bottom spacer */
+.sb-spacer{flex:1;}
+/* Focus ring */
+.sb-tab:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;}
+/* Tooltip when collapsed */
+.sb-tab[title]:not(:hover){position:relative;}
+/* Active indicator bar */
+.sb-tab.active::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:20px;background:var(--cyan);border-radius:0 3px 3px 0;opacity:0;transition:opacity .15s;}
+.sidebar:not(:hover) .sb-tab.active::before{opacity:1;}
+.sb-tab.adv.active::before{background:var(--gold);}
+
+/* Keep .ntab alias for any inline references */
+.ntab{display:none;}
 
 /* CARDS */
 .card{background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);}
@@ -118,7 +137,7 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 .dist-cnt{font-size:11px;color:var(--t3);width:32px;text-align:right;}
 
 /* ── KNOWLEDGE GRAPH LAYOUT ── */
-.graph-layout{display:grid;grid-template-columns:1fr 270px;gap:14px;height:calc(100vh - 200px);}
+.graph-layout{display:grid;grid-template-columns:1fr 270px;gap:14px;height:calc(100vh - 100px);}
 .graph-left{display:flex;flex-direction:column;min-width:0;gap:8px;}
 .graph-legend{display:flex;gap:20px;padding:0 4px;flex-shrink:0;align-items:center;}
 .graph-panel{background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:14px;overflow-y:auto;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);}
@@ -210,7 +229,7 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 .sector-pill{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10.5px;font-weight:600;}
 
 /* PROVINCES */
-.prov-layout{display:grid;grid-template-columns:1fr 310px;gap:14px;height:calc(100vh - 200px);}
+.prov-layout{display:grid;grid-template-columns:1fr 310px;gap:14px;height:calc(100vh - 100px);}
 .map-wrap{background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);}
 .map-tabs{display:flex;gap:6px;padding:14px 16px 0;}
 .mtab{padding:5px 16px;font-size:12.5px;font-weight:500;border-radius:8px;cursor:pointer;color:var(--t2);background:none;border:1px solid transparent;transition:all .18s;font-family:'Inter',sans-serif;}
@@ -294,13 +313,11 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
    RESPONSIVE — Full System
    ══════════════════════════════════════════ */
 
-/* ── 1100px: Nav rows scroll horizontally ── */
+/* ── 1100px: Slightly tighter content ── */
 @media (max-width:1100px){
-  .bnav-core-row,.bnav-adv-row{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 10px;gap:1px;}
-  .bnav-core-row::-webkit-scrollbar,.bnav-adv-row::-webkit-scrollbar{display:none;}
-  .ntab{padding:0 9px;font-size:12.5px;flex-shrink:0;}
-  .bnav-adv-lbl{flex-shrink:0;}
-  .content{padding:16px 16px;}
+  .content{padding:16px 18px;}
+  .sidebar{width:54px;}
+  .sidebar:hover{width:210px;}
 }
 
 /* ── 900px: Tablet portrait — stack major 2-col layouts, reduce grid cols ── */
@@ -423,10 +440,9 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 /* ── LUCIDE ICON BASE ── */
 .lc{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;vertical-align:middle;}
 .lc svg{display:block;stroke-width:1.75;}
-/* Nav icon sizing */
-.ntab{gap:6px;}
-.ntab .lc svg{width:14px;height:14px;opacity:.75;transition:opacity .15s;}
-.ntab:hover .lc svg,.ntab.active .lc svg{opacity:1;}
+/* Sidebar icon sizing */
+.sb-tab{gap:11px;}
+.sb-tab .lc svg{width:17px;height:17px;}
 /* KPI / card icon */
 .kpi-icon{position:absolute;top:14px;right:14px;opacity:.13;}
 .kpi-icon svg{width:26px;height:26px;}
@@ -606,6 +622,34 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
   <div class="clock" id="clock">BKK 00:00:00</div>
 </header>
 
+<!-- APP BODY: sidebar + content -->
+<div class="app-body">
+
+<!-- LEFT SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <!-- CORE -->
+  <div class="sb-sec-lbl">CORE</div>
+  <button class="sb-tab active" onclick="goPage('overview',this)" title="Overview"><i data-lucide="layout-dashboard" class="lc"></i><span class="sb-lbl">Overview</span></button>
+  <button class="sb-tab" onclick="goPage('graph',this)" title="Knowledge Graph"><i data-lucide="network" class="lc"></i><span class="sb-lbl">Knowledge Graph</span></button>
+  <button class="sb-tab" onclick="goPage('sectors',this)" title="Sectors"><i data-lucide="layers" class="lc"></i><span class="sb-lbl">Sectors</span></button>
+  <button class="sb-tab" onclick="goPage('provinces',this)" title="Provinces"><i data-lucide="map" class="lc"></i><span class="sb-lbl">Provinces</span></button>
+  <button class="sb-tab" onclick="goPage('news',this)" title="ข่าวสาร"><i data-lucide="newspaper" class="lc"></i><span class="sb-lbl">ข่าวสาร</span></button>
+  <!-- Divider -->
+  <div class="sb-div"></div>
+  <!-- ADV -->
+  <div class="sb-sec-lbl adv">ADV</div>
+  <button class="sb-tab adv" onclick="goPage('capital',this)" title="Capital Flows"><i data-lucide="trending-up" class="lc"></i><span class="sb-lbl">Capital Flows</span></button>
+  <button class="sb-tab adv" onclick="goPage('oil',this)" title="Oil & Energy"><i data-lucide="fuel" class="lc"></i><span class="sb-lbl">Oil &amp; Energy</span></button>
+  <button class="sb-tab adv" onclick="goPage('gold',this)" title="ทองคำ" style="color:#b7791f;"><i data-lucide="coins" class="lc"></i><span class="sb-lbl">ทองคำ</span></button>
+  <button class="sb-tab adv" onclick="goPage('simulator',this)" title="Simulator"><i data-lucide="sliders-horizontal" class="lc"></i><span class="sb-lbl">Simulator</span></button>
+  <button class="sb-tab adv" onclick="goPage('briefing',this)" title="AI Briefing"><i data-lucide="brain" class="lc"></i><span class="sb-lbl">AI Briefing</span></button>
+  <button class="sb-tab adv" onclick="goPage('govdata',this)" title="ข้อมูลภาครัฐ"><i data-lucide="landmark" class="lc"></i><span class="sb-lbl">ข้อมูลภาครัฐ</span></button>
+  <!-- Bottom: Settings -->
+  <div class="sb-spacer"></div>
+  <div class="sb-div"></div>
+  <button class="sb-tab" onclick="goPage('settings',this)" title="Settings"><i data-lucide="settings" class="lc"></i><span class="sb-lbl">Settings</span></button>
+</nav>
+
 <!-- CONTENT -->
 <div class="content">
 
@@ -729,7 +773,7 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
         <div style="font-size:9.5px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;">คลิกจังหวัดบนแผนที่</div>
       </div>
       <div class="map-svg-area">
-        <svg id="thaiMap" viewBox="0 0 380 600" style="width:auto;height:calc(100vh - 240px);max-width:100%">
+        <svg id="thaiMap" viewBox="0 0 380 600" style="width:auto;height:calc(100vh - 108px);max-width:100%">
           <defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
           <rect width="380" height="600" fill="#e8edf3" rx="6"/>
         </svg>
@@ -991,7 +1035,7 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
   <div class="news-snippet">
     <div class="news-snippet-hdr">
       <div class="news-snippet-lbl"><i data-lucide="newspaper" class="lc" style="width:11px;height:11px;"></i>ข่าวล่าสุด — น้ำมัน &amp; พลังงาน</div>
-      <button class="news-snippet-more" onclick="goPage('news',document.querySelector('[onclick*=goPage\\28\\27news])'))">ดูทั้งหมด →</button>
+      <button class="news-snippet-more" onclick="goPage('news',document.querySelector('.sb-tab[onclick*=news])'))">ดูทั้งหมด →</button>
     </div>
     <div id="news-oil-items"><div style="font-size:12px;color:var(--t3);padding:6px 0;">กำลังโหลด...</div></div>
   </div>
@@ -1257,7 +1301,7 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
   <div class="news-snippet">
     <div class="news-snippet-hdr">
       <div class="news-snippet-lbl"><i data-lucide="newspaper" class="lc" style="width:11px;height:11px;"></i>ข่าวล่าสุด — ทองคำ &amp; โลหะมีค่า</div>
-      <button class="news-snippet-more" onclick="goPage('news',document.querySelector('[onclick*=goPage\\28\\27news])'))">ดูทั้งหมด →</button>
+      <button class="news-snippet-more" onclick="goPage('news',document.querySelector('.sb-tab[onclick*=news])'))">ดูทั้งหมด →</button>
     </div>
     <div id="news-gold-items"><div style="font-size:12px;color:var(--t3);padding:6px 0;">กำลังโหลด...</div></div>
   </div>
@@ -1399,29 +1443,7 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
 
 </div><!-- /content -->
 
-<!-- BOTTOM NAV — two-tier -->
-<nav class="bnav">
-  <!-- ── CORE ROW ── -->
-  <div class="bnav-core-row">
-    <button class="ntab active" onclick="goPage('overview',this)"><i data-lucide="layout-dashboard" class="lc"></i>Overview</button>
-    <button class="ntab" onclick="goPage('graph',this)"><i data-lucide="network" class="lc"></i>Graph</button>
-    <button class="ntab" onclick="goPage('sectors',this)"><i data-lucide="layers" class="lc"></i>Sectors</button>
-    <button class="ntab" onclick="goPage('provinces',this)"><i data-lucide="map" class="lc"></i>Provinces</button>
-    <button class="ntab" onclick="goPage('news',this)"><i data-lucide="newspaper" class="lc"></i>ข่าวสาร</button>
-    <div class="bnav-spacer"></div>
-    <button class="ntab" onclick="goPage('settings',this)" title="Settings"><i data-lucide="settings" class="lc"></i></button>
-  </div>
-  <!-- ── ADV ROW ── -->
-  <div class="bnav-adv-row">
-    <span class="bnav-adv-lbl">ADV</span>
-    <button class="ntab adv" onclick="goPage('capital',this)"><i data-lucide="trending-up" class="lc"></i>Capital</button>
-    <button class="ntab adv" onclick="goPage('oil',this)"><i data-lucide="fuel" class="lc"></i>Oil &amp; Energy</button>
-    <button class="ntab adv" onclick="goPage('gold',this)" style="color:#b7791f;"><i data-lucide="coins" class="lc"></i>ทองคำ</button>
-    <button class="ntab adv" onclick="goPage('simulator',this)"><i data-lucide="sliders-horizontal" class="lc"></i>Simulator</button>
-    <button class="ntab adv" onclick="goPage('briefing',this)"><i data-lucide="brain" class="lc"></i>AI Briefing</button>
-    <button class="ntab adv" onclick="goPage('govdata',this)"><i data-lucide="landmark" class="lc"></i>ภาครัฐ</button>
-  </div>
-</nav>
+</div><!-- /app-body -->
 
 <script>
 /* ═══════ LUCIDE ICON HELPERS ═══════ */
@@ -1451,7 +1473,7 @@ if(document.readyState==='loading'){
 /* ═══════ NAV ═══════ */
 function goPage(name,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.sb-tab').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   btn.classList.add('active');
   ({graph:lazyGraph,sectors:lazySectors,provinces:lazyMap,capital:lazyCap,oil:lazyOil,gold:lazyGold,simulator:lazySim,briefing:lazyBrief,settings:lazySettings,govdata:lazyGovData,news:lazyNews})[name]?.();
