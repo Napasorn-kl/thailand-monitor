@@ -1,0 +1,72 @@
+{
+  "name": "thailand-monitor",
+  "version": "1.0.0",
+  "description": "Thailand Macro-Economic Intelligence Dashboard",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --mac",
+    "build:dmg": "electron-builder --mac dmg"
+  },
+  "build": {
+    "appId": "com.thailandmonitor.app",
+    "productName": "Thailand Monitor",
+    "copyright": "Copyright © 2026 Thailand Monitor",
+    "mac": {
+      "category": "public.app-category.finance",
+      "icon": "build/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ],
+      "darkModeSupport": true,
+      "minimumSystemVersion": "11.0"
+    },
+    "dmg": {
+      "title": "Thailand Monitor",
+      "background": "build/dmg-background.png",
+      "window": {
+        "width": 540,
+        "height": 380
+      },
+      "contents": [
+        {
+          "x": 150,
+          "y": 185,
+          "type": "file"
+        },
+        {
+          "x": 390,
+          "y": 185,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "build/**/*"
+    ],
+    "extraMetadata": {
+      "main": "main.js"
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  }
+}
