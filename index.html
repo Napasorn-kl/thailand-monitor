@@ -1,7 +1,14 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
+<meta name="description" content="Thailand Macro-Economic Intelligence Dashboard — GDP, Oil, Gold, Provinces, Sectors & AI Briefing"/>
+<meta name="theme-color" content="#0891b2"/>
+<meta property="og:title" content="Thailand Monitor"/>
+<meta property="og:description" content="Thailand Macro-Economic Intelligence Dashboard"/>
+<meta property="og:type" content="website"/>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230891b2'/><text x='16' y='22' font-size='16' font-weight='900' text-anchor='middle' fill='white' font-family='Inter,sans-serif'>TM</text></svg>"/>
 <title>Thailand Monitor</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
@@ -15,7 +22,7 @@
   --cyan:#0891b2;--gold:#d97706;--green:#059669;
   --purple:#7c3aed;--red:#dc2626;--blue:#2563eb;--orange:#ea580c;
 }
-body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-serif;height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
 
 /* HEADER */
 .hdr{background:rgba(255,255,255,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(0,0,0,.07);height:60px;display:flex;align-items:center;padding:0 28px;gap:16px;flex-shrink:0;box-shadow:0 1px 0 rgba(0,0,0,.04),0 4px 16px rgba(0,0,0,.04);position:relative;z-index:10;}
@@ -2067,6 +2074,11 @@ function markApiStatus(key, ok, value='—') {
    Clean · Secure · Structured
    ═══════════════════════════════════════════════════════════ */
 
+/* ── Environment Detection ── */
+const IS_ELECTRON = navigator.userAgent.includes('Electron');
+// CORS proxy สำหรับ API ที่ไม่รองรับ browser CORS (ใช้เฉพาะบนเว็บ)
+const CORS = IS_ELECTRON ? '' : 'https://corsproxy.io/?';
+
 /* ── API Configuration (ใส่ key ตรงนี้ที่เดียว) ── */
 const API_CONFIG = {
   // EIA Brent (FREE — ลงทะเบียนที่ eia.gov/opendata ไม่จำกัด req/day)
@@ -2171,9 +2183,9 @@ async function fetchBrentCrude() {
   }
   // — Yahoo Finance fallback (ไม่ต้อง key, real-time delayed) —
   try {
-    const r = await fetch(API_CONFIG.ENDPOINTS.YAHOO_BRENT + '?interval=1d&range=5d', {
+    const r = await fetch(CORS + API_CONFIG.ENDPOINTS.YAHOO_BRENT + '?interval=1d&range=5d', {
       ...sig(),
-      headers: { 'User-Agent': 'Mozilla/5.0' },
+      headers: IS_ELECTRON ? { 'User-Agent': 'Mozilla/5.0' } : {},
     });
     const d = await r.json();
     const meta = d?.chart?.result?.[0]?.meta;
@@ -2197,7 +2209,7 @@ async function fetchBrentCrude() {
    หมายเหตุ: premium_diesel = ดีเซลธรรมดา, diesel_b7 = V-Power/ดีเซลพรีเมียม   ── */
 async function fetchThaiOilPrices() {
   try {
-    const r = await fetch(API_CONFIG.ENDPOINTS.THAI_OIL, {
+    const r = await fetch(CORS + API_CONFIG.ENDPOINTS.THAI_OIL, {
       ...sig(),
       headers: { 'Accept': 'application/json' },
     });
@@ -2239,7 +2251,7 @@ async function fetchThaiOilPrices() {
 /* ── 5. Thai Gold Prices — ราคาทองคำ สมาคมค้าทองคำ ── */
 async function fetchThaiGoldPrices() {
   try {
-    const r = await fetch(API_CONFIG.ENDPOINTS.THAI_GOLD, {
+    const r = await fetch(CORS + API_CONFIG.ENDPOINTS.THAI_GOLD, {
       ...sig(),
       headers: { 'Accept': 'application/json' },
     });
