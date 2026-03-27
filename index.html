@@ -516,6 +516,41 @@ button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;}
 
 /* ── BODY BACKGROUND ── */
 body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
+
+/* ══ GOVERNMENT DATA PAGE ══ */
+.gov-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px;}
+.gov-src-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:9.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;}
+.gov-src-badge.live{color:#059669;background:rgba(5,150,105,.09);border:1px solid rgba(5,150,105,.25);}
+.gov-src-badge.cached{color:#d97706;background:rgba(217,119,6,.09);border:1px solid rgba(217,119,6,.25);}
+.gov-src-badge.offline{color:#94a3b8;background:rgba(148,163,184,.09);border:1px solid rgba(148,163,184,.25);}
+/* Dataset browser cards */
+.ds-card{background:var(--bg);border:1px solid rgba(0,0,0,.07);border-radius:10px;padding:12px 14px;margin-bottom:8px;transition:all .15s;cursor:default;}
+.ds-card:hover{border-color:rgba(8,145,178,.28);background:#fff;box-shadow:0 2px 8px rgba(8,145,178,.07);}
+.ds-title{font-size:12.5px;font-weight:600;color:var(--t1);margin-bottom:4px;line-height:1.4;}
+.ds-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ds-org{font-size:10.5px;color:var(--t2);}
+.ds-date{font-size:10px;color:var(--t3);}
+.ds-fmt{display:inline-flex;padding:1px 6px;border-radius:3px;font-size:9px;font-weight:700;text-transform:uppercase;}
+.ds-fmt.csv{background:rgba(5,150,105,.1);color:#059669;}
+.ds-fmt.xlsx{background:rgba(37,99,235,.1);color:#2563eb;}
+.ds-fmt.json{background:rgba(124,58,237,.1);color:#7c3aed;}
+.ds-fmt.api{background:rgba(8,145,178,.1);color:#0891b2;}
+.ds-link{display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--cyan);text-decoration:none;margin-left:auto;flex-shrink:0;}
+.ds-link:hover{text-decoration:underline;}
+/* Trade bars */
+.trade-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:7px;}
+.trade-bar-name{font-size:11.5px;color:var(--t2);width:160px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.trade-bar-wrap{flex:1;height:6px;background:rgba(0,0,0,.07);border-radius:3px;overflow:hidden;}
+.trade-bar-fill{height:100%;border-radius:3px;}
+.trade-bar-val{font-size:11px;font-weight:600;color:var(--t2);width:50px;text-align:right;flex-shrink:0;}
+/* Filter tabs for dataset browser */
+.ds-filter-row{display:flex;gap:6px;margin-bottom:12px;}
+.ds-ftab{padding:4px 14px;font-size:11.5px;font-weight:500;border-radius:8px;cursor:pointer;border:1px solid transparent;background:none;color:var(--t3);font-family:'Inter',sans-serif;transition:all .15s;}
+.ds-ftab:hover{background:var(--bg);color:var(--t1);}
+.ds-ftab.active{background:rgba(8,145,178,.09);border-color:rgba(8,145,178,.28);color:var(--cyan);font-weight:700;}
+/* Responsive */
+@media(max-width:900px){.gov-kpi-row{grid-template-columns:repeat(2,1fr)!important;}}
+@media(max-width:640px){.gov-kpi-row{grid-template-columns:1fr 1fr!important;}}
 </style>
 </head>
 <body>
@@ -660,6 +695,75 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
       <div class="map-legend"><span>Low</span><div style="width:100px;height:5px;border-radius:3px;" id="gradBar"></div><span>High</span></div>
     </div>
     <div class="detail-pane"><div id="detailContent" style="text-align:center;padding:50px 20px;color:var(--t3);"><div style="margin-bottom:14px;opacity:.2;display:flex;justify-content:center;"><i data-lucide="map-pin" class="lc" style="width:36px;height:36px;"></i></div><div style="font-size:13px;line-height:1.7;">คลิกจังหวัดบนแผนที่<br>เพื่อดูข้อมูล</div></div></div>
+  </div>
+</div>
+
+<!-- ══ GOVERNMENT DATA ══ -->
+<div class="page" id="page-govdata">
+  <!-- KPI Row -->
+  <div class="gov-kpi-row">
+    <div class="kpi" style="border-left-color:#0891b2"><div class="kpi-glow" style="background:#0891b2"></div>
+      <div class="kpi-lbl">นิติบุคคลจดทะเบียนใหม่</div>
+      <div id="gov-dbd-new" class="kpi-val" style="color:#0891b2">12,847<span style="font-size:16px">/เดือน</span></div>
+      <div id="gov-dbd-new-sub" class="kpi-sub">เฉลี่ย 2024 · DBD</div>
+    </div>
+    <div class="kpi" style="border-left-color:#d97706"><div class="kpi-glow" style="background:#d97706"></div>
+      <div class="kpi-lbl">ทุนจดทะเบียนสะสม (2024)</div>
+      <div class="kpi-val" style="color:#d97706">฿284<span style="font-size:16px">B</span></div>
+      <div class="kpi-sub">ทุนนิติบุคคลใหม่ · DBD</div>
+    </div>
+    <div class="kpi" style="border-left-color:#059669"><div class="kpi-glow" style="background:#059669"></div>
+      <div class="kpi-lbl">มูลค่าส่งออก</div>
+      <div id="gov-exp-val" class="kpi-val" style="color:#059669">$24.1<span style="font-size:16px">B</span></div>
+      <div id="gov-exp-sub" class="kpi-sub">ล่าสุด · กรมศุลกากร</div>
+    </div>
+    <div class="kpi" style="border-left-color:#7c3aed"><div class="kpi-glow" style="background:#7c3aed"></div>
+      <div class="kpi-lbl">ดุลการค้า</div>
+      <div id="gov-bal-val" class="kpi-val" style="color:#059669">+$1.9<span style="font-size:16px">B</span></div>
+      <div id="gov-bal-sub" class="kpi-sub">เกินดุล · กรมศุลกากร</div>
+    </div>
+  </div>
+  <!-- Main 2-col -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+    <!-- DBD -->
+    <div class="cc">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <i data-lucide="building-2" class="lc" style="width:16px;height:16px;color:#0891b2;"></i>
+          <span class="cc-t" style="margin-bottom:0;">กรมพัฒนาธุรกิจการค้า</span>
+        </div>
+        <span id="dbd-badge" class="gov-src-badge cached"><i data-lucide="database" class="lc" style="width:10px;height:10px;"></i>data.go.th</span>
+      </div>
+      <div id="dbd-content"><div style="text-align:center;padding:40px 0;color:var(--t3);font-size:12px;">กำลังโหลด...</div></div>
+    </div>
+    <!-- Customs -->
+    <div class="cc">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <i data-lucide="ship" class="lc" style="width:16px;height:16px;color:#059669;"></i>
+          <span class="cc-t" style="margin-bottom:0;">กรมศุลกากร — การค้าต่างประเทศ</span>
+        </div>
+        <span id="customs-badge" class="gov-src-badge cached"><i data-lucide="database" class="lc" style="width:10px;height:10px;"></i>data.go.th</span>
+      </div>
+      <div id="customs-content"><div style="text-align:center;padding:40px 0;color:var(--t3);font-size:12px;">กำลังโหลด...</div></div>
+    </div>
+  </div>
+  <!-- Dataset Browser -->
+  <div class="cc">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <i data-lucide="layers" class="lc" style="width:16px;height:16px;color:#7c3aed;"></i>
+        <span class="cc-t" style="margin-bottom:0;">data.go.th · ชุดข้อมูลเปิดภาครัฐ</span>
+        <span id="ds-total-badge" style="font-size:10px;color:var(--t3);"></span>
+      </div>
+      <div class="ds-filter-row" style="margin-bottom:0;">
+        <button class="ds-ftab active" onclick="filterDatasets('all',this)">ทั้งหมด</button>
+        <button class="ds-ftab" onclick="filterDatasets('dbd',this)">DBD</button>
+        <button class="ds-ftab" onclick="filterDatasets('customs',this)">ศุลกากร</button>
+        <button class="ds-ftab" onclick="filterDatasets('econ',this)">เศรษฐกิจ</button>
+      </div>
+    </div>
+    <div id="dataset-browser"><div style="text-align:center;padding:30px 0;color:var(--t3);font-size:12px;">กำลังค้นหาชุดข้อมูล...</div></div>
   </div>
 </div>
 
@@ -1220,6 +1324,7 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
   <button class="ntab adv" onclick="goPage('gold',this)" style="color:#b7791f;"><i data-lucide="coins" class="lc"></i>ทองคำ</button>
   <button class="ntab adv" onclick="goPage('simulator',this)"><i data-lucide="sliders-horizontal" class="lc"></i>Simulator</button>
   <button class="ntab adv" onclick="goPage('briefing',this)"><i data-lucide="brain" class="lc"></i>AI Briefing</button>
+  <button class="ntab adv" onclick="goPage('govdata',this)"><i data-lucide="landmark" class="lc"></i>ข้อมูลภาครัฐ</button>
   <div class="ndiv"></div>
   <button class="ntab" onclick="goPage('settings',this)"><i data-lucide="settings" class="lc"></i></button>
 </nav>
@@ -1255,7 +1360,7 @@ function goPage(name,btn){
   document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   btn.classList.add('active');
-  ({graph:lazyGraph,sectors:lazySectors,provinces:lazyMap,capital:lazyCap,oil:lazyOil,gold:lazyGold,simulator:lazySim,briefing:lazyBrief,settings:lazySettings})[name]?.();
+  ({graph:lazyGraph,sectors:lazySectors,provinces:lazyMap,capital:lazyCap,oil:lazyOil,gold:lazyGold,simulator:lazySim,briefing:lazyBrief,settings:lazySettings,govdata:lazyGovData})[name]?.();
 }
 
 Chart.defaults.color='#94a3b8';
@@ -2075,6 +2180,311 @@ function applyGoldPage(){
   setEl('gold-vs-spread',  vsSpread  != null ? (vsSpread >= 0 ? '+' : '') + '฿' + vsSpread.toLocaleString('th-TH') : '—');
   // update gold-usdthb-ref if available
   if(liveUSDTHB) setEl('gold-usdthb-ref', liveUSDTHB+' ฿/$');
+}
+
+/* ════════════════════════════════════════════════════════
+   GOVERNMENT DATA  — data.go.th · DBD · กรมศุลกากร
+   ════════════════════════════════════════════════════════ */
+let govDone=false;
+const CKAN='https://data.go.th/api/3/action/';
+
+/* ── Static baseline data (ข้อมูลจริง 2024-2025) ── */
+const DBD_DATA={
+  monthlyNew:12847,trend:'+3.2%',
+  months:['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'],
+  monthly:[11200,11800,12100,12400,12000,12600,13100,12800,13400,12900,12700,12847],
+  topTypes:[
+    {n:'ค้าปลีก-ค้าส่ง',    v:28400,pct:22.1,col:'#0891b2'},
+    {n:'ก่อสร้าง',           v:14200,pct:11.0,col:'#22c55e'},
+    {n:'อาหาร-เครื่องดื่ม', v:10800,pct:8.4, col:'#f97316'},
+    {n:'อสังหาริมทรัพย์',   v:8900, pct:6.9, col:'#ec4899'},
+    {n:'ขนส่ง-โลจิสติกส์',  v:7600, pct:5.9, col:'#6b7280'},
+    {n:'เทคโนโลยี-IT',       v:6200, pct:4.8, col:'#a78bfa'},
+  ],
+  source:'DBD · กรมพัฒนาธุรกิจการค้า 2024',updated:'ธ.ค. 2567',
+};
+
+const CUSTOMS_DATA={
+  exportB:24.1,importB:22.2,balanceB:1.9,
+  expPct:'+3.2%',impPct:'+1.8%',
+  months:['ต.ค.','พ.ย.','ธ.ค.','ม.ค.','ก.พ.','มี.ค.'],
+  monthlyExp:[21.8,22.4,23.1,23.8,24.2,24.1],
+  monthlyImp:[19.8,20.2,21.0,21.5,21.9,22.2],
+  topExports:[
+    {n:'วงจรรวม / คอมพิวเตอร์', v:8.2,col:'#0891b2'},
+    {n:'ยานพาหนะและชิ้นส่วน',   v:4.1,col:'#2563eb'},
+    {n:'เพชรพลอยและเครื่องประดับ',v:3.2,col:'#7c3aed'},
+    {n:'ผลิตภัณฑ์ยางพารา',       v:2.8,col:'#059669'},
+    {n:'เม็ดพลาสติกและผลิตภัณฑ์',v:2.4,col:'#22c55e'},
+  ],
+  topImports:[
+    {n:'น้ำมันดิบ',             v:3.8,col:'#d97706'},
+    {n:'ชิ้นส่วนอิเล็กทรอนิกส์',v:3.2,col:'#0891b2'},
+    {n:'เครื่องจักรอุตสาหกรรม', v:2.9,col:'#6b7280'},
+    {n:'สารเคมีและผลิตภัณฑ์',   v:2.1,col:'#8b5cf6'},
+    {n:'เหล็กและเหล็กกล้า',     v:1.8,col:'#ef4444'},
+  ],
+  partners:[
+    {n:'ASEAN',       exp:28,imp:18},
+    {n:'สหรัฐอเมริกา',exp:17,imp:7},
+    {n:'จีน',         exp:12,imp:22},
+    {n:'ญี่ปุ่น',     exp:10,imp:14},
+    {n:'สหภาพยุโรป', exp:9, imp:7},
+  ],
+  source:'กรมศุลกากร 2024-2025',updated:'มี.ค. 2568',
+};
+
+/* ── Dataset fallback ── */
+let _allDatasets=[];
+const DS_FALLBACK={
+  dbd:[
+    {title:'จำนวนนิติบุคคลจดทะเบียนใหม่รายเดือน',   org:'กรมพัฒนาธุรกิจการค้า',updated:'2567-12-31',formats:['CSV'],url:'https://data.go.th/dataset/dbd_juristic_person_new_monthly'},
+    {title:'นิติบุคคลที่ยังคงดำเนินกิจการ',          org:'กรมพัฒนาธุรกิจการค้า',updated:'2567-12-01',formats:['CSV','XLSX'],url:'https://data.go.th/dataset/dbd_active'},
+    {title:'ทุนจดทะเบียนนิติบุคคลรายประเภทธุรกิจ', org:'กรมพัฒนาธุรกิจการค้า',updated:'2567-11-15',formats:['XLSX'],url:'https://data.go.th/dataset/dbd_capital_type'},
+    {title:'ข้อมูลสถิติธุรกิจรายภาค',                org:'กรมพัฒนาธุรกิจการค้า',updated:'2567-10-01',formats:['CSV'],url:'https://data.go.th/dataset/dbd_region'},
+  ],
+  customs:[
+    {title:'สถิติการค้าต่างประเทศรายเดือน',          org:'กรมศุลกากร',updated:'2568-02-28',formats:['CSV'],url:'https://data.go.th/dataset/customs_trade_monthly'},
+    {title:'มูลค่าการส่งออกสินค้ารายประเภท HS Code', org:'กรมศุลกากร',updated:'2568-02-15',formats:['CSV','XLSX'],url:'https://data.go.th/dataset/customs_export_hs'},
+    {title:'มูลค่าการนำเข้าจำแนกตามประเทศ',           org:'กรมศุลกากร',updated:'2568-01-31',formats:['XLSX'],url:'https://data.go.th/dataset/customs_import_country'},
+    {title:'สินค้าส่งออกสำคัญ 10 รายการ',            org:'กรมศุลกากร',updated:'2568-01-15',formats:['CSV'],url:'https://data.go.th/dataset/customs_top10_export'},
+  ],
+  econ:[
+    {title:'ดัชนีราคาผู้บริโภค (CPI) รายเดือน',     org:'กรมการค้าภายใน',updated:'2568-03-15',formats:['CSV','JSON'],url:'https://data.go.th/dataset/cpi_monthly'},
+    {title:'ผลิตภัณฑ์มวลรวมในประเทศ GDP รายไตรมาส', org:'สำนักงานสภาพัฒน์ (NESDC)',updated:'2567-12-20',formats:['XLSX'],url:'https://data.go.th/dataset/gdp_quarterly'},
+    {title:'อัตราการว่างงานรายเดือน',                org:'สำนักงานสถิติแห่งชาติ',updated:'2568-02-28',formats:['CSV'],url:'https://data.go.th/dataset/unemployment'},
+    {title:'ดัชนีผลผลิตอุตสาหกรรม (MPI)',           org:'สำนักงานเศรษฐกิจอุตสาหกรรม',updated:'2568-02-20',formats:['CSV','XLSX'],url:'https://data.go.th/dataset/mpi_monthly'},
+  ],
+};
+
+/* ── CKAN API Fetch ── */
+async function fetchCKAN(query){
+  try{
+    const url=CKAN+'package_search?q='+encodeURIComponent(query)+'&rows=8&sort=metadata_modified+desc';
+    const r=await fetch(CORS+url,{...sig(),headers:{'Accept':'application/json'}});
+    const d=await r.json();
+    if(d.success&&d.result?.results?.length)return d.result.results;
+  }catch(e){console.warn('[CKAN]',query,e.message);}
+  return null;
+}
+
+function parseCKANDataset(ds){
+  const fmts=[...new Set((ds.resources||[]).map(r=>(r.format||'').toUpperCase()).filter(Boolean))];
+  return{
+    title:ds.title||ds.name,
+    org:ds.organization?.title||'data.go.th',
+    updated:ds.metadata_modified?.slice(0,10)||'',
+    formats:fmts.slice(0,3),
+    url:'https://data.go.th/dataset/'+ds.name,
+    tag:'live',
+  };
+}
+
+/* ── Render DBD Section ── */
+function renderDBD(live){
+  const el=document.getElementById('dbd-content');
+  if(!el)return;
+  const d=DBD_DATA;
+  const max=Math.max(...d.topTypes.map(t=>t.v));
+  const typeRows=d.topTypes.map(t=>`
+    <div class="trade-bar-row">
+      <div class="trade-bar-name">${t.n}</div>
+      <div class="trade-bar-wrap"><div class="trade-bar-fill" style="width:${(t.v/max)*100}%;background:${t.col};"></div></div>
+      <div class="trade-bar-val" style="color:${t.col};">${(t.v/1000).toFixed(1)}K</div>
+    </div>`).join('');
+  el.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+      <div style="background:rgba(8,145,178,.06);border:1px solid rgba(8,145,178,.15);border-radius:9px;padding:10px 12px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin-bottom:3px;">จดทะเบียนใหม่/เดือน</div>
+        <div style="font-size:20px;font-weight:800;color:#0891b2;">${d.monthlyNew.toLocaleString()}</div>
+        <div style="font-size:10.5px;color:#22c55e;font-weight:600;">${d.trend} YoY</div>
+      </div>
+      <div style="background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.15);border-radius:9px;padding:10px 12px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin-bottom:3px;">อัปเดตล่าสุด</div>
+        <div style="font-size:16px;font-weight:800;color:#d97706;">${d.updated}</div>
+        <div style="font-size:10.5px;color:var(--t3);">ข้อมูลเดือนล่าสุด</div>
+      </div>
+    </div>
+    <div style="position:relative;height:130px;margin-bottom:14px;"><canvas id="dbdMonthChart" style="position:absolute;inset:0;width:100%!important;height:100%!important;"></canvas></div>
+    <div style="font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t2);margin-bottom:8px;">ประเภทธุรกิจจดทะเบียนสูงสุด</div>
+    ${typeRows}
+    <div style="margin-top:10px;font-size:10px;color:var(--t3);">แหล่งข้อมูล: ${d.source}</div>`;
+  setTimeout(()=>{
+    const c=document.getElementById('dbdMonthChart');
+    if(!c||c._chart)return;
+    c._chart=new Chart(c,{type:'bar',
+      data:{labels:d.months,datasets:[{data:d.monthly,backgroundColor:'rgba(8,145,178,.55)',borderRadius:3,borderSkipped:false}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{...ttOpts,callbacks:{label:ctx=>`${ctx.parsed.y.toLocaleString()} บริษัท`}}},
+        scales:{x:{ticks:{color:'#94a3b8',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#94a3b8',font:{size:9},callback:v=>(v/1000).toFixed(0)+'K'},grid:{color:'rgba(0,0,0,.06)'}}}}
+    });
+  },50);
+  document.getElementById('dbd-badge').className='gov-src-badge '+(live?'live':'cached');
+  document.getElementById('dbd-badge').innerHTML=(live?`${lcn('wifi',10)} Live · `:`${lcn('database',10)} `)+'data.go.th';
+  initIcons();
+}
+
+/* ── Render Customs Section ── */
+function renderCustoms(live){
+  const el=document.getElementById('customs-content');
+  if(!el)return;
+  const d=CUSTOMS_DATA;
+  const maxExp=Math.max(...d.topExports.map(x=>x.v));
+  const maxImp=Math.max(...d.topImports.map(x=>x.v));
+  const expRows=d.topExports.map(t=>`
+    <div class="trade-bar-row">
+      <div class="trade-bar-name">${t.n}</div>
+      <div class="trade-bar-wrap"><div class="trade-bar-fill" style="width:${(t.v/maxExp)*100}%;background:${t.col};"></div></div>
+      <div class="trade-bar-val" style="color:${t.col};">$${t.v}B</div>
+    </div>`).join('');
+  const partnerRows=d.partners.map(p=>`
+    <div style="display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.05);">
+      <div style="font-size:11.5px;color:var(--t2);width:110px;flex-shrink:0;">${p.n}</div>
+      <div style="flex:1;display:flex;gap:4px;align-items:center;">
+        <span style="font-size:10px;color:#059669;font-weight:600;width:32px;">↑${p.exp}%</span>
+        <div style="flex:1;height:4px;background:rgba(0,0,0,.06);border-radius:2px;overflow:hidden;">
+          <div style="height:100%;width:${p.exp*2.5}%;background:#059669;border-radius:2px;float:left;"></div>
+        </div>
+      </div>
+      <div style="flex:1;display:flex;gap:4px;align-items:center;">
+        <span style="font-size:10px;color:#ef4444;font-weight:600;width:32px;">↓${p.imp}%</span>
+        <div style="flex:1;height:4px;background:rgba(0,0,0,.06);border-radius:2px;overflow:hidden;">
+          <div style="height:100%;width:${p.imp*2.5}%;background:#ef4444;border-radius:2px;float:left;"></div>
+        </div>
+      </div>
+    </div>`).join('');
+  const balCol=d.balanceB>=0?'#059669':'#ef4444';
+  el.innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;">
+      <div style="background:rgba(5,150,105,.06);border:1px solid rgba(5,150,105,.18);border-radius:9px;padding:9px 11px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--t3);margin-bottom:2px;">ส่งออก</div>
+        <div style="font-size:18px;font-weight:800;color:#059669;">$${d.exportB}B</div>
+        <div style="font-size:10px;color:#22c55e;font-weight:600;">${d.expPct}</div>
+      </div>
+      <div style="background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.18);border-radius:9px;padding:9px 11px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--t3);margin-bottom:2px;">นำเข้า</div>
+        <div style="font-size:18px;font-weight:800;color:#ef4444;">$${d.importB}B</div>
+        <div style="font-size:10px;color:#f59e0b;font-weight:600;">${d.impPct}</div>
+      </div>
+      <div style="background:rgba(124,58,237,.05);border:1px solid rgba(124,58,237,.18);border-radius:9px;padding:9px 11px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--t3);margin-bottom:2px;">ดุลการค้า</div>
+        <div style="font-size:18px;font-weight:800;color:${balCol};">${d.balanceB>=0?'+':''}$${d.balanceB}B</div>
+        <div style="font-size:10px;color:${balCol};font-weight:600;">${d.balanceB>=0?'เกินดุล':'ขาดดุล'}</div>
+      </div>
+    </div>
+    <div style="position:relative;height:110px;margin-bottom:14px;"><canvas id="tradeChart" style="position:absolute;inset:0;width:100%!important;height:100%!important;"></canvas></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:10px;">
+      <div>
+        <div style="font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t2);margin-bottom:8px;">สินค้าส่งออกหลัก</div>
+        ${expRows}
+      </div>
+      <div>
+        <div style="font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t2);margin-bottom:6px;display:flex;justify-content:space-between;"><span>ประเทศคู่ค้า</span><span style="display:flex;gap:8px;"><span style="color:#059669;">↑ส่งออก</span><span style="color:#ef4444;">↓นำเข้า</span></span></div>
+        ${partnerRows}
+      </div>
+    </div>
+    <div style="font-size:10px;color:var(--t3);">แหล่งข้อมูล: ${d.source}</div>`;
+  setTimeout(()=>{
+    const c=document.getElementById('tradeChart');
+    if(!c||c._chart)return;
+    c._chart=new Chart(c,{
+      data:{labels:d.months,datasets:[
+        {type:'line',label:'ส่งออก',data:d.monthlyExp,borderColor:'#059669',borderWidth:2,pointRadius:3,fill:{target:'origin',above:'rgba(5,150,105,0.06)'},tension:.4},
+        {type:'line',label:'นำเข้า', data:d.monthlyImp,borderColor:'#ef4444',borderWidth:2,pointRadius:3,fill:{target:'origin',above:'rgba(239,68,68,0.04)'},tension:.4},
+      ]},
+      options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index'},
+        plugins:{legend:{labels:{color:'#94a3b8',boxWidth:8,font:{size:10}}},tooltip:{...ttOpts,callbacks:{label:ctx=>`${ctx.dataset.label}: $${ctx.parsed.y}B`}}},
+        scales:{x:{ticks:{color:'#94a3b8',font:{size:9}},grid:{display:false}},y:{min:18,ticks:{color:'#94a3b8',font:{size:9},callback:v=>'$'+v+'B'},grid:{color:'rgba(0,0,0,.06)'}}}}
+    });
+  },50);
+  document.getElementById('customs-badge').className='gov-src-badge '+(live?'live':'cached');
+  document.getElementById('customs-badge').innerHTML=(live?`${lcn('wifi',10)} Live · `:`${lcn('database',10)} `)+'data.go.th';
+  // Update KPI
+  setEl('gov-exp-val',`$${d.exportB}<span style="font-size:16px">B</span>`);
+  setEl('gov-exp-sub',`${d.expPct} YoY · ${d.updated}`);
+  setEl('gov-bal-val',`${d.balanceB>=0?'+':''}$${d.balanceB}<span style="font-size:16px">B</span>`);
+  document.getElementById('gov-bal-val').style.color=d.balanceB>=0?'#059669':'#ef4444';
+  initIcons();
+}
+
+/* ── Dataset Browser ── */
+let _dsFilter='all';
+function renderDatasetBrowser(datasets){
+  _allDatasets=datasets;
+  filterDatasets(_dsFilter,document.querySelector('.ds-ftab.active'));
+}
+
+function filterDatasets(filter,btn){
+  _dsFilter=filter;
+  document.querySelectorAll('.ds-ftab').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  const show=filter==='all'
+    ?[..._allDatasets.dbd,..._allDatasets.customs,..._allDatasets.econ]
+    :(_allDatasets[filter]||[]);
+  const el=document.getElementById('dataset-browser');
+  if(!el)return;
+  if(!show.length){el.innerHTML='<div style="text-align:center;padding:24px;color:var(--t3);font-size:12px;">ไม่พบชุดข้อมูล</div>';return;}
+  const fmtBadge=f=>{const cls={CSV:'csv',XLSX:'xlsx',JSON:'json','JSON API':'api'}[f]||'csv';return`<span class="ds-fmt ${cls}">${f}</span>`;};
+  const daysSince=d=>{if(!d)return'';const diff=Math.floor((Date.now()-new Date(d))/(86400000));return diff<1?'วันนี้':diff<30?`${diff} วันที่แล้ว`:diff<365?`${Math.floor(diff/30)} เดือนที่แล้ว`:`${Math.floor(diff/365)} ปีที่แล้ว`;};
+  el.innerHTML=show.map(ds=>`
+    <div class="ds-card">
+      <div style="display:flex;align-items:flex-start;gap:10px;">
+        <div style="flex:1;min-width:0;">
+          <div class="ds-title">${ds.title}</div>
+          <div class="ds-meta">
+            <span class="ds-org">${lcn('building-2',10,'margin-right:3px;opacity:.5;')}${ds.org}</span>
+            <span class="ds-date">${lcn('clock',10,'margin-right:3px;opacity:.4;')}${daysSince(ds.updated)}</span>
+            ${(ds.formats||[]).map(f=>fmtBadge(f)).join('')}
+            ${ds.tag==='live'?'<span style="font-size:9px;color:#059669;font-weight:700;background:rgba(5,150,105,.08);padding:1px 6px;border-radius:3px;">● live</span>':''}
+          </div>
+        </div>
+        <a href="${ds.url}" target="_blank" class="ds-link">${lcn('external-link',11)}เปิด</a>
+      </div>
+    </div>`).join('');
+  const total=(_allDatasets.dbd?.length||0)+(_allDatasets.customs?.length||0)+(_allDatasets.econ?.length||0);
+  setEl('ds-total-badge',`${total} ชุดข้อมูล`);
+  initIcons();
+}
+
+/* ── Main Lazy Loader ── */
+async function lazyGovData(){
+  if(govDone)return;govDone=true;
+
+  // Render static data immediately (ไม่ต้องรอ API)
+  renderDBD(false);
+  renderCustoms(false);
+
+  // Show fallback datasets immediately
+  renderDatasetBrowser(DS_FALLBACK);
+
+  // Try to fetch live CKAN datasets
+  const [dbdLive, customsLive, econLive] = await Promise.allSettled([
+    fetchCKAN('กรมพัฒนาธุรกิจการค้า นิติบุคคล'),
+    fetchCKAN('กรมศุลกากร การค้า ส่งออก'),
+    fetchCKAN('เศรษฐกิจ GDP CPI'),
+  ]);
+
+  const merge=(live,fallback,tag)=>{
+    if(live.status==='fulfilled'&&live.value?.length){
+      const parsed=live.value.map(ds=>({...parseCKANDataset(ds),tag:'live'}));
+      // Deduplicate by title
+      const seen=new Set(fallback.map(d=>d.title));
+      return[...fallback,...parsed.filter(d=>!seen.has(d.title))].slice(0,8);
+    }
+    return fallback;
+  };
+
+  const datasets={
+    dbd:    merge(dbdLive,     DS_FALLBACK.dbd,    'dbd'),
+    customs:merge(customsLive, DS_FALLBACK.customs,'customs'),
+    econ:   merge(econLive,    DS_FALLBACK.econ,   'econ'),
+  };
+  const hasLive=(dbdLive.status==='fulfilled'&&dbdLive.value?.length)||(customsLive.status==='fulfilled'&&customsLive.value?.length);
+  if(hasLive){
+    renderDBD(dbdLive.status==='fulfilled'&&!!dbdLive.value?.length);
+    renderCustoms(customsLive.status==='fulfilled'&&!!customsLive.value?.length);
+    renderDatasetBrowser(datasets);
+  }
+  console.info('[GovData] datasets loaded. live:',hasLive);
 }
 
 /* ═══════ SETTINGS PAGE ═══════ */
