@@ -40,16 +40,17 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 .last-update{font-size:10px;color:var(--t3);margin-left:2px;}
 
 /* CONTENT */
-.content{flex:1;overflow-y:auto;overflow-x:hidden;padding:20px 28px;}
+.content{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:20px 28px;}
 .content::-webkit-scrollbar{width:4px;}
 .content::-webkit-scrollbar-thumb{background:rgba(0,0,0,.1);border-radius:4px;}
 .content::-webkit-scrollbar-track{background:transparent;margin:4px 0;}
 
 /* ── APP BODY ── */
-.app-body{flex:1;display:flex;overflow:hidden;}
+.app-body{flex:1;display:flex;overflow:hidden;min-height:0;}
 
 /* ── LEFT SIDEBAR ── */
-.sidebar{width:60px;background:rgba(255,255,255,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-right:1px solid rgba(0,0,0,.07);display:flex;flex-direction:column;padding:8px 6px 12px;flex-shrink:0;overflow:hidden;transition:width .22s cubic-bezier(.4,0,.2,1);box-shadow:1px 0 0 rgba(0,0,0,.04),4px 0 20px rgba(0,0,0,.04);z-index:20;position:relative;}
+.sidebar{width:60px;background:rgba(255,255,255,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-right:1px solid rgba(0,0,0,.07);display:flex;flex-direction:column;padding:8px 6px 12px;flex-shrink:0;overflow-x:hidden;overflow-y:auto;transition:width .22s cubic-bezier(.4,0,.2,1);box-shadow:1px 0 0 rgba(0,0,0,.04),4px 0 20px rgba(0,0,0,.04);z-index:20;position:relative;}
+.sidebar::-webkit-scrollbar{display:none;}
 .sidebar:hover{width:220px;}
 /* Section label */
 .sb-sec-lbl{font-size:8px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:var(--t3);padding:8px 10px 4px;white-space:nowrap;overflow:hidden;opacity:0;transition:opacity .15s ease;flex-shrink:0;}
@@ -137,7 +138,7 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 .dist-cnt{font-size:11px;color:var(--t3);width:32px;text-align:right;}
 
 /* ── KNOWLEDGE GRAPH LAYOUT ── */
-.graph-layout{display:grid;grid-template-columns:1fr 270px;gap:14px;height:calc(100vh - 100px);}
+.graph-layout{display:grid;grid-template-columns:1fr 270px;gap:14px;height:calc(100dvh - 100px);}
 .graph-left{display:flex;flex-direction:column;min-width:0;gap:8px;}
 .graph-legend{display:flex;gap:20px;padding:0 4px;flex-shrink:0;align-items:center;}
 .graph-panel{background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:14px;overflow-y:auto;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);}
@@ -229,7 +230,7 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 .sector-pill{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10.5px;font-weight:600;}
 
 /* PROVINCES */
-.prov-layout{display:grid;grid-template-columns:1fr 310px;gap:14px;height:calc(100vh - 100px);}
+.prov-layout{display:grid;grid-template-columns:1fr 310px;gap:14px;height:calc(100dvh - 100px);}
 .map-wrap{background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);}
 .map-tabs{display:flex;gap:6px;padding:14px 16px 0;}
 .mtab{padding:5px 16px;font-size:12.5px;font-weight:500;border-radius:8px;cursor:pointer;color:var(--t2);background:none;border:1px solid transparent;transition:all .18s;font-family:'Inter',sans-serif;}
@@ -316,8 +317,22 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 /* ── 1100px: Slightly tighter content ── */
 @media (max-width:1100px){
   .content{padding:16px 18px;}
-  .sidebar{width:54px;}
+  .sidebar{width:52px;}
   .sidebar:hover{width:210px;}
+}
+
+/* ── 768px: Tablet — sidebar icon-only, no hover expand ── */
+@media (max-width:768px){
+  .sidebar{width:48px;}
+  .sidebar:hover{width:48px;}
+  .sb-lbl,.sb-sec-lbl{display:none;}
+  .content{padding:12px 14px;}
+}
+
+/* ── 480px: Mobile — hide sidebar completely ── */
+@media (max-width:480px){
+  .sidebar{display:none;}
+  .content{padding:10px 12px;}
 }
 
 /* ── 900px: Tablet portrait — stack major 2-col layouts, reduce grid cols ── */
@@ -773,7 +788,7 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
         <div style="font-size:9.5px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;">คลิกจังหวัดบนแผนที่</div>
       </div>
       <div class="map-svg-area">
-        <svg id="thaiMap" viewBox="0 0 380 600" style="width:auto;height:calc(100vh - 108px);max-width:100%">
+        <svg id="thaiMap" viewBox="0 0 380 600" style="width:auto;height:calc(100dvh - 108px);max-width:100%">
           <defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
           <rect width="380" height="600" fill="#e8edf3" rx="6"/>
         </svg>
