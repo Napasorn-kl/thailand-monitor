@@ -449,6 +449,35 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 .oil-sens-icon{display:inline-flex;align-items:center;margin-right:4px;vertical-align:middle;}
 .oil-sens-icon svg{width:10px;height:10px;stroke-width:2;}
 
+/* ── OIL-GOLD ANALYSIS PANEL (Sectors Tab) ── */
+.og-panel{background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:14px;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);}
+.og-banner{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(217,119,6,.06),rgba(183,121,31,.03));border:1px solid rgba(217,119,6,.18);border-radius:10px;padding:14px 18px;margin-bottom:16px;}
+.og-price-block{display:flex;flex-direction:column;gap:1px;}
+.og-price-lbl{font-size:9px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--t3);display:flex;align-items:center;gap:3px;}
+.og-price-val{font-size:21px;font-weight:800;line-height:1.1;}
+.og-divider{width:1px;height:52px;background:rgba(0,0,0,.08);flex-shrink:0;}
+.og-col{border-radius:10px;padding:13px 14px;}
+.og-col-lbl{font-size:9.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.og-sec-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(0,0,0,.045);}
+.og-sec-row:last-child{border-bottom:none;}
+.og-sec-name{font-size:11.5px;color:var(--t2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.og-impact-val{font-size:11.5px;font-weight:700;white-space:nowrap;margin-left:8px;}
+.og-mini-bar{height:3px;border-radius:2px;margin-top:3px;}
+/* Province Oil-Gold detail section */
+.prov-og{margin-top:14px;padding-top:12px;border-top:1px solid rgba(0,0,0,.06);}
+.prov-og-lbl{font-size:9.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--t2);margin-bottom:8px;margin-top:12px;}
+.risk-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.risk-track{flex:1;height:7px;border-radius:4px;background:rgba(0,0,0,.07);overflow:hidden;}
+.risk-fill{height:100%;border-radius:4px;transition:width .4s ease;}
+.risk-val{font-size:12px;font-weight:800;width:32px;text-align:right;flex-shrink:0;}
+.risk-lbl{font-size:11px;color:var(--t2);width:90px;flex-shrink:0;}
+/* Graph overlay buttons */
+.graph-overlay-btns{display:flex;gap:5px;margin-left:auto;}
+.gov-btn{padding:3px 10px;font-size:11px;font-weight:600;border-radius:7px;cursor:pointer;border:1px solid var(--border);background:none;color:var(--t3);font-family:'Inter',sans-serif;transition:all .15s;}
+.gov-btn.active{background:rgba(8,145,178,.1);border-color:rgba(8,145,178,.3);color:var(--cyan);}
+.gov-btn.oil.active{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#ef4444;}
+.gov-btn.gold.active{background:rgba(183,121,31,.1);border-color:rgba(183,121,31,.3);color:#b7791f;}
+
 /* ── LOGO REFINEMENT ── */
 .logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(145deg,#0369a1,#0891b2 60%,#06b6d4);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:#fff;letter-spacing:-1px;flex-shrink:0;box-shadow:0 2px 8px rgba(8,145,178,.4),0 1px 2px rgba(8,145,178,.2);}
 
@@ -571,7 +600,12 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
         <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t2);"><div style="width:12px;height:12px;border-radius:50%;background:var(--cyan)"></div>Sector</div>
         <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t2);"><div style="width:12px;height:12px;border-radius:3px;background:var(--green)"></div>Province</div>
         <div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--t2);"><div style="width:10px;height:10px;background:var(--gold);transform:rotate(45deg)"></div>Size Tier</div>
-        <div style="margin-left:auto;font-size:11px;color:var(--t3);">คลิก node · ลาก node</div>
+        <div class="graph-overlay-btns" id="graphOverlayBtns">
+          <button class="gov-btn active" onclick="setGraphOverlay('normal',this)">Normal</button>
+          <button class="gov-btn oil"    onclick="setGraphOverlay('oil',this)"><i data-lucide="flame" class="lc" style="width:11px;height:11px;margin-right:3px;"></i>Oil Risk</button>
+          <button class="gov-btn gold"   onclick="setGraphOverlay('gold',this)"><i data-lucide="coins" class="lc" style="width:11px;height:11px;margin-right:3px;"></i>Gold</button>
+        </div>
+        <div style="font-size:11px;color:var(--t3);margin-left:6px;">คลิก node · ลาก</div>
       </div>
     </div>
     <div class="graph-panel" id="graphPanel">
@@ -605,6 +639,8 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
       <div id="bubbleLegend" style="display:flex;flex-direction:column;gap:5px;padding-top:4px;max-height:210px;overflow-y:auto;"></div>
     </div>
   </div>
+  <!-- Oil & Gold Analysis Panel — rendered by renderSectorOilGold() -->
+  <div id="oil-gold-impact" style="margin-top:14px;"></div>
 </div>
 
 <!-- ══ PROVINCES ══ -->
@@ -612,7 +648,7 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
   <div class="prov-layout">
     <div class="map-wrap">
       <div style="padding:13px 14px 0;display:flex;justify-content:space-between;align-items:center;">
-        <div class="map-tabs"><button class="mtab active" onclick="setMapMode('registrations',this)">Registrations</button><button class="mtab" onclick="setMapMode('capital',this)">Capital</button><button class="mtab" onclick="setMapMode('density',this)">Density</button><button class="mtab" onclick="setMapMode('energy',this)" style="color:#d97706;display:flex;align-items:center;gap:5px;"><i data-lucide="fuel" class="lc" style="width:12px;height:12px;"></i>Energy</button></div>
+        <div class="map-tabs"><button class="mtab active" onclick="setMapMode('registrations',this)">Registrations</button><button class="mtab" onclick="setMapMode('capital',this)">Capital</button><button class="mtab" onclick="setMapMode('density',this)">Density</button><button class="mtab" onclick="setMapMode('energy',this)" style="display:flex;align-items:center;gap:4px;"><i data-lucide="fuel" class="lc" style="width:11px;height:11px;"></i>Energy</button><button class="mtab" onclick="setMapMode('oilrisk',this)" style="display:flex;align-items:center;gap:4px;color:#ef4444;"><i data-lucide="flame" class="lc" style="width:11px;height:11px;"></i>Oil Risk</button><button class="mtab" onclick="setMapMode('gold',this)" style="display:flex;align-items:center;gap:4px;color:#b7791f;"><i data-lucide="coins" class="lc" style="width:11px;height:11px;"></i>Gold</button></div>
         <div style="font-size:9.5px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;">คลิกจังหวัดบนแผนที่</div>
       </div>
       <div class="map-svg-area">
@@ -1310,6 +1346,23 @@ function showGraphPanel(node,edges,nodes){
   if(node.type==='sector'){
     const d=GP_SECTOR_DATA[node.id]||{reg:'N/A',cap:'N/A',avg:'N/A',gv:'N/A',share:'N/A',col:node.col,provs:[]};
     const gPos=!d.gv.includes('-');
+    // Match to SECTORS array for oil & gold data
+    const secData=SECTORS.find(s=>s.name===node.id||node.id.includes(s.name.split(' ')[0]));
+    const oilSens=secData?.oilSens||'L';
+    const oilBadgeMap={H:`<span style="font-size:10px;font-weight:700;color:#ef4444;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);padding:2px 8px;border-radius:5px;">▲ High Impact</span>`,M:`<span style="font-size:10px;font-weight:700;color:#f59e0b;background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);padding:2px 8px;border-radius:5px;">— Medium Impact</span>`,L:`<span style="font-size:10px;font-weight:600;color:#94a3b8;background:rgba(148,163,184,.1);border:1px solid rgba(148,163,184,.2);padding:2px 8px;border-radius:5px;">Low Impact</span>`,'+': `<span style="font-size:10px;font-weight:700;color:#059669;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.2);padding:2px 8px;border-radius:5px;">★ Benefits</span>`};
+    const brent=parseFloat(liveBrent)||74.2;
+    const impactPct=secData?+((brent-70)/10*{H:1.2,M:0.5,L:0.08,'+':-1.5}[oilSens]).toFixed(2):0;
+    const impSign=impactPct>0?'+':'';
+    const impCol=impactPct<0?'#22c55e':Math.abs(impactPct)<0.2?'#94a3b8':'#ef4444';
+    const ge=GOLD_EXPOSURE[node.id];
+    const goldHtml=ge?`<div class="gp-section-lbl">${lcn('coins',11,'margin-right:4px;')} Gold Exposure</div>
+      <div style="background:rgba(183,121,31,.06);border:1px solid rgba(183,121,31,.15);border-radius:8px;padding:10px 12px;margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <span style="font-size:11.5px;font-weight:600;color:var(--t2);">${ge.th}</span>
+          <span style="font-size:18px;font-weight:800;color:#b7791f;">${ge.score}<span style="font-size:11px;color:var(--t3);">/100</span></span>
+        </div>
+        <div style="font-size:11px;color:var(--t2);line-height:1.6;">${ge.desc}</div>
+      </div>`:'';
     html=`<div class="gp-type-badge" style="background:${node.col}18;color:${node.col}">SECTOR</div>
       <div class="gp-name">${node.id}</div>
       <div class="gp-stats">
@@ -1319,6 +1372,16 @@ function showGraphPanel(node,edges,nodes){
         <div class="gp-stat"><div class="gp-stat-lbl">Growth YoY</div><div class="gp-stat-val" style="color:${gPos?'#059669':'#dc2626'}">${d.gv}</div></div>
       </div>
       <div style="background:var(--bg);border-radius:6px;padding:10px 12px;margin-bottom:14px;"><div class="gp-stat-lbl" style="margin-bottom:4px">Market Share</div><div style="font-size:22px;font-weight:800;color:${node.col}">${d.share}</div></div>
+      <div class="gp-section-lbl">${lcn('droplets',11,'margin-right:4px;')} Oil Sensitivity</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;background:var(--bg);border-radius:8px;padding:10px 12px;margin-bottom:14px;">
+        <div>${oilBadgeMap[oilSens]||''}</div>
+        <div style="text-align:right;">
+          <div style="font-size:10px;color:var(--t3);">Margin impact</div>
+          <div style="font-size:16px;font-weight:800;color:${impCol};">${impSign}${impactPct}%</div>
+          <div style="font-size:9.5px;color:var(--t3);">Brent @$${brent}/bbl</div>
+        </div>
+      </div>
+      ${goldHtml}
       <div class="gp-section-lbl">Top Provinces</div>
       ${(d.provs||[]).map(p=>`<div class="gp-bar-row"><div class="gp-bar-name">${p.n}</div><div class="gp-bar-wrap"><div class="gp-bar-fill" style="width:${(p.v/d.provs[0].v)*100}%;background:${node.col}"></div></div><div class="gp-bar-cnt">${(p.v/1000).toFixed(1)}K</div></div>`).join('')}
       <div class="gp-section-lbl">Connections (${conns.length})</div>
@@ -1370,6 +1433,7 @@ function lazyGraph(){
   SEC.forEach((s,i)=>{const a=(i/SEC.length)*Math.PI*2-Math.PI/2;nodes.push({...s,x:W/2+Math.cos(a)*190,y:H/2+Math.sin(a)*170,vx:0,vy:0,type:'sector'});});
   PROV.forEach((p,i)=>{const a=(i/PROV.length)*Math.PI*2-Math.PI/4;nodes.push({id:p.id,col:'#059669',r:13,x:W/2+Math.cos(a)*330,y:H/2+Math.sin(a)*280,vx:0,vy:0,type:'province'});});
   TIERS.forEach((t,i)=>{const a=(i/TIERS.length)*Math.PI*2;nodes.push({id:t.id,col:'#d97706',r:11,x:W/2+Math.cos(a)*85,y:H/2+Math.sin(a)*75,vx:0,vy:0,type:'tier'});});
+  window._graphNodes=nodes; // expose for overlay
   const edges=[];
   PROV.forEach((_,pi)=>{[0,1,2].forEach(off=>{const idx=(pi+off)%SEC.length;edges.push([idx,SEC.length+pi]);});});
   for(let i=0;i<SEC.length;i++)for(let j=i+1;j<SEC.length;j++)if(Math.random()>.55)edges.push([i,j]);
@@ -1392,6 +1456,78 @@ function lazyGraph(){
       if(isHov&&!dragged){const label=n.id+(n.type==='province'&&GP_PROV_DATA[n.id]?' ('+GP_PROV_DATA[n.id].reg.toLocaleString()+')':n.type==='sector'&&GP_SECTOR_DATA[n.id]?' ('+GP_SECTOR_DATA[n.id].reg.toLocaleString()+')':'');ctx.save();ctx.font='500 11px Inter';const tw=ctx.measureText(label).width;ctx.fillStyle='rgba(30,41,59,0.88)';ctx.beginPath();if(ctx.roundRect)ctx.roundRect(n.x-tw/2-8,n.y-n.r-28,tw+16,20,4);else ctx.rect(n.x-tw/2-8,n.y-n.r-28,tw+16,20);ctx.fill();ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(label,n.x,n.y-n.r-18);ctx.restore();}
       ctx.fillStyle=n.type==='sector'?'#1e293b':'#475569';ctx.font=`${n.type==='sector'?600:400} ${n.type==='sector'?11:9}px Inter`;ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText(n.id,n.x,n.y+n.r+5);});}
   (function loop(){if(frame<250)sim();frame++;draw();requestAnimationFrame(loop);})();
+  // Default panel: show oil risk summary
+  showGraphOilGoldDefault();
+  initIcons();
+}
+
+function showGraphOilGoldDefault(){
+  const panel=document.getElementById('graphPanel');
+  if(!panel)return;
+  const brent=parseFloat(liveBrent)||74.2;
+  const goldSell=liveGoldBar?.sell||46900;
+  const FACTOR={H:1.2,M:0.5,L:0.08,'+':-1.5};
+  const rows=SECTORS
+    .filter(s=>s.oilSens==='H'||s.oilSens==='+')
+    .sort((a,b)=>Math.abs(FACTOR[b.oilSens])-Math.abs(FACTOR[a.oilSens]))
+    .map(s=>{
+      const imp=+((brent-70)/10*FACTOR[s.oilSens]).toFixed(2);
+      const col=imp<0?'#059669':imp>0.4?'#ef4444':'#f59e0b';
+      const sign=imp>0?'+':'';
+      const ge=GOLD_EXPOSURE[s.name];
+      return `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.05);">
+        <div style="width:9px;height:9px;border-radius:50%;background:${s.col};flex-shrink:0;"></div>
+        <div style="flex:1;font-size:11.5px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.name}</div>
+        <div style="font-size:11.5px;font-weight:700;color:${col};">${sign}${imp}%</div>
+        ${ge?`<div style="font-size:9.5px;background:rgba(183,121,31,.1);color:#b7791f;border-radius:4px;padding:1px 5px;font-weight:600;">${lcn('coins',9,'margin-right:2px;')}${ge.score}</div>`:''}
+      </div>`;
+    }).join('');
+  panel.innerHTML=`
+    <div style="margin-bottom:14px;">
+      <div style="font-size:10.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t2);margin-bottom:10px;display:flex;align-items:center;gap:6px;">${lcn('activity',12)}Oil &amp; Gold Impact</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+        <div style="background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.18);border-radius:8px;padding:10px 12px;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin-bottom:3px;">Brent</div>
+          <div style="font-size:20px;font-weight:800;color:#d97706;">$${brent}<span style="font-size:12px">/bbl</span></div>
+        </div>
+        <div style="background:rgba(183,121,31,.06);border:1px solid rgba(183,121,31,.18);border-radius:8px;padding:10px 12px;">
+          <div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin-bottom:3px;">ทองคำ (ขาย)</div>
+          <div style="font-size:15px;font-weight:800;color:#b7791f;">฿${goldSell.toLocaleString('th-TH')}</div>
+        </div>
+      </div>
+      <div style="font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t2);margin-bottom:6px;">Sectors ที่กระทบสูงสุด</div>
+      ${rows}
+    </div>
+    <div style="background:var(--bg);border-radius:8px;padding:10px 12px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin-bottom:5px;">ใช้ Overlay</div>
+      <div style="font-size:11px;color:var(--t2);line-height:1.6;">กด <b>Oil Risk</b> หรือ <b>Gold</b> บน legend ด้านล่างเพื่อดูสีตาม sensitivity<br>คลิก node เพื่อดูรายละเอียด</div>
+    </div>`;
+  initIcons();
+}
+
+/* ── Graph Color Overlay ── */
+let graphOverlay='normal';
+function setGraphOverlay(mode,btn){
+  graphOverlay=mode;
+  document.querySelectorAll('.gov-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const nds=window._graphNodes;
+  if(!nds)return;
+  const OIL_COL  ={H:'#ef4444',M:'#f59e0b',L:'#94a3b8','+':`#059669`};
+  const GOLD_TIER={score=>score>=70?'#b7791f':score>=40?'#d97706':score>=20?'#f59e0b':'#94a3b8'};
+  nds.forEach(n=>{
+    if(!n._origCol)n._origCol=n.col;
+    if(mode==='normal'){ n.col=n._origCol; return; }
+    if(n.type!=='sector'){ n.col=n._origCol; return; }
+    if(mode==='oil'){
+      const sec=SECTORS.find(s=>s.name===n.id||n.id.split(' ')[0]===s.name.split(' ')[0]);
+      n.col=OIL_COL[sec?.oilSens||'L']||'#94a3b8';
+    } else if(mode==='gold'){
+      const ge=GOLD_EXPOSURE[n.id];
+      const sc=ge?.score||0;
+      n.col=sc>=70?'#b7791f':sc>=40?'#d97706':sc>=20?'#f59e0b':'#94a3b8';
+    }
+  });
 }
 
 /* ═══════ SECTORS DATA ═══════ */
@@ -1414,6 +1550,153 @@ const SECTORS=[
   {name:'Professional Svcs', em:'scale',          col:'#34d399', reg:9800,  capB:72,  avgM:7.3,  gv:15.2, share:1.8, trend:[7,8,8,8,9,9,9,9,10,10,10,11],           oilSens:'L'},
   {name:'Other',             em:'package',        col:'#78716c', reg:65100, capB:312, avgM:4.8,  gv:1.5,  share:11.9,trend:[62,63,63,64,64,65,64,65,65,66,66,66],     oilSens:'L'},
 ];
+
+/* ═══════ OIL-GOLD CROSS-ANALYSIS DATA ═══════ */
+// Gold exposure score per sector (0=none · 100=critical)
+// type: hedge=safe haven, positive=price benefit, cost=input cost, luxury/consumer=demand link
+const GOLD_EXPOSURE={
+  'Financial Services':  {score:85,type:'hedge',   th:'Safe Haven / Hedge',    desc:'ทองเป็น safe-haven ยามดอกเบี้ยลด · กองทุนสำรองถือทองคำ'},
+  'Energy':              {score:70,type:'positive', th:'Commodity Correlation', desc:'น้ำมัน-ทอง สัมพันธ์ positive ช่วง USD อ่อน/เงินเฟ้อสูง'},
+  'Manufacturing':       {score:50,type:'cost',     th:'Input Cost',            desc:'ทองใช้ใน electronics, ชิ้นส่วน semicon, auto connectors'},
+  'Tourism & Hospitality':{score:45,type:'luxury',  th:'Luxury & Souvenir',    desc:'นักท่องเที่ยวจีน/ตปท. ซื้อทองรูปพรรณในไทย ฿80B+/ปี'},
+  'Wholesale & Retail':  {score:40,type:'consumer', th:'Consumer Jewellery',   desc:'ยอดขายทองรูปพรรณผ่านร้านค้าปลีก ฿200B+/ปี'},
+  'Real Estate':         {score:32,type:'hedge',    th:'Inflation Hedge',      desc:'ทองและอสังหาฯ ต่างเป็น hedge เงินเฟ้อ มักเคลื่อนไปด้วยกัน'},
+  'Agriculture':         {score:22,type:'indirect', th:'Commodity Link',       desc:'สินค้าโภคภัณฑ์เกษตรมักสัมพันธ์กับราคาทองในระยะยาว'},
+  'IT & Technology':     {score:18,type:'cost',     th:'Component Cost',       desc:'ทองคำในชิ้นส่วนอิเล็กทรอนิกส์ precision — ต้นทุนระดับต่ำ'},
+};
+
+// Oil risk score per province 0–100
+const oilRiskData={
+  'Rayong':95,'Chonburi':90,'Ayutthaya':85,'Samut Prakan':78,'Chachoengsao':72,
+  'Bangkok':65,'Samut Sakhon':70,'Prachin Buri':68,'Nakhon Ratchasima':55,
+  'Phuket':58,'Surat Thani':52,'Khon Kaen':48,'Lampang':45,'Chiang Mai':42,
+  'Udon Thani':40,'Phetchabun':38,'Loei':32,'Chiang Rai':30
+};
+
+// Gold market activity per province (traders + jewellers registered)
+const goldMarketData={
+  'Bangkok':1850,'Chiang Mai':320,'Chonburi':185,'Phuket':165,'Khon Kaen':95,
+  'Udon Thani':88,'Nakhon Ratchasima':82,'Surat Thani':72,'Ayutthaya':68,
+  'Chiang Rai':62,'Rayong':55,'Ubon Ratchathani':48
+};
+
+/* ═══════ SECTOR OIL-GOLD ANALYSIS PANEL ═══════ */
+function renderSectorOilGold(){
+  const el=document.getElementById('oil-gold-impact');
+  if(!el)return;
+  const brent=parseFloat(liveBrent)||74.2;
+  const base=70;
+  const delta=+(brent-base).toFixed(1);
+  const g95  =(liveThaiOil?.gasohol95 ||35.88).toFixed(2);
+  const dsl  =(liveThaiOil?.diesel    ||29.54).toFixed(2);
+  const e20  =(liveThaiOil?.e20       ||33.54).toFixed(2);
+  const goldSell=liveGoldBar?.sell||46900;
+  const goldBuy =liveGoldBar?.buy ||46800;
+  const isUp=delta>=0;
+  // margin impact: per $10 above/below $70 baseline
+  const FACTOR={H:1.2,M:0.5,L:0.08,'+':-1.5};
+  const calcImpact=s=>+((delta/10)*(FACTOR[s.oilSens]||0)).toFixed(2);
+
+  const highS =SECTORS.filter(s=>s.oilSens==='H');
+  const medS  =SECTORS.filter(s=>s.oilSens==='M');
+  const benS  =SECTORS.filter(s=>s.oilSens==='+');
+  const goldS =SECTORS.filter(s=>GOLD_EXPOSURE[s.name]).sort((a,b)=>GOLD_EXPOSURE[b.name].score-GOLD_EXPOSURE[a.name].score).slice(0,6);
+
+  const impRow=s=>{
+    const imp=calcImpact(s);
+    const isNeg=imp<0;
+    const col=isNeg?'#22c55e':Math.abs(imp)<0.2?'#94a3b8':Math.abs(imp)<0.5?'#f59e0b':'#ef4444';
+    const sign=imp>0?'+':'';
+    const barW=Math.min(100,Math.abs(imp)*65);
+    return `<div class="og-sec-row">
+      <span class="og-sec-name">${s.name}</span>
+      <div style="text-align:right;min-width:48px;">
+        <div class="og-impact-val" style="color:${col}">${sign}${imp}%</div>
+        <div class="og-mini-bar" style="width:${barW}%;background:${isNeg?'#22c55e':'#ef4444'};margin-left:auto;"></div>
+      </div>
+    </div>`;
+  };
+
+  const goldRow=s=>{
+    const ge=GOLD_EXPOSURE[s.name];
+    const typeCol={hedge:'#d97706',positive:'#059669',cost:'#ef4444',luxury:'#8b5cf6',consumer:'#0891b2',indirect:'#94a3b8'}[ge.type]||'#94a3b8';
+    return `<div class="og-sec-row" title="${ge.desc}">
+      <div style="flex:1;min-width:0;">
+        <div class="og-sec-name">${s.name}</div>
+        <div style="font-size:9.5px;color:${typeCol};font-weight:600;">${ge.th}</div>
+      </div>
+      <div style="text-align:right;margin-left:8px;">
+        <div style="font-size:13px;font-weight:800;color:${typeCol};line-height:1;">${ge.score}</div>
+        <div style="font-size:9px;color:var(--t3);">/100</div>
+      </div>
+    </div>`;
+  };
+
+  const statusBg=isUp?'rgba(239,68,68,.07)':'rgba(34,197,94,.07)';
+  const statusBorder=isUp?'rgba(239,68,68,.2)':'rgba(34,197,94,.2)';
+  const affectedSectors=SECTORS.filter(s=>Math.abs(calcImpact(s))>=0.1).length;
+
+  el.innerHTML=`<div class="og-panel">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+    <div style="font-size:13px;font-weight:700;color:var(--t1);display:flex;align-items:center;gap:7px;">${lcn('activity',14,'color:#d97706;')} Oil &amp; Gold · ผลกระทบต่อภาคธุรกิจ</div>
+    <div style="font-size:10px;color:var(--t3);">คำนวณจากราคา Brent เทียบ Baseline $${base}/bbl</div>
+  </div>
+  <!-- Banner row -->
+  <div class="og-banner">
+    <div class="og-price-block">
+      <span class="og-price-lbl">${lcn('droplets',11)}Brent Crude</span>
+      <span class="og-price-val" style="color:#d97706">$${brent}<span style="font-size:14px">/bbl</span></span>
+      <span style="font-size:11px;color:${isUp?'#ef4444':'#22c55e'};font-weight:600;">${isUp?'▲ +':'▼ '}${delta} vs $${base} baseline</span>
+    </div>
+    <div class="og-divider"></div>
+    <div class="og-price-block">
+      <span class="og-price-lbl">${lcn('fuel',11)}ราคาหน้าปั๊ม (PTT OR)</span>
+      <div style="display:flex;gap:12px;margin-top:3px;">
+        <div><div style="font-size:9px;color:var(--t3);">G95</div><div style="font-size:17px;font-weight:800;color:#0891b2;">฿${g95}</div></div>
+        <div><div style="font-size:9px;color:var(--t3);">E20</div><div style="font-size:17px;font-weight:800;color:#22c55e;">฿${e20}</div></div>
+        <div><div style="font-size:9px;color:var(--t3);">Diesel</div><div style="font-size:17px;font-weight:800;color:#2563eb;">฿${dsl}</div></div>
+      </div>
+    </div>
+    <div class="og-divider"></div>
+    <div class="og-price-block">
+      <span class="og-price-lbl">${lcn('coins',11)}ทองคำแท่ง (สมาคมฯ)</span>
+      <span class="og-price-val" style="color:#b7791f">฿${goldSell.toLocaleString('th-TH')}<span style="font-size:13px"> /บาท</span></span>
+      <span style="font-size:11px;color:var(--t3);">ซื้อ ฿${goldBuy.toLocaleString('th-TH')}</span>
+    </div>
+    <div style="margin-left:auto;background:${statusBg};border:1px solid ${statusBorder};border-radius:10px;padding:12px 16px;text-align:center;flex-shrink:0;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--t3);margin-bottom:5px;">ภาคกระทบ ≥0.1%</div>
+      <div style="font-size:28px;font-weight:800;color:${isUp?'#ef4444':'#22c55e'};line-height:1;">${affectedSectors}</div>
+      <div style="font-size:10px;color:var(--t3);">จาก ${SECTORS.length} ภาค</div>
+    </div>
+  </div>
+  <!-- 4-column impact grid -->
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;">
+    <div class="og-col" style="background:rgba(239,68,68,.04);border:1px solid rgba(239,68,68,.15);">
+      <div class="og-col-lbl" style="color:#ef4444;">${lcn('flame',11)}ผลกระทบสูง</div>
+      ${highS.map(s=>impRow(s)).join('')}
+      <div style="margin-top:8px;background:rgba(239,68,68,.06);border-radius:6px;padding:8px 10px;font-size:10.5px;color:var(--t2);line-height:1.55;">ต้นทุนโลจิสติกส์ เชื้อเพลิง และวัตถุดิบ<br>ได้รับผลกระทบโดยตรงจากราคาน้ำมัน</div>
+    </div>
+    <div class="og-col" style="background:rgba(245,158,11,.04);border:1px solid rgba(245,158,11,.15);">
+      <div class="og-col-lbl" style="color:#f59e0b;">${lcn('minus-circle',11)}ผลกระทบปานกลาง</div>
+      ${medS.map(s=>impRow(s)).join('')}
+      <div style="margin-top:8px;background:rgba(245,158,11,.06);border-radius:6px;padding:8px 10px;font-size:10.5px;color:var(--t2);line-height:1.55;">กระทบทางอ้อมผ่านต้นทุนขนส่ง<br>และสาธารณูปโภค</div>
+    </div>
+    <div class="og-col" style="background:rgba(5,150,105,.04);border:1px solid rgba(5,150,105,.15);">
+      <div class="og-col-lbl" style="color:#059669;">${lcn('trending-up',11)}ได้ประโยชน์</div>
+      ${benS.map(s=>impRow(s)).join('')}
+      <div style="margin-top:10px;background:rgba(5,150,105,.06);border-radius:6px;padding:8px 10px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#059669;margin-bottom:4px;">Chain Effect</div>
+        <div style="font-size:10.5px;color:var(--t2);line-height:1.55;">น้ำมันสูง → รายได้ Energy ↑<br>→ บริษัทปิโตรฯ ลงทุนเพิ่ม<br>→ Manufacturing สั่งซื้อเครื่องจักร ↑</div>
+      </div>
+    </div>
+    <div class="og-col" style="background:rgba(183,121,31,.04);border:1px solid rgba(183,121,31,.18);">
+      <div class="og-col-lbl" style="color:#b7791f;">${lcn('coins',11)}Gold Exposure</div>
+      ${goldS.map(s=>goldRow(s)).join('')}
+    </div>
+  </div>
+</div>`;
+  initIcons();
+}
 
 function makeSpark(data,col){
   const w=80,h=22,min=Math.min(...data),max=Math.max(...data),range=max-min||1;
@@ -1475,6 +1758,7 @@ function lazySectors(){
     bl.innerHTML+=`<div style="display:flex;align-items:center;gap:6px;"><div style="width:8px;height:8px;border-radius:50%;background:${s.col};flex-shrink:0;"></div><span style="font-size:10.5px;color:var(--t2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${s.name}</span><span style="font-size:10.5px;font-weight:700;color:${clr};flex-shrink:0;">${sign}${s.gv}%</span></div>`;
   });
   initIcons();
+  renderSectorOilGold();
 }
 
 /* ═══════ SECTOR DETAIL DATA ═══════ */
@@ -1601,12 +1885,25 @@ const provShapes=[
   {id:'Satun',       path:'M 102,516 L 125,508 L 138,520 L 134,545 L 108,550 L 94,535 Z',cx:117,cy:530},
   {id:'Ranong',      path:'M 42,352 L 65,342 L 80,355 L 75,385 L 50,392 L 35,375 Z',cx:58,cy:368},
 ];
-const modeMax={registrations:4820,capital:285000,density:8200,energy:300};
-const modeColors={registrations:{lo:'#dbeafe',hi:'#0891b2'},capital:{lo:'#fef3c7',hi:'#d97706'},density:{lo:'#d1fae5',hi:'#059669'},energy:{lo:'#fef9c3',hi:'#d97706'}};
+const modeMax={registrations:4820,capital:285000,density:8200,energy:300,oilrisk:100,gold:1850};
+const modeColors={
+  registrations:{lo:'#dbeafe',hi:'#0891b2'},
+  capital:      {lo:'#fef3c7',hi:'#d97706'},
+  density:      {lo:'#d1fae5',hi:'#059669'},
+  energy:       {lo:'#fef9c3',hi:'#d97706'},
+  oilrisk:      {lo:'#fff7ed',hi:'#dc2626'},  // white-orange → deep red
+  gold:         {lo:'#fefce8',hi:'#92400e'},  // cream → amber-brown
+};
 // energy = number of oil/gas/petrochem companies registered
 const energyData={'Rayong':300,'Chonburi':245,'Bangkok':180,'Ayutthaya':155,'Samut Prakan':140,'Chachoengsao':120,'Samut Sakhon':95,'Prachin Buri':75,'Nakhon Ratchasima':70,'Khon Kaen':52,'Surat Thani':45,'Chiang Mai':40,'Udon Thani':35,'Phuket':30,'Chiang Rai':20};
 function lerpHex(a,b,t){const ah=parseInt(a.slice(1),16),bh=parseInt(b.slice(1),16);const ar=ah>>16,ag=(ah>>8)&255,ab=ah&255,br=bh>>16,bg=(bh>>8)&255,bb=bh&255;return '#'+[Math.round(ar+(br-ar)*t),Math.round(ag+(bg-ag)*t),Math.round(ab+(bb-ab)*t)].map(x=>x.toString(16).padStart(2,'0')).join('');}
-function getVal(id,mode){if(mode==='energy')return(energyData[id]||0)/modeMax.energy;const d=provDB[id];if(!d)return .22;return(mode==='registrations'?d.reg:mode==='capital'?d.cap:d.den)/modeMax[mode];}
+function getVal(id,mode){
+  if(mode==='energy')  return(energyData[id]||0)/modeMax.energy;
+  if(mode==='oilrisk') return(oilRiskData[id]||12)/modeMax.oilrisk;
+  if(mode==='gold')    return(goldMarketData[id]||0)/modeMax.gold;
+  const d=provDB[id];if(!d)return .22;
+  return(mode==='registrations'?d.reg:mode==='capital'?d.cap:d.den)/modeMax[mode];
+}
 function lazyMap(){if(mapDone)return;mapDone=true;renderMap();}
 function renderMap(){
   const svg=document.getElementById('thaiMap');
@@ -1632,11 +1929,69 @@ function showProv(id){
   const pane=document.getElementById('detailContent');
   const secH=d.sec.map(([n,v])=>`<div class="srow"><div class="sname">${n}</div><div class="sbar-wrap"><div class="sbar-fill" style="width:${v*2}%"></div></div><div class="scnt">${v}</div></div>`).join('');
   const notH=d.notable.map(n=>`<div class="notable-item"><span class="ncap">${n.c}</span><div class="nname">${n.n}</div><div class="nsec">${n.s}</div></div>`).join('');
+
+  // Oil risk data for this province
+  const oilRisk   = oilRiskData[id]||18;
+  const oilRiskLbl= oilRisk>=75?'สูงมาก':oilRisk>=55?'สูง':oilRisk>=35?'ปานกลาง':'ต่ำ';
+  const oilRiskCol= oilRisk>=75?'#dc2626':oilRisk>=55?'#f59e0b':oilRisk>=35?'#0891b2':'#22c55e';
+  const energyCnt = energyData[id]||0;
+  const goldCnt   = goldMarketData[id]||0;
+  const brent     = parseFloat(liveBrent)||74.2;
+  const g95       = (liveThaiOil?.gasohol95||35.88).toFixed(2);
+  const diesel    = (liveThaiOil?.diesel   ||29.54).toFixed(2);
+  const goldSell  = liveGoldBar?.sell||46900;
+
+  // Dominant oil-sensitive sectors in this province
+  const HIGH_OIL_NAMES=['Manufacturing','Transportation','Tourism & Hospitality','Agriculture'];
+  const domOil=d.sec.filter(([n])=>HIGH_OIL_NAMES.some(h=>n.toLowerCase().includes(h.toLowerCase().split(' ')[0]))).slice(0,3);
+
+  // Estimated transport cost impact: diesel±1฿ → logistics cost change ~2.5%
+  const dslBase=29.54;
+  const dslDelta=+((parseFloat(diesel)-dslBase)).toFixed(2);
+  const transportImpact=+(dslDelta*2.5).toFixed(1);
+
+  const oilSectionH=`<div class="prov-og">
+    <div class="prov-og-lbl">${lcn('droplets',11,'margin-right:4px;color:#d97706;')}Oil &amp; Energy Exposure</div>
+    <div class="risk-row">
+      <div class="risk-lbl">ความเสี่ยงน้ำมัน</div>
+      <div class="risk-track"><div class="risk-fill" style="width:${oilRisk}%;background:${oilRiskCol};"></div></div>
+      <div class="risk-val" style="color:${oilRiskCol};">${oilRisk}</div>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:8px;">
+      <div style="flex:1;background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.15);border-radius:7px;padding:7px 10px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--t3);margin-bottom:2px;">บริษัทพลังงาน</div>
+        <div style="font-size:17px;font-weight:800;color:#d97706;">${energyCnt}<span style="font-size:11px;color:var(--t3);"> บจ.</span></div>
+      </div>
+      <div style="flex:1;background:${transportImpact>0?'rgba(239,68,68,.06)':'rgba(34,197,94,.06)'};border:1px solid ${transportImpact>0?'rgba(239,68,68,.2)':'rgba(34,197,94,.2)'};border-radius:7px;padding:7px 10px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--t3);margin-bottom:2px;">ต้นทุนขนส่ง</div>
+        <div style="font-size:17px;font-weight:800;color:${transportImpact>0?'#ef4444':'#22c55e'};">${transportImpact>0?'+':''}${transportImpact}%<span style="font-size:10px;color:var(--t3);">vs ปกติ</span></div>
+      </div>
+    </div>
+    <div style="background:var(--bg);border-radius:7px;padding:9px 11px;font-size:11px;color:var(--t2);line-height:1.6;">
+      ${lcn('fuel',11,'margin-right:4px;color:#2563eb;')} ดีเซล <b>฿${diesel}</b> · Brent <b>$${brent}/bbl</b>
+      ${domOil.length?`<br>ภาคที่กระทบ: <span style="color:var(--t1);font-weight:600;">${domOil.map(([n])=>n).join(', ')}</span>`:''}
+    </div>
+    <div class="prov-og-lbl" style="margin-top:12px;">${lcn('coins',11,'margin-right:4px;color:#b7791f;')}Gold Market Activity</div>
+    <div style="display:flex;gap:8px;margin-bottom:6px;">
+      <div style="flex:1;background:rgba(183,121,31,.06);border:1px solid rgba(183,121,31,.18);border-radius:7px;padding:7px 10px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--t3);margin-bottom:2px;">ร้านทอง/ผู้ค้าทอง</div>
+        <div style="font-size:17px;font-weight:800;color:#b7791f;">${goldCnt||'&lt;10'}<span style="font-size:11px;color:var(--t3);"> ร้าน</span></div>
+      </div>
+      <div style="flex:1;background:rgba(183,121,31,.04);border:1px solid rgba(183,121,31,.12);border-radius:7px;padding:7px 10px;">
+        <div style="font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--t3);margin-bottom:2px;">ราคาทอง (ขาย)</div>
+        <div style="font-size:13px;font-weight:800;color:#92400e;">฿${goldSell.toLocaleString('th-TH')}</div>
+        <div style="font-size:9.5px;color:var(--t3);">/บาทน้ำหนัก</div>
+      </div>
+    </div>
+  </div>`;
+
   pane.innerHTML=`<div class="dname">${id}</div><div class="dthai">${d.th}</div>
   <div class="stat3"><div><div class="sbox-lbl">Registrations</div><div class="sbox-val" style="color:var(--cyan)">${d.reg.toLocaleString()}</div></div><div><div class="sbox-lbl">Capital</div><div class="sbox-val" style="color:var(--gold)">฿${(d.cap/1000).toFixed(1)}B</div></div><div><div class="sbox-lbl">Biz Density</div><div class="sbox-val" style="color:var(--green)">${d.den.toLocaleString()}<span style="font-size:10px"> /10K</span></div></div></div>
   <div class="sec-lbl">Top Sectors</div>${secH}
-  <div class="sec-lbl">Monthly Trend</div><canvas id="miniTrend" height="65" style="margin:4px 0 10px"></canvas>
-  <div class="sec-lbl">Notable Registrations</div>${notH}`;
+  <div class="sec-lbl">Monthly Trend</div><canvas id="miniTrend" height="58" style="margin:4px 0 8px"></canvas>
+  <div class="sec-lbl">Notable Registrations</div>${notH}
+  ${oilSectionH}`;
+  initIcons();
   setTimeout(()=>{const c=document.getElementById('miniTrend');if(!c)return;const vals=Array.from({length:12},()=>Math.round(d.reg*.06+Math.random()*d.reg*.12));new Chart(c,{type:'bar',data:{labels:['O','N','D','J','F','M','A','M','J','J','A','S'],datasets:[{data:vals,backgroundColor:'rgba(8,145,178,.5)',borderRadius:2}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}}});},50);
 }
 
