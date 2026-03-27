@@ -551,6 +551,40 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
 /* Responsive */
 @media(max-width:900px){.gov-kpi-row{grid-template-columns:repeat(2,1fr)!important;}}
 @media(max-width:640px){.gov-kpi-row{grid-template-columns:1fr 1fr!important;}}
+
+/* ══ NEWS COMPONENTS ══ */
+/* Contextual snippet */
+.news-snippet{margin-top:14px;background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:14px;padding:16px 18px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);}
+.news-snippet-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.news-snippet-lbl{font-size:9.5px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--t2);display:flex;align-items:center;gap:5px;}
+.news-snippet-more{font-size:11px;color:var(--cyan);font-weight:600;cursor:pointer;border:none;background:none;padding:0;font-family:'Inter',sans-serif;}
+.news-snippet-more:hover{text-decoration:underline;}
+.ns-item{display:flex;align-items:flex-start;gap:9px;padding:9px 0;border-bottom:1px solid rgba(0,0,0,.05);cursor:pointer;}
+.ns-item:last-child{border-bottom:none;}
+.ns-item:hover .ns-title{color:var(--cyan);}
+.ns-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+.ns-body{flex:1;min-width:0;}
+.ns-title{font-size:12.5px;color:var(--t1);line-height:1.45;font-weight:500;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;transition:color .12s;}
+.ns-meta{font-size:10px;color:var(--t3);display:flex;align-items:center;gap:5px;margin-top:3px;}
+.ns-src{font-weight:600;}
+/* News full-page */
+.news-filter-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.nf-tab{padding:5px 14px;font-size:12px;font-weight:500;border-radius:8px;cursor:pointer;color:var(--t2);background:var(--card);border:1px solid var(--border);transition:all .18s;font-family:'Inter',sans-serif;white-space:nowrap;}
+.nf-tab:hover{border-color:rgba(8,145,178,.3);color:var(--cyan);}
+.nf-tab.active{background:rgba(8,145,178,.1);color:var(--cyan);border-color:rgba(8,145,178,.35);font-weight:700;}
+.news-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;}
+.news-card{background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:12px;padding:14px 16px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);cursor:pointer;transition:box-shadow .2s,transform .2s;text-decoration:none;display:block;color:inherit;}
+.news-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.06),0 12px 28px rgba(0,0,0,.07);transform:translateY(-1px);}
+.nc-hdr{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
+.nc-src-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.nc-src-name{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--t2);}
+.nc-tag{display:inline-flex;padding:1px 7px;border-radius:4px;font-size:9.5px;font-weight:700;margin-left:auto;}
+.nc-time{font-size:10px;color:var(--t3);white-space:nowrap;}
+.nc-title{font-size:13.5px;font-weight:700;color:var(--t1);line-height:1.45;margin-bottom:5px;}
+.nc-desc{font-size:11.5px;color:var(--t2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.news-loading{display:flex;align-items:center;justify-content:center;padding:60px;color:var(--t3);font-size:13px;gap:10px;}
+.news-empty{display:flex;flex-direction:column;align-items:center;padding:50px;color:var(--t3);font-size:12.5px;gap:6px;text-align:center;}
+@media(max-width:900px){.news-grid{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -944,6 +978,15 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
       </div>
     </div>
   </div>
+
+  <!-- ══ Contextual News: Oil & Energy ══ -->
+  <div class="news-snippet">
+    <div class="news-snippet-hdr">
+      <div class="news-snippet-lbl"><i data-lucide="newspaper" class="lc" style="width:11px;height:11px;"></i>ข่าวล่าสุด — น้ำมัน &amp; พลังงาน</div>
+      <button class="news-snippet-more" onclick="goPage('news',document.querySelector('[onclick*=goPage\\28\\27news])'))">ดูทั้งหมด →</button>
+    </div>
+    <div id="news-oil-items"><div style="font-size:12px;color:var(--t3);padding:6px 0;">กำลังโหลด...</div></div>
+  </div>
 </div>
 
 <!-- ══ SIMULATOR ══ -->
@@ -1202,7 +1245,45 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
     </div>
   </div>
 
+  <!-- ══ Contextual News: Gold ══ -->
+  <div class="news-snippet">
+    <div class="news-snippet-hdr">
+      <div class="news-snippet-lbl"><i data-lucide="newspaper" class="lc" style="width:11px;height:11px;"></i>ข่าวล่าสุด — ทองคำ &amp; โลหะมีค่า</div>
+      <button class="news-snippet-more" onclick="goPage('news',document.querySelector('[onclick*=goPage\\28\\27news])'))">ดูทั้งหมด →</button>
+    </div>
+    <div id="news-gold-items"><div style="font-size:12px;color:var(--t3);padding:6px 0;">กำลังโหลด...</div></div>
+  </div>
+
 </div><!-- /page-gold -->
+
+<!-- ══ NEWS FEED ══ -->
+<div class="page" id="page-news">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:10px;">
+    <div>
+      <div style="font-size:18px;font-weight:800;color:var(--t1);margin-bottom:3px;display:flex;align-items:center;gap:8px;">
+        <i data-lucide="newspaper" class="lc" style="width:18px;height:18px;"></i>ข่าวสารเศรษฐกิจไทย
+      </div>
+      <div id="news-update-lbl" style="font-size:11px;color:var(--t3);">กรุงเทพธุรกิจ · ประชาชาติธุรกิจ · Bangkok Post · The Nation · อัปเดตทุก 15 นาที</div>
+    </div>
+    <button id="news-refresh-btn" onclick="refreshNews(this)" style="display:flex;align-items:center;gap:6px;padding:7px 16px;background:var(--card);border:1px solid var(--border);border-radius:9px;font-size:12.5px;font-weight:600;color:var(--t2);cursor:pointer;font-family:'Inter',sans-serif;transition:all .18s;box-shadow:0 1px 2px rgba(0,0,0,.05);">
+      <i data-lucide="rotate-cw" class="lc" style="width:14px;height:14px;"></i>รีเฟรช
+    </button>
+  </div>
+  <div class="news-filter-row">
+    <button class="nf-tab active" onclick="filterNews('all',this)">ทั้งหมด</button>
+    <button class="nf-tab" onclick="filterNews('energy',this)">⛽ น้ำมัน &amp; พลังงาน</button>
+    <button class="nf-tab" onclick="filterNews('gold',this)">🥇 ทองคำ</button>
+    <button class="nf-tab" onclick="filterNews('macro',this)">📊 เศรษฐกิจมหภาค</button>
+    <button class="nf-tab" onclick="filterNews('trade',this)">🚢 การค้า &amp; ส่งออก</button>
+    <button class="nf-tab" onclick="filterNews('invest',this)">💹 ตลาดทุน</button>
+  </div>
+  <div id="news-feed-container">
+    <div class="news-loading">
+      <i data-lucide="loader-2" class="lc" style="width:18px;height:18px;animation:spin .8s linear infinite;"></i>
+      กำลังโหลดข่าว...
+    </div>
+  </div>
+</div>
 
 <!-- ══ SETTINGS ══ -->
 <div class="page" id="page-settings">
@@ -1317,6 +1398,7 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
   <button class="ntab" onclick="goPage('graph',this)"><i data-lucide="network" class="lc"></i>Knowledge Graph</button>
   <button class="ntab" onclick="goPage('sectors',this)"><i data-lucide="layers" class="lc"></i>Sectors</button>
   <button class="ntab" onclick="goPage('provinces',this)"><i data-lucide="map" class="lc"></i>Provinces</button>
+  <button class="ntab" onclick="goPage('news',this)"><i data-lucide="newspaper" class="lc"></i>ข่าวสาร</button>
   <div class="ndiv"></div>
   <span class="bnav-lbl adv">ADV</span>
   <button class="ntab adv" onclick="goPage('capital',this)"><i data-lucide="trending-up" class="lc"></i>Capital Flows</button>
@@ -1360,7 +1442,7 @@ function goPage(name,btn){
   document.querySelectorAll('.ntab').forEach(b=>b.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   btn.classList.add('active');
-  ({graph:lazyGraph,sectors:lazySectors,provinces:lazyMap,capital:lazyCap,oil:lazyOil,gold:lazyGold,simulator:lazySim,briefing:lazyBrief,settings:lazySettings,govdata:lazyGovData})[name]?.();
+  ({graph:lazyGraph,sectors:lazySectors,provinces:lazyMap,capital:lazyCap,oil:lazyOil,gold:lazyGold,simulator:lazySim,briefing:lazyBrief,settings:lazySettings,govdata:lazyGovData,news:lazyNews})[name]?.();
 }
 
 Chart.defaults.color='#94a3b8';
@@ -2486,6 +2568,204 @@ async function lazyGovData(){
   }
   console.info('[GovData] datasets loaded. live:',hasLive);
 }
+
+/* ═══════ NEWS FEED ═══════ */
+/* RSS sources — whitelist only, ordered by relevance */
+const NEWS_SOURCES=[
+  {id:'bkbiz',   name:'กรุงเทพธุรกิจ', color:'#0891b2',
+   url:'https://www.bangkokbiznews.com/rss/data/bangkokbiznews.xml'},
+  {id:'prachachat',name:'ประชาชาติ',   color:'#d97706',
+   url:'https://www.prachachat.net/feed'},
+  {id:'bkpost',  name:'Bangkok Post',  color:'#dc2626',
+   url:'https://www.bangkokpost.com/rss/data/business.xml'},
+  {id:'nation',  name:'The Nation',    color:'#7c3aed',
+   url:'https://www.nationthailand.com/rss/business'},
+];
+
+/* Keyword maps for category filtering */
+const NEWS_KEYWORDS={
+  energy:['น้ำมัน','ราคาน้ำมัน','พลังงาน','ptt','pttep','ปิโตรเลียม','oil','energy','crude','opec','fuel','diesel','gasoline','ไออาร์พีซี','bangchak','บางจาก','ก๊าซ','lng'],
+  gold:  ['ทอง','ราคาทอง','ทองคำ','gold','precious','สมาคมค้าทอง','ทองแท่ง','ทองรูปพรรณ'],
+  macro: ['gdp','เงินเฟ้อ','cpi','ดอกเบี้ย','ธปท','bot','inflation','interest rate','นโยบายการเงิน','เศรษฐกิจ','economy','เฟด','fed'],
+  trade: ['ส่งออก','นำเข้า','การค้า','export','import','trade','ดุลการค้า','ศุลกากร','customs','อุตสาหกรรม'],
+  invest:['หุ้น','ตลาดหลักทรัพย์','set','ลงทุน','กองทุน','invest','stock','fund','etf','foreign','fdI','เงินลงทุน'],
+};
+
+const NEWS_CACHE_KEY='tm_news_v1';
+const NEWS_CACHE_TTL=15*60*1000; // 15 min
+let _newsItems=[];
+let _newsDone=false;
+let _newsFilter='all';
+
+/* Fetch one RSS feed via CORS proxy, returns array of item objects */
+async function fetchOneRSS(src){
+  const url=CORS+encodeURIComponent(src.url);
+  const r=await fetch(url,{signal:AbortSignal.timeout(8000)});
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  const txt=await r.text();
+  // Strip CORS proxy HTML wrapper if present
+  const xmlStart=txt.indexOf('<?xml');
+  const rssStart=txt.indexOf('<rss');
+  const feedStart=txt.indexOf('<feed');
+  const startIdx=xmlStart>=0?xmlStart:Math.max(rssStart,feedStart);
+  const clean=startIdx>0?txt.slice(startIdx):txt;
+  const doc=new DOMParser().parseFromString(clean,'text/xml');
+  const items=[...doc.querySelectorAll('item,entry')];
+  return items.slice(0,12).map(el=>{
+    const title=(el.querySelector('title')?.textContent||'').replace(/<!\[CDATA\[|\]\]>/g,'').trim();
+    const link=(el.querySelector('link')?.textContent||el.querySelector('link')?.getAttribute('href')||'').trim();
+    const pub=el.querySelector('pubDate,published,updated')?.textContent||'';
+    const desc=(el.querySelector('description,summary,content')?.textContent||'').replace(/<[^>]+>/g,'').replace(/<!\[CDATA\[|\]\]>/g,'').trim().slice(0,180);
+    return{title,link,desc,pub,srcId:src.id,srcName:src.name,srcColor:src.color};
+  }).filter(i=>i.title&&i.link);
+}
+
+/* Categorise an item by keyword matching */
+function categoriseItem(item){
+  const text=(item.title+' '+item.desc).toLowerCase();
+  for(const[cat,kws] of Object.entries(NEWS_KEYWORDS)){
+    if(kws.some(k=>text.includes(k.toLowerCase()))) return cat;
+  }
+  return'other';
+}
+
+/* Format relative time */
+function relTime(pubStr){
+  if(!pubStr) return'';
+  const d=new Date(pubStr);
+  if(isNaN(d)) return'';
+  const diff=Date.now()-d.getTime();
+  if(diff<60e3) return'เมื่อกี้';
+  if(diff<3600e3) return Math.floor(diff/60e3)+'นาทีที่แล้ว';
+  if(diff<86400e3) return Math.floor(diff/3600e3)+'ชม.ที่แล้ว';
+  return Math.floor(diff/86400e3)+'วันที่แล้ว';
+}
+
+/* Fetch all sources in parallel, cache results */
+async function fetchAllNews(force=false){
+  // Check cache
+  if(!force){
+    try{
+      const c=JSON.parse(localStorage.getItem(NEWS_CACHE_KEY)||'null');
+      if(c&&Date.now()-c.ts<NEWS_CACHE_TTL){
+        _newsItems=c.items;
+        return _newsItems;
+      }
+    }catch(e){}
+  }
+  const results=await Promise.allSettled(NEWS_SOURCES.map(s=>fetchOneRSS(s)));
+  let all=[];
+  results.forEach((r,i)=>{
+    if(r.status==='fulfilled') all.push(...r.value);
+    else console.warn('[News]',NEWS_SOURCES[i].id,'failed:',r.reason?.message);
+  });
+  // Sort newest first
+  all.sort((a,b)=>new Date(b.pub)-new Date(a.pub));
+  // Tag categories
+  all=all.map(it=>({...it,cat:categoriseItem(it)}));
+  _newsItems=all;
+  try{ localStorage.setItem(NEWS_CACHE_KEY,JSON.stringify({ts:Date.now(),items:all})); }catch(e){}
+  return all;
+}
+
+/* Render the full news feed grid */
+function renderNewsFeed(items,filter='all'){
+  const c=document.getElementById('news-feed-container');
+  if(!c) return;
+  const filtered=filter==='all'?items:items.filter(it=>it.cat===filter);
+  if(!filtered.length){
+    c.innerHTML=`<div class="news-empty"><i data-lucide="inbox" class="lc" style="width:28px;height:28px;opacity:.3;"></i><div>ไม่พบข่าวในหมวดนี้</div><div style="font-size:11px;color:var(--t3);">ลองรีเฟรชหรือเลือกหมวดอื่น</div></div>`;
+    initIcons();return;
+  }
+  const tagLabel={energy:'น้ำมัน',gold:'ทองคำ',macro:'มหภาค',trade:'การค้า',invest:'ลงทุน',other:'ทั่วไป'};
+  const tagColor={energy:'rgba(217,119,6,.12)',gold:'rgba(183,121,31,.12)',macro:'rgba(8,145,178,.12)',trade:'rgba(5,150,105,.12)',invest:'rgba(124,58,237,.12)',other:'rgba(148,163,184,.12)'};
+  const tagText={energy:'#d97706',gold:'#b7791f',macro:'#0891b2',trade:'#059669',invest:'#7c3aed',other:'#94a3b8'};
+  c.innerHTML=`<div class="news-grid">${filtered.map(it=>`
+    <a class="news-card" href="${it.link}" target="_blank" rel="noopener noreferrer">
+      <div class="nc-hdr">
+        <div class="nc-src-dot" style="background:${it.srcColor}"></div>
+        <div class="nc-src-name">${it.srcName}</div>
+        <div class="nc-tag" style="background:${tagColor[it.cat]};color:${tagText[it.cat]};">${tagLabel[it.cat]||'ทั่วไป'}</div>
+        <div class="nc-time">${relTime(it.pub)}</div>
+      </div>
+      <div class="nc-title">${it.title}</div>
+      ${it.desc?`<div class="nc-desc">${it.desc}</div>`:''}
+    </a>`).join('')}</div>`;
+  // Update timestamp label
+  const lbl=document.getElementById('news-update-lbl');
+  if(lbl&&_newsItems.length){
+    const newest=new Date(_newsItems[0].pub);
+    const label=isNaN(newest)?'':' · อัปเดต '+relTime(_newsItems[0].pub);
+    lbl.textContent='กรุงเทพธุรกิจ · ประชาชาติธุรกิจ · Bangkok Post · The Nation'+label;
+  }
+}
+
+/* Render 3-item contextual snippets in Oil / Gold tabs */
+function renderNewsSnippet(containerId,cat){
+  const el=document.getElementById(containerId);
+  if(!el) return;
+  const items=_newsItems.filter(it=>it.cat===cat).slice(0,3);
+  if(!items.length){
+    el.innerHTML=`<div style="font-size:11.5px;color:var(--t3);padding:4px 0;">ยังไม่มีข่าวในหมวดนี้ — ลองรีเฟรช</div>`;
+    return;
+  }
+  el.innerHTML=items.map(it=>`
+    <div class="ns-item" onclick="window.open('${it.link}','_blank','noopener,noreferrer')">
+      <div class="ns-dot" style="background:${it.srcColor}"></div>
+      <div class="ns-body">
+        <div class="ns-title">${it.title}</div>
+        <div class="ns-meta">
+          <span class="ns-src" style="color:${it.srcColor}">${it.srcName}</span>
+          <span>·</span>
+          <span>${relTime(it.pub)}</span>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+/* Filter handler for news tab buttons */
+function filterNews(cat,btn){
+  _newsFilter=cat;
+  document.querySelectorAll('.nf-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderNewsFeed(_newsItems,cat);
+}
+
+/* Refresh button handler */
+async function refreshNews(btn){
+  const ic=btn?.querySelector('.lc');
+  if(ic) ic.style.animation='spin .6s linear infinite';
+  btn&&(btn.disabled=true);
+  const c=document.getElementById('news-feed-container');
+  if(c) c.innerHTML=`<div class="news-loading"><i data-lucide="loader-2" class="lc" style="width:18px;height:18px;animation:spin .8s linear infinite;"></i>กำลังโหลดข่าว...</div>`;
+  initIcons();
+  await fetchAllNews(true);
+  renderNewsFeed(_newsItems,_newsFilter);
+  renderNewsSnippet('news-oil-items','energy');
+  renderNewsSnippet('news-gold-items','gold');
+  if(ic) ic.style.animation='';
+  btn&&(btn.disabled=false);
+}
+
+/* Lazy loader — called on first tab visit */
+async function lazyNews(){
+  if(_newsDone) return;
+  _newsDone=true;
+  const c=document.getElementById('news-feed-container');
+  if(c) c.innerHTML=`<div class="news-loading"><i data-lucide="loader-2" class="lc" style="width:18px;height:18px;animation:spin .8s linear infinite;"></i>กำลังโหลดข่าว...</div>`;
+  initIcons();
+  await fetchAllNews(false);
+  renderNewsFeed(_newsItems,_newsFilter);
+  renderNewsSnippet('news-oil-items','energy');
+  renderNewsSnippet('news-gold-items','gold');
+}
+
+/* Pre-fetch news in background after page loads (10 sec delay) */
+window.addEventListener('load',()=>setTimeout(async()=>{
+  await fetchAllNews(false);
+  renderNewsSnippet('news-oil-items','energy');
+  renderNewsSnippet('news-gold-items','gold');
+},10000));
 
 /* ═══════ SETTINGS PAGE ═══════ */
 let settingsDone=false;
