@@ -45,18 +45,26 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 .content::-webkit-scrollbar-thumb{background:rgba(0,0,0,.12);border-radius:3px;}
 .content::-webkit-scrollbar-track{background:transparent;}
 
-/* BOTTOM NAV */
-.bnav{background:rgba(255,255,255,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(0,0,0,.06);height:56px;display:flex;align-items:center;padding:0 20px;flex-shrink:0;box-shadow:0 -1px 0 rgba(0,0,0,.04),0 -4px 16px rgba(0,0,0,.04);position:relative;z-index:10;gap:2px;}
-.bnav-lbl{font-size:9px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;flex-shrink:0;}
-.bnav-lbl.core{color:#b0bec5;padding:0 8px 0 4px;}
-.bnav-lbl.adv{color:#c9a227;padding:0 8px;}
-.ntab{padding:0 13px;height:36px;display:inline-flex;align-items:center;font-size:13px;font-weight:500;color:var(--t3);cursor:pointer;border:none;border-radius:9px;transition:all .17s cubic-bezier(.4,0,.2,1);background:none;font-family:'Inter','Sarabun',sans-serif;white-space:nowrap;position:relative;}
+/* BOTTOM NAV — two-tier */
+.bnav{background:rgba(255,255,255,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(0,0,0,.06);display:flex;flex-direction:column;flex-shrink:0;box-shadow:0 -1px 0 rgba(0,0,0,.04),0 -6px 20px rgba(0,0,0,.05);position:relative;z-index:10;}
+/* Core row */
+.bnav-core-row{display:flex;align-items:center;padding:0 16px;height:50px;gap:2px;border-bottom:1px solid rgba(0,0,0,.06);}
+/* ADV row */
+.bnav-adv-row{display:flex;align-items:center;padding:0 16px;height:38px;gap:2px;background:linear-gradient(90deg,rgba(217,119,6,.04),rgba(217,119,6,.02));}
+.bnav-adv-lbl{font-size:8px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#c9a227;padding:0 10px 0 2px;flex-shrink:0;opacity:.8;}
+/* All tabs */
+.ntab{padding:0 12px;height:34px;display:inline-flex;align-items:center;font-size:13px;font-weight:500;color:var(--t3);cursor:pointer;border:none;border-radius:9px;transition:all .17s cubic-bezier(.4,0,.2,1);background:none;font-family:'Inter','Sarabun',sans-serif;white-space:nowrap;position:relative;}
 .ntab:hover{color:var(--t1);background:rgba(0,0,0,.05);}
 .ntab.active{color:var(--cyan);font-weight:700;background:rgba(8,145,178,.1);}
+/* ADV row tabs — slightly compact */
+.bnav-adv-row .ntab{height:28px;font-size:12px;padding:0 10px;}
+.bnav-adv-row .ntab .lc svg{width:13px;height:13px;}
 .ntab.adv{color:#c09a2a;}
-.ntab.adv:hover{color:#92650a;background:rgba(180,120,0,.06);}
-.ntab.adv.active{color:var(--gold);background:rgba(217,119,6,.1);font-weight:700;}
-.ndiv{width:1px;height:22px;background:rgba(0,0,0,.08);margin:0 6px;flex-shrink:0;}
+.ntab.adv:hover{color:#92650a;background:rgba(180,120,0,.07);}
+.ntab.adv.active{color:var(--gold);background:rgba(217,119,6,.12);font-weight:700;}
+/* Settings push-right */
+.bnav-spacer{flex:1;}
+.ndiv{width:1px;height:20px;background:rgba(0,0,0,.08);margin:0 4px;flex-shrink:0;}
 
 /* CARDS */
 .card{background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:14px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);}
@@ -110,7 +118,7 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 .dist-cnt{font-size:11px;color:var(--t3);width:32px;text-align:right;}
 
 /* ── KNOWLEDGE GRAPH LAYOUT ── */
-.graph-layout{display:grid;grid-template-columns:1fr 270px;gap:14px;height:calc(100vh - 168px);}
+.graph-layout{display:grid;grid-template-columns:1fr 270px;gap:14px;height:calc(100vh - 200px);}
 .graph-left{display:flex;flex-direction:column;min-width:0;gap:8px;}
 .graph-legend{display:flex;gap:20px;padding:0 4px;flex-shrink:0;align-items:center;}
 .graph-panel{background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:14px;overflow-y:auto;padding:20px;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);}
@@ -202,7 +210,7 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
 .sector-pill{display:inline-flex;padding:2px 8px;border-radius:4px;font-size:10.5px;font-weight:600;}
 
 /* PROVINCES */
-.prov-layout{display:grid;grid-template-columns:1fr 310px;gap:14px;height:calc(100vh - 168px);}
+.prov-layout{display:grid;grid-template-columns:1fr 310px;gap:14px;height:calc(100vh - 200px);}
 .map-wrap{background:var(--card);border:1px solid rgba(0,0,0,.07);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 12px rgba(0,0,0,.04);}
 .map-tabs{display:flex;gap:6px;padding:14px 16px 0;}
 .mtab{padding:5px 16px;font-size:12.5px;font-weight:500;border-radius:8px;cursor:pointer;color:var(--t2);background:none;border:1px solid transparent;transition:all .18s;font-family:'Inter',sans-serif;}
@@ -286,12 +294,12 @@ body{background:var(--bg);color:var(--t1);font-family:'Inter','Sarabun',sans-ser
    RESPONSIVE — Full System
    ══════════════════════════════════════════ */
 
-/* ── 1100px: Nav scroll + slight content padding ── */
+/* ── 1100px: Nav rows scroll horizontally ── */
 @media (max-width:1100px){
-  .bnav{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 10px;gap:1px;}
-  .bnav::-webkit-scrollbar{display:none;}
+  .bnav-core-row,.bnav-adv-row{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 10px;gap:1px;}
+  .bnav-core-row::-webkit-scrollbar,.bnav-adv-row::-webkit-scrollbar{display:none;}
   .ntab{padding:0 9px;font-size:12.5px;flex-shrink:0;}
-  .bnav-lbl{font-size:8.5px;padding:0 5px!important;}
+  .bnav-adv-lbl{flex-shrink:0;}
   .content{padding:16px 16px;}
 }
 
@@ -721,7 +729,7 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
         <div style="font-size:9.5px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;">คลิกจังหวัดบนแผนที่</div>
       </div>
       <div class="map-svg-area">
-        <svg id="thaiMap" viewBox="0 0 380 600" style="width:auto;height:calc(100vh - 208px);max-width:100%">
+        <svg id="thaiMap" viewBox="0 0 380 600" style="width:auto;height:calc(100vh - 240px);max-width:100%">
           <defs><filter id="glow"><feGaussianBlur stdDeviation="3" result="cb"/><feMerge><feMergeNode in="cb"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
           <rect width="380" height="600" fill="#e8edf3" rx="6"/>
         </svg>
@@ -1391,24 +1399,28 @@ body{background:linear-gradient(160deg,#eef2f7 0%,#f1f5f9 100%);}
 
 </div><!-- /content -->
 
-<!-- BOTTOM NAV -->
+<!-- BOTTOM NAV — two-tier -->
 <nav class="bnav">
-  <span class="bnav-lbl core">CORE</span>
-  <button class="ntab active" onclick="goPage('overview',this)"><i data-lucide="layout-dashboard" class="lc"></i>Overview</button>
-  <button class="ntab" onclick="goPage('graph',this)"><i data-lucide="network" class="lc"></i>Knowledge Graph</button>
-  <button class="ntab" onclick="goPage('sectors',this)"><i data-lucide="layers" class="lc"></i>Sectors</button>
-  <button class="ntab" onclick="goPage('provinces',this)"><i data-lucide="map" class="lc"></i>Provinces</button>
-  <button class="ntab" onclick="goPage('news',this)"><i data-lucide="newspaper" class="lc"></i>ข่าวสาร</button>
-  <div class="ndiv"></div>
-  <span class="bnav-lbl adv">ADV</span>
-  <button class="ntab adv" onclick="goPage('capital',this)"><i data-lucide="trending-up" class="lc"></i>Capital Flows</button>
-  <button class="ntab adv" onclick="goPage('oil',this)"><i data-lucide="fuel" class="lc"></i>Oil &amp; Energy</button>
-  <button class="ntab adv" onclick="goPage('gold',this)" style="color:#b7791f;"><i data-lucide="coins" class="lc"></i>ทองคำ</button>
-  <button class="ntab adv" onclick="goPage('simulator',this)"><i data-lucide="sliders-horizontal" class="lc"></i>Simulator</button>
-  <button class="ntab adv" onclick="goPage('briefing',this)"><i data-lucide="brain" class="lc"></i>AI Briefing</button>
-  <button class="ntab adv" onclick="goPage('govdata',this)"><i data-lucide="landmark" class="lc"></i>ข้อมูลภาครัฐ</button>
-  <div class="ndiv"></div>
-  <button class="ntab" onclick="goPage('settings',this)"><i data-lucide="settings" class="lc"></i></button>
+  <!-- ── CORE ROW ── -->
+  <div class="bnav-core-row">
+    <button class="ntab active" onclick="goPage('overview',this)"><i data-lucide="layout-dashboard" class="lc"></i>Overview</button>
+    <button class="ntab" onclick="goPage('graph',this)"><i data-lucide="network" class="lc"></i>Graph</button>
+    <button class="ntab" onclick="goPage('sectors',this)"><i data-lucide="layers" class="lc"></i>Sectors</button>
+    <button class="ntab" onclick="goPage('provinces',this)"><i data-lucide="map" class="lc"></i>Provinces</button>
+    <button class="ntab" onclick="goPage('news',this)"><i data-lucide="newspaper" class="lc"></i>ข่าวสาร</button>
+    <div class="bnav-spacer"></div>
+    <button class="ntab" onclick="goPage('settings',this)" title="Settings"><i data-lucide="settings" class="lc"></i></button>
+  </div>
+  <!-- ── ADV ROW ── -->
+  <div class="bnav-adv-row">
+    <span class="bnav-adv-lbl">ADV</span>
+    <button class="ntab adv" onclick="goPage('capital',this)"><i data-lucide="trending-up" class="lc"></i>Capital</button>
+    <button class="ntab adv" onclick="goPage('oil',this)"><i data-lucide="fuel" class="lc"></i>Oil &amp; Energy</button>
+    <button class="ntab adv" onclick="goPage('gold',this)" style="color:#b7791f;"><i data-lucide="coins" class="lc"></i>ทองคำ</button>
+    <button class="ntab adv" onclick="goPage('simulator',this)"><i data-lucide="sliders-horizontal" class="lc"></i>Simulator</button>
+    <button class="ntab adv" onclick="goPage('briefing',this)"><i data-lucide="brain" class="lc"></i>AI Briefing</button>
+    <button class="ntab adv" onclick="goPage('govdata',this)"><i data-lucide="landmark" class="lc"></i>ภาครัฐ</button>
+  </div>
 </nav>
 
 <script>
