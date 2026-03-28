@@ -92,7 +92,7 @@ export default function News({ newsHook }) {
               <div className="cc" style={{
                 padding: '12px 16px', cursor: 'pointer', transition: 'all .15s',
               }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
                   {/* Source dot */}
                   <div style={{
                     width: 8, height: 8, borderRadius: '50%', background: a.sourceDot || a.sourceColor,
@@ -134,7 +134,20 @@ export default function News({ newsHook }) {
                       )}
                     </div>
                   </div>
-                  <ExternalLink size={12} style={{ color: 'var(--t3)', flexShrink: 0, marginTop: 3 }} />
+                  {/* Thumbnail */}
+                  {a.image ? (
+                    <img
+                      src={a.image}
+                      alt=""
+                      style={{
+                        width: 80, height: 60, objectFit: 'cover',
+                        borderRadius: 8, flexShrink: 0,
+                      }}
+                      onError={e => { e.target.style.display = 'none'; }}
+                    />
+                  ) : (
+                    <ExternalLink size={12} style={{ color: 'var(--t3)', flexShrink: 0, marginTop: 3 }} />
+                  )}
                 </div>
               </div>
             </a>

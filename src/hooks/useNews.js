@@ -43,6 +43,13 @@ async function fetchOneRSS(src) {
       const pubDate = item.querySelector('pubDate')?.textContent?.trim() || '';
       if (!title) return;
 
+      // extract image: media:thumbnail > media:content > enclosure
+      const image =
+        item.querySelector('thumbnail')?.getAttribute('url') ||
+        item.querySelector('content')?.getAttribute('url') ||
+        item.querySelector('enclosure[type^="image"]')?.getAttribute('url') ||
+        null;
+
       // detect category
       const text = (title + ' ' + desc).toLowerCase();
       let category = 'other';
@@ -56,6 +63,7 @@ async function fetchOneRSS(src) {
         link,
         desc,
         pubDate,
+        image,
         source: src.name,
         sourceColor: src.color,
         sourceDot: src.dot,
