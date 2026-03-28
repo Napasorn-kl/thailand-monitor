@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 // Environment detection
 const IS_ELECTRON = typeof navigator !== 'undefined' && navigator.userAgent.includes('Electron');
-const CORS = IS_ELECTRON ? '' : 'https://corsproxy.io/?';
+const CORS_YAHOO = IS_ELECTRON ? '' : 'https://corsproxy.io/?';
 
 const API_CONFIG = {
   EIA_KEY: '',
@@ -124,7 +124,7 @@ export function useData() {
     }
     // Yahoo Finance fallback
     try {
-      const r = await fetch(CORS + API_CONFIG.ENDPOINTS.YAHOO_BRENT + '?interval=1d&range=5d', {
+      const r = await fetch(CORS_YAHOO + API_CONFIG.ENDPOINTS.YAHOO_BRENT + '?interval=1d&range=5d', {
         ...sig(),
         headers: IS_ELECTRON ? { 'User-Agent': 'Mozilla/5.0' } : {},
       });
@@ -146,7 +146,7 @@ export function useData() {
 
   const fetchThaiOilPrices = useCallback(async () => {
     try {
-      const r = await fetch(CORS + API_CONFIG.ENDPOINTS.THAI_OIL, {
+      const r = await fetch(API_CONFIG.ENDPOINTS.THAI_OIL, {
         ...sig(),
         headers: { 'Accept': 'application/json' },
       });
@@ -181,7 +181,7 @@ export function useData() {
 
   const fetchThaiGoldPrices = useCallback(async () => {
     try {
-      const r = await fetch(CORS + API_CONFIG.ENDPOINTS.THAI_GOLD, {
+      const r = await fetch(API_CONFIG.ENDPOINTS.THAI_GOLD, {
         ...sig(),
         headers: { 'Accept': 'application/json' },
       });
