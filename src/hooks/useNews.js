@@ -7,7 +7,8 @@ const RSS_SOURCES = [
   { name: 'BBC ไทย',             url: 'https://feeds.bbci.co.uk/thai/rss.xml',                       color: '#7c3aed',  dot: '#a78bfa' },
 ];
 
-const CORS_PROXY = 'https://corsproxy.io/?';
+const IS_LOCAL = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+const CORS_PROXY = IS_LOCAL ? 'https://corsproxy.io/?' : '/api/rss?url=';
 const CACHE_DURATION_MS = 10 * 60 * 1000; // 10 minutes
 
 const NEWS_CATEGORY_KEYWORDS = {
