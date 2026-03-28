@@ -22,11 +22,11 @@ import GovData     from './pages/GovData';
 import SettingsPage from './pages/Settings';
 
 const NAV_CORE = [
+  { id: 'news',       label: 'News Highlights', icon: Newspaper,       adv: false },
   { id: 'overview',   label: 'Overview',        icon: LayoutDashboard, adv: false },
   { id: 'graph',      label: 'Knowledge Graph', icon: Network,         adv: false },
   { id: 'sectors',    label: 'Sectors',          icon: Layers,          adv: false },
   { id: 'provinces',  label: 'Provinces',        icon: Map,             adv: false },
-  { id: 'news',       label: 'News',             icon: Newspaper,       adv: false },
 ];
 
 const NAV_ADV = [
