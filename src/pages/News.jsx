@@ -79,7 +79,7 @@ export default function News({ newsHook }) {
           <div style={{ fontSize: 13, color: 'var(--t3)' }}>ไม่มีข่าวในหมวดนี้</div>
         </div>
       ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', gap: 12 }}>
           {articles.map(a => (
             <a
               key={a.id}
@@ -89,65 +89,49 @@ export default function News({ newsHook }) {
               style={{ textDecoration: 'none' }}
               onClick={e => { if (!a.link) e.preventDefault(); }}
             >
-              <div className="cc" style={{
-                padding: '12px 16px', cursor: 'pointer', transition: 'all .15s',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                  {/* Source dot */}
+              <div className="cc" style={{ padding: 0, cursor: 'pointer', overflow: 'hidden', height: '100%' }}>
+                {/* Thumbnail */}
+                {a.image ? (
+                  <img
+                    src={a.image}
+                    alt=""
+                    style={{ width: '100%', height: 160, objectFit: 'cover', display: 'block' }}
+                    onError={e => { e.target.style.display = 'none'; }}
+                  />
+                ) : (
                   <div style={{
-                    width: 8, height: 8, borderRadius: '50%', background: a.sourceDot || a.sourceColor,
-                    flexShrink: 0, marginTop: 5,
-                  }} />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{
-                      fontSize: 13, fontWeight: 600, color: 'var(--t1)',
-                      lineHeight: 1.45, marginBottom: 5,
-                    }}>
-                      {a.title}
-                    </div>
-                    {a.desc && (
-                      <div style={{
-                        fontSize: 11.5, color: 'var(--t3)', lineHeight: 1.5,
-                        marginBottom: 6, overflow: 'hidden',
-                        display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
-                      }}>
-                        {a.desc}
-                      </div>
-                    )}
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{
-                        fontSize: 10, fontWeight: 700, color: a.sourceColor,
-                        background: a.sourceColor + '15', borderRadius: 4, padding: '1px 6px',
-                      }}>
-                        {a.source}
-                      </span>
-                      {a.ago && (
-                        <span style={{ fontSize: 10, color: 'var(--t3)' }}>{a.ago}</span>
-                      )}
-                      {a.category !== 'other' && (
-                        <span style={{
-                          fontSize: 10, color: 'var(--t3)',
-                          background: 'rgba(0,0,0,.05)', borderRadius: 4, padding: '1px 6px',
-                        }}>
-                          {CATS.find(c => c.id === a.category)?.label?.replace(/^[^ ]+ /, '') || a.category}
-                        </span>
-                      )}
-                    </div>
+                    width: '100%', height: 80,
+                    background: `linear-gradient(135deg,${a.sourceColor}22,${a.sourceColor}08)`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    <div style={{ width: 8, height: 8, borderRadius: '50%', background: a.sourceDot || a.sourceColor }} />
                   </div>
-                  {/* Thumbnail */}
-                  {a.image ? (
-                    <img
-                      src={a.image}
-                      alt=""
-                      style={{
-                        width: 80, height: 60, objectFit: 'cover',
-                        borderRadius: 8, flexShrink: 0,
-                      }}
-                      onError={e => { e.target.style.display = 'none'; }}
-                    />
-                  ) : (
-                    <ExternalLink size={12} style={{ color: 'var(--t3)', flexShrink: 0, marginTop: 3 }} />
+                )}
+                {/* Content */}
+                <div style={{ padding: '12px 14px 14px' }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--t1)', lineHeight: 1.45, marginBottom: 6,
+                    overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' }}>
+                    {a.title}
+                  </div>
+                  {a.desc && (
+                    <div style={{ fontSize: 11.5, color: 'var(--t3)', lineHeight: 1.5, marginBottom: 8,
+                      overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' }}>
+                      {a.desc}
+                    </div>
                   )}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: a.sourceColor,
+                      background: a.sourceColor + '15', borderRadius: 4, padding: '2px 7px' }}>
+                      {a.source}
+                    </span>
+                    {a.ago && <span style={{ fontSize: 10, color: 'var(--t3)' }}>{a.ago}</span>}
+                    {a.category !== 'other' && (
+                      <span style={{ fontSize: 10, color: 'var(--t3)', background: 'rgba(0,0,0,.05)', borderRadius: 4, padding: '2px 6px' }}>
+                        {CATS.find(c => c.id === a.category)?.label?.replace(/^[^ ]+ /, '') || a.category}
+                      </span>
+                    )}
+                    <ExternalLink size={10} style={{ color: 'var(--t3)', marginLeft: 'auto' }} />
+                  </div>
                 </div>
               </div>
             </a>
