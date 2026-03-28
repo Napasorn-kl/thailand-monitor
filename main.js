@@ -28,7 +28,7 @@ function createWindow() {
     show: false, // Show after ready-to-show for smooth launch
   });
 
-  mainWindow.loadFile('index.html');
+  mainWindow.loadFile('dist/index.html');
 
   // Show window smoothly when ready
   mainWindow.once('ready-to-show', () => {
