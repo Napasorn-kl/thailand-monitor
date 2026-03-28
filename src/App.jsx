@@ -110,11 +110,11 @@ export default function App() {
         {/* Title */}
         <div>
           <div style={{ fontSize: 16, fontWeight: 800, letterSpacing: '.2px', color: 'var(--t1)' }}>THAILAND MONITOR</div>
-          <div style={{ fontSize: 11, color: 'var(--t3)', letterSpacing: '.3px', marginTop: 2 }}>Macro-Economic Intelligence · Thailand</div>
+          <div className="header-title-sub" style={{ fontSize: 11, color: 'var(--t3)', letterSpacing: '.3px', marginTop: 2 }}>Macro-Economic Intelligence · Thailand</div>
         </div>
 
         {/* LIVE badge */}
-        <div style={{
+        <div className="header-live" style={{
           marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 7,
           border: '1px solid rgba(5,150,105,.3)', borderRadius: 20,
           padding: '5px 14px', fontSize: 11.5, fontWeight: 700, color: '#059669',
@@ -125,7 +125,7 @@ export default function App() {
         </div>
 
         {/* API Status */}
-        <div style={{ fontSize: 10.5, color: 'var(--t3)', display: 'flex', alignItems: 'center', gap: 5 }}>
+        <div className="header-api-detail" style={{ fontSize: 10.5, color: 'var(--t3)', display: 'flex', alignItems: 'center', gap: 5 }}>
           <span style={{ color: apiOk ? '#059669' : '#dc2626', fontWeight: 600 }}>
             {data.fetching
               ? '● Fetching...'
@@ -206,6 +206,27 @@ export default function App() {
           </div>
         </div>
       </div>
+
+      {/* BOTTOM NAV (mobile only) */}
+      <nav className="bottom-nav">
+        {[
+          { id: 'overview',  icon: LayoutDashboard, label: 'Overview' },
+          { id: 'news',      icon: Newspaper,       label: 'ข่าวสาร' },
+          { id: 'oil',       icon: Fuel,            label: 'Oil', adv: true },
+          { id: 'gold',      icon: Coins,           label: 'ทอง', adv: true },
+          { id: 'simulator', icon: SlidersHorizontal, label: 'Sim', adv: true },
+          { id: 'settings',  icon: Settings,        label: 'Settings' },
+        ].map(item => (
+          <button
+            key={item.id}
+            className={`bn-tab${page === item.id ? ' active' : ''}${item.adv ? ' adv' : ''}`}
+            onClick={() => setPage(item.id)}
+          >
+            <item.icon aria-hidden="true" />
+            <span>{item.label}</span>
+          </button>
+        ))}
+      </nav>
     </div>
   );
 }
