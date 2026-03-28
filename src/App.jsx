@@ -26,16 +26,16 @@ const NAV_CORE = [
   { id: 'graph',      label: 'Knowledge Graph', icon: Network,         adv: false },
   { id: 'sectors',    label: 'Sectors',          icon: Layers,          adv: false },
   { id: 'provinces',  label: 'Provinces',        icon: Map,             adv: false },
-  { id: 'news',       label: 'ข่าวสาร',          icon: Newspaper,       adv: false },
+  { id: 'news',       label: 'News',             icon: Newspaper,       adv: false },
 ];
 
 const NAV_ADV = [
   { id: 'capital',    label: 'Capital Flows',   icon: TrendingUp,       adv: true  },
   { id: 'oil',        label: 'Oil & Energy',    icon: Fuel,             adv: true  },
-  { id: 'gold',       label: 'ทองคำ',           icon: Coins,            adv: true, goldStyle: true },
+  { id: 'gold',       label: 'Gold',            icon: Coins,            adv: true, goldStyle: true },
   { id: 'simulator',  label: 'Simulator',       icon: SlidersHorizontal,adv: true  },
   { id: 'briefing',   label: 'AI Briefing',     icon: Brain,            adv: true  },
-  { id: 'govdata',    label: 'ข้อมูลภาครัฐ',   icon: Landmark,         adv: true  },
+  { id: 'govdata',    label: 'Gov Data',        icon: Landmark,         adv: true  },
 ];
 
 function Clock() {
@@ -54,7 +54,7 @@ function Clock() {
 }
 
 export default function App() {
-  const [page, setPage] = useState('overview');
+  const [page, setPage] = useState('news');
   const data = useData();
   const newsHook = useNews();
 
@@ -211,9 +211,9 @@ export default function App() {
       <nav className="bottom-nav">
         {[
           { id: 'overview',  icon: LayoutDashboard, label: 'Overview' },
-          { id: 'news',      icon: Newspaper,       label: 'ข่าวสาร' },
+          { id: 'news',      icon: Newspaper,       label: 'News' },
           { id: 'oil',       icon: Fuel,            label: 'Oil', adv: true },
-          { id: 'gold',      icon: Coins,           label: 'ทอง', adv: true },
+          { id: 'gold',      icon: Coins,           label: 'Gold', adv: true },
           { id: 'simulator', icon: SlidersHorizontal, label: 'Sim', adv: true },
           { id: 'settings',  icon: Settings,        label: 'Settings' },
         ].map(item => (
