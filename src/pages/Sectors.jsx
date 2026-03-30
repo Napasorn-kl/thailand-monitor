@@ -1,13 +1,34 @@
 import React, { useState } from 'react';
+import {
+  Plane, ShoppingCart, Hotel, Package, HardHat, Factory, Building2,
+  Wrench, HeartPulse, Wheat, Landmark, Truck, Monitor, BookOpen,
+  Zap, Tv, BarChart2,
+} from 'lucide-react';
 import { SECTORS, GOLD_EXPOSURE } from '../data/staticData';
 
-const SECTOR_ICONS = {
-  Tourism: '✈️', Retail: '🛒', Hospitality: '🏨', Wholesale: '📦',
-  Construction: '🏗️', Manufacturing: '🏭', 'Real Estate': '🏢',
-  'Other Services': '🔧', Healthcare: '🏥', Agriculture: '🌾',
-  Finance: '💰', Transport: '🚚', Technology: '💻', Education: '📚',
-  Energy: '⚡', Media: '📺',
+const SECTOR_ICON_MAP = {
+  Tourism:         Plane,
+  Retail:          ShoppingCart,
+  Hospitality:     Hotel,
+  Wholesale:       Package,
+  Construction:    HardHat,
+  Manufacturing:   Factory,
+  'Real Estate':   Building2,
+  'Other Services': Wrench,
+  Healthcare:      HeartPulse,
+  Agriculture:     Wheat,
+  Finance:         Landmark,
+  Transport:       Truck,
+  Technology:      Monitor,
+  Education:       BookOpen,
+  Energy:          Zap,
+  Media:           Tv,
 };
+
+function SectorIcon({ name, size = 16, style }) {
+  const Icon = SECTOR_ICON_MAP[name] || BarChart2;
+  return <Icon size={size} style={style} />;
+}
 
 const OIL_INFO = {
   H:   { label: 'ต้นทุนสูงตามน้ำมัน',   desc: 'ราคาน้ำมันขึ้น → ต้นทุนเพิ่มมาก',        bg: 'rgba(239,68,68,.07)',   border: 'rgba(239,68,68,.22)',   color: '#ef4444', icon: '🔴' },
@@ -87,7 +108,7 @@ export default function Sectors({ data }) {
       </div>
 
       {/* Two-panel layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 290px', gap: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 256px', gap: 14 }}>
 
         {/* LEFT: Ranked list */}
         <div className="cc">
@@ -106,8 +127,8 @@ export default function Sectors({ data }) {
                   onClick={() => setSelected(s.name)}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '22px 1fr 90px 72px',
-                    alignItems: 'center', gap: 8,
+                    gridTemplateColumns: '20px minmax(0,1fr) 70px 60px',
+                    alignItems: 'center', gap: 6,
                     padding: '6px 8px', borderRadius: 8, cursor: 'pointer',
                     background: isSel ? s.col + '12' : 'transparent',
                     border: isSel ? `1px solid ${s.col}35` : '1px solid transparent',
@@ -116,7 +137,7 @@ export default function Sectors({ data }) {
                 >
                   <span style={{ fontSize: 10, color: 'var(--t3)', fontWeight: 600, textAlign: 'right' }}>{i + 1}</span>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 7, overflow: 'hidden' }}>
-                    <span style={{ fontSize: 16, flexShrink: 0 }}>{SECTOR_ICONS[s.name] || '📊'}</span>
+                    <SectorIcon name={s.name} size={15} style={{ flexShrink: 0, color: isSel ? s.col : 'var(--t3)', opacity: isSel ? 1 : 0.7 }} />
                     <span style={{
                       fontSize: 12, color: 'var(--t1)', overflow: 'hidden',
                       textOverflow: 'ellipsis', whiteSpace: 'nowrap',
@@ -157,9 +178,10 @@ export default function Sectors({ data }) {
                   <div style={{
                     width: 46, height: 46, borderRadius: 12, flexShrink: 0,
                     background: selSec.col + '20', border: `1.5px solid ${selSec.col}50`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: selSec.col,
                   }}>
-                    {SECTOR_ICONS[selSec.name] || '📊'}
+                    <SectorIcon name={selSec.name} size={22} />
                   </div>
                   <div>
                     <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--t1)', lineHeight: 1.2 }}>{selSec.nameTH}</div>
