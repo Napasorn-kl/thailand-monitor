@@ -12,12 +12,12 @@ const CORS_PROXY = IS_LOCAL ? 'https://corsproxy.io/?' : '/api/rss?url=';
 const CACHE_DURATION_MS = 10 * 60 * 1000; // 10 minutes
 
 const NEWS_CATEGORY_KEYWORDS = {
-  energy: ['น้ำมัน','energy','oil','brent','crude','petroleum','ปิโตรเลียม','พลังงาน','ptt','fuel','ราคาน้ำมัน','opec'],
-  gold:   ['ทอง','gold','precious metal','xau','ราคาทอง','bullion','ทองคำ'],
-  macro:  ['gdp','เศรษฐกิจ','economy','inflation','เงินเฟ้อ','ธนาคารแห่งประเทศไทย','bot','fed','interest rate','ดอกเบี้ย','imu','เศรษฐกิจไทย'],
-  trade:  ['ส่งออก','export','import','นำเข้า','trade','customs','ศุลกากร','fta','wto','tariff'],
-  invest: ['หุ้น','stock','set','ตลาดหลักทรัพย์','invest','fdi','bond','กองทุน','etf','ลงทุน','crypto'],
-  food:   ['อาหาร','food','beverage','เครื่องดื่ม','restaurant','โรงแรม','ท่องเที่ยว','cpf','อุตสาหกรรมอาหาร','ข้าว','sugar','น้ำตาล','เกษตร','agri','เนื้อสัตว์','dairy','snack','fnb','f&b'],
+  energy: ['น้ำมัน','energy','oil','brent','crude','petroleum','ปิโตรเลียม','พลังงาน','ptt','fuel','ราคาน้ำมัน','opec','ก๊าซ','lpg','lng','solar','renewable','พลังงานหมุนเวียน','โซลาร์','ไฟฟ้า','egat','การไฟฟ้า','ngv'],
+  gold:   ['ทอง','gold','precious metal','xau','ราคาทอง','bullion','ทองคำ','สมาคมค้าทองคำ','ราคาทองวันนี้','silver','เงิน','platinum'],
+  macro:  ['gdp','เศรษฐกิจ','economy','inflation','เงินเฟ้อ','ธนาคารแห่งประเทศไทย','bot','fed','interest rate','ดอกเบี้ย','imu','เศรษฐกิจไทย','บาท','thb','ค่าเงิน','อัตราแลกเปลี่ยน','imf','world bank','ธปท','mpc','cpi','pmi','นโยบายการเงิน','กระตุ้นเศรษฐกิจ','งบประมาณ'],
+  trade:  ['ส่งออก','export','import','นำเข้า','trade','customs','ศุลกากร','fta','wto','tariff','ภาษีนำเข้า','trump','rcep','asean','ท่าเรือ','logistics','supply chain','จีน','สหรัฐ','trade war'],
+  invest: ['หุ้น','stock','set','ตลาดหลักทรัพย์','invest','fdi','bond','กองทุน','etf','ลงทุน','crypto','mai','ipo','ปันผล','dividend','market cap','ดัชนี','กำไร','งบการเงิน','sec','ก.ล.ต.','private equity','venture'],
+  food:   ['อาหาร','food','beverage','เครื่องดื่ม','restaurant','โรงแรม','ท่องเที่ยว','cpf','อุตสาหกรรมอาหาร','ข้าว','sugar','น้ำตาล','เกษตร','agri','เนื้อสัตว์','dairy','snack','fnb','f&b','ประมง','seafood','กุ้ง','ทูน่า','tuna','thai union','betagro','itochu','minor','mkrestaurant','oishi','singha','chang','leo','เบียร์','นม','สุรา'],
 };
 
 let newsCache = null;
