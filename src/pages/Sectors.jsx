@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import { SECTORS, GOLD_EXPOSURE } from '../data/staticData';
 
 const OIL_BADGE = {
-  H:   { label: 'น้ำมัน: สูง',     bg: 'rgba(239,68,68,.1)',   color: '#ef4444', icon: '🔴' },
-  M:   { label: 'น้ำมัน: ปานกลาง', bg: 'rgba(245,158,11,.1)',  color: '#f59e0b', icon: '🟡' },
-  L:   { label: 'น้ำมัน: ต่ำ',     bg: 'rgba(148,163,184,.1)', color: '#94a3b8', icon: '⚪' },
-  '+': { label: 'น้ำมัน: บวก',     bg: 'rgba(5,150,105,.1)',   color: '#059669', icon: '🟢' },
+  H:   { label: 'ต้นทุนสูงตามน้ำมัน', desc: 'ราคาน้ำมันขึ้น → ต้นทุนเพิ่มมาก',   bg: 'rgba(239,68,68,.1)',   color: '#ef4444', icon: '🔴' },
+  M:   { label: 'ต้นทุนบางส่วน',       desc: 'ราคาน้ำมันขึ้น → ต้นทุนเพิ่มบางส่วน', bg: 'rgba(245,158,11,.1)',  color: '#f59e0b', icon: '🟡' },
+  L:   { label: 'กระทบน้อย',           desc: 'ไม่พึ่งน้ำมันโดยตรง',                  bg: 'rgba(148,163,184,.1)', color: '#94a3b8', icon: '⚪' },
+  '+': { label: 'ได้ประโยชน์',         desc: 'ราคาน้ำมันขึ้น → รายได้เพิ่มขึ้น',    bg: 'rgba(5,150,105,.1)',   color: '#059669', icon: '🟢' },
 };
+
+function goldLevel(score) {
+  if (score >= 70) return { label: 'สูง',       color: '#d97706' };
+  if (score >= 40) return { label: 'ปานกลาง',  color: '#b7791f' };
+  return              { label: 'ต่ำ',          color: '#92400e' };
+}
 
 const SECTOR_ICONS = {
   Tourism: '✈️', Retail: '🛒', Hospitality: '🏨', Wholesale: '📦',
@@ -88,29 +94,56 @@ function SectorCard({ s, selected, onSelect }) {
           </div>
         </div>
 
-        {/* Oil badge */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        {/* Oil badge row */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
           <span style={{
             fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 6,
             background: ob.bg, color: ob.color,
           }}>
-            {ob.icon} {ob.label}
+            {ob.icon} น้ำมัน: {ob.label}
           </span>
-          {ge && (
-            <span style={{ fontSize: 10, color: '#b7791f', fontWeight: 600, marginLeft: 'auto' }}>
-              🥇 Gold {ge.score}/100
-            </span>
-          )}
+          {ge && (() => {
+            const gl = goldLevel(ge.score);
+            return (
+              <span style={{
+                fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 6, marginLeft: 'auto',
+                background: 'rgba(217,119,6,.1)', color: gl.color,
+              }}>
+                🥇 ทองคำ: {gl.label}
+              </span>
+            );
+          })()}
         </div>
 
         {/* Expanded detail */}
-        {selected && ge && (
-          <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(0,0,0,0.06)' }}>
-            <div style={{ fontSize: 10, color: 'var(--t3)', marginBottom: 4 }}>Gold Exposure</div>
-            <div style={{ background: 'rgba(0,0,0,0.04)', borderRadius: 8, height: 6, marginBottom: 4 }}>
-              <div style={{ width: ge.score + '%', height: '100%', background: '#d97706', borderRadius: 8 }} />
+        {selected && (
+          <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid rgba(0,0,0,0.06)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+
+            {/* Oil impact box */}
+            <div style={{ background: ob.bg, borderRadius: 8, padding: '8px 10px', border: `1px solid ${ob.color}25` }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: ob.color, marginBottom: 2 }}>
+                {ob.icon} ผลกระทบจากราคาน้ำมัน
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--t2)' }}>{ob.desc}</div>
             </div>
-            <div style={{ fontSize: 10.5, color: 'var(--t3)' }}>{ge.note}</div>
+
+            {/* Gold exposure box */}
+            {ge && (() => {
+              const gl = goldLevel(ge.score);
+              return (
+                <div style={{ background: 'rgba(217,119,6,.06)', borderRadius: 8, padding: '8px 10px', border: '1px solid rgba(217,119,6,.2)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: '#b7791f' }}>🥇 ความเกี่ยวข้องกับทองคำ</span>
+                    <span style={{ fontSize: 11, fontWeight: 800, color: gl.color }}>{ge.score}/100 · {gl.label}</span>
+                  </div>
+                  <div style={{ background: 'rgba(0,0,0,0.08)', borderRadius: 6, height: 6, marginBottom: 6 }}>
+                    <div style={{ width: ge.score + '%', height: '100%', background: 'linear-gradient(90deg,#d97706,#f59e0b)', borderRadius: 6 }} />
+                  </div>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--t2)', marginBottom: 2 }}>{ge.th}</div>
+                  <div style={{ fontSize: 10, color: 'var(--t3)' }}>{ge.note}</div>
+                </div>
+              );
+            })()}
           </div>
         )}
       </div>
