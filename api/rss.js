@@ -9,7 +9,7 @@ export default async function handler(req, res) {
     });
     const text = await r.text();
     res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+    res.setHeader('Content-Type', r.headers.get('content-type') || 'text/plain; charset=utf-8');
     res.status(r.status).send(text);
   } catch (e) {
     res.status(500).json({ error: e.message });

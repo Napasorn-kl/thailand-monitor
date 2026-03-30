@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 
-const CORS    = 'https://corsproxy.io/?';
+const IS_LOCAL = typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+const CORS     = IS_LOCAL ? 'https://corsproxy.io/?' : '/api/rss?url=';
 const CACHE_MS = 10 * 60 * 1000;
 
 async function fetchOneSymbol(sym) {
