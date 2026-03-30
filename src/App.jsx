@@ -30,7 +30,6 @@ const NAV_CORE = [
 
 const NAV_ADV = [
   { id: 'capital',    label: 'Capital Flows',   icon: TrendingUp,       adv: true  },
-  { id: 'graph',      label: 'Knowledge Graph', icon: Network,          adv: true  },
   { id: 'oil',        label: 'Oil & Energy',    icon: Fuel,             adv: true  },
   { id: 'gold',       label: 'Gold',            icon: Coins,            adv: true, goldStyle: true },
   { id: 'simulator',  label: 'Simulator',       icon: SlidersHorizontal,adv: true  },
