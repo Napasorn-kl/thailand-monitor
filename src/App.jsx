@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard, Network, Layers, Map, Newspaper,
   TrendingUp, Fuel, Coins, SlidersHorizontal, Brain,
-  Landmark, Settings,
+  Landmark, Settings, PackageOpen,
 } from 'lucide-react';
 
 import { useData } from './hooks/useData';
@@ -14,8 +14,7 @@ import Sectors     from './pages/Sectors';
 import Provinces   from './pages/Provinces';
 import News        from './pages/News';
 import Capital     from './pages/Capital';
-import Oil         from './pages/Oil';
-import Gold        from './pages/Gold';
+import Commodity   from './pages/Commodity';
 import Simulator   from './pages/Simulator';
 import Briefing    from './pages/Briefing';
 import GovData     from './pages/GovData';
@@ -29,12 +28,11 @@ const NAV_CORE = [
 ];
 
 const NAV_ADV = [
-  { id: 'capital',    label: 'Capital Flows',   icon: TrendingUp,       adv: true  },
-  { id: 'oil',        label: 'Oil & Energy',    icon: Fuel,             adv: true  },
-  { id: 'gold',       label: 'Gold',            icon: Coins,            adv: true, goldStyle: true },
-  { id: 'simulator',  label: 'Simulator',       icon: SlidersHorizontal,adv: true  },
-  { id: 'briefing',   label: 'AI Briefing',     icon: Brain,            adv: true  },
-  { id: 'govdata',    label: 'Gov Data',        icon: Landmark,         adv: true  },
+  { id: 'capital',    label: 'Capital Flows',   icon: TrendingUp,        adv: true },
+  { id: 'commodity',  label: 'Commodities',     icon: PackageOpen,       adv: true },
+  { id: 'simulator',  label: 'Simulator',       icon: SlidersHorizontal, adv: true },
+  { id: 'briefing',   label: 'AI Briefing',     icon: Brain,             adv: true },
+  { id: 'govdata',    label: 'Gov Data',        icon: Landmark,          adv: true },
 ];
 
 function Clock() {
@@ -70,8 +68,7 @@ export default function App() {
       case 'provinces': return <Provinces {...props} />;
       case 'news':      return <News      {...props} />;
       case 'capital':   return <Capital   {...props} />;
-      case 'oil':       return <Oil       {...props} />;
-      case 'gold':      return <Gold      {...props} />;
+      case 'commodity': return <Commodity {...props} />;
       case 'simulator': return <Simulator {...props} />;
       case 'briefing':  return <Briefing  {...props} />;
       case 'govdata':   return <GovData   {...props} />;
