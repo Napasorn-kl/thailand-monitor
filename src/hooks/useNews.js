@@ -51,12 +51,20 @@ async function fetchOneRSS(src) {
         item.querySelector('enclosure[type^="image"]')?.getAttribute('url') ||
         null;
 
-      // detect category
-      const text = (title + ' ' + desc).toLowerCase();
-      let category = 'other';
+      // detect category: score-based, title match = 3pts, desc match = 1pt
+      const titleLow = title.toLowerCase();
+      const descLow  = desc.toLowerCase();
+      let bestCat = 'other';
+      let bestScore = 0;
       for (const [cat, kws] of Object.entries(NEWS_CATEGORY_KEYWORDS)) {
-        if (kws.some(k => text.includes(k))) { category = cat; break; }
+        let score = 0;
+        for (const k of kws) {
+          if (titleLow.includes(k)) score += 3;
+          else if (descLow.includes(k)) score += 1;
+        }
+        if (score > bestScore) { bestScore = score; bestCat = cat; }
       }
+      const category = bestCat;
 
       results.push({
         id: src.name + '_' + idx,
