@@ -8,6 +8,7 @@ const CATS = [
   { id: 'macro',  label: '📊 เศรษฐกิจ' },
   { id: 'trade',  label: '🚢 การค้า'  },
   { id: 'invest', label: '📈 ตลาดทุน' },
+  { id: 'food',   label: '🍽️ อาหาร & เครื่องดื่ม' },
 ];
 
 export default function News({ newsHook }) {

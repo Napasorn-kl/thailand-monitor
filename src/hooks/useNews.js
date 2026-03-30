@@ -17,6 +17,7 @@ const NEWS_CATEGORY_KEYWORDS = {
   macro:  ['gdp','เศรษฐกิจ','economy','inflation','เงินเฟ้อ','ธนาคารแห่งประเทศไทย','bot','fed','interest rate','ดอกเบี้ย','imu','เศรษฐกิจไทย'],
   trade:  ['ส่งออก','export','import','นำเข้า','trade','customs','ศุลกากร','fta','wto','tariff'],
   invest: ['หุ้น','stock','set','ตลาดหลักทรัพย์','invest','fdi','bond','กองทุน','etf','ลงทุน','crypto'],
+  food:   ['อาหาร','food','beverage','เครื่องดื่ม','restaurant','โรงแรม','ท่องเที่ยว','cpf','อุตสาหกรรมอาหาร','ข้าว','sugar','น้ำตาล','เกษตร','agri','เนื้อสัตว์','dairy','snack','fnb','f&b'],
 };
 
 let newsCache = null;
