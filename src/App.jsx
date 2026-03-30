@@ -24,13 +24,13 @@ import SettingsPage from './pages/Settings';
 const NAV_CORE = [
   { id: 'news',       label: 'News Highlights', icon: Newspaper,       adv: false },
   { id: 'overview',   label: 'Overview',        icon: LayoutDashboard, adv: false },
-  { id: 'graph',      label: 'Knowledge Graph', icon: Network,         adv: false },
   { id: 'sectors',    label: 'Sectors',          icon: Layers,          adv: false },
   { id: 'provinces',  label: 'Provinces',        icon: Map,             adv: false },
 ];
 
 const NAV_ADV = [
   { id: 'capital',    label: 'Capital Flows',   icon: TrendingUp,       adv: true  },
+  { id: 'graph',      label: 'Knowledge Graph', icon: Network,          adv: true  },
   { id: 'oil',        label: 'Oil & Energy',    icon: Fuel,             adv: true  },
   { id: 'gold',       label: 'Gold',            icon: Coins,            adv: true, goldStyle: true },
   { id: 'simulator',  label: 'Simulator',       icon: SlidersHorizontal,adv: true  },
