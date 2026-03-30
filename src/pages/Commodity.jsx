@@ -4,7 +4,7 @@ import { useCommodity, COMMODITY_DEFS } from '../hooks/useCommodity';
 
 const CATS = [
   { id: 'energy',    label: '⚡ พลังงาน'  },
-  { id: 'metals',    label: '🔩 โลหะ'     },
+  { id: 'metals',    label: '🪙 โลหะ & ทองคำ' },
   { id: 'agri',      label: '🌾 เกษตร'    },
   { id: 'livestock', label: '🐄 ปศุสัตว์' },
 ];
