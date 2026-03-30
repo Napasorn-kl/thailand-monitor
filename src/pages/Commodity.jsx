@@ -14,6 +14,17 @@ function fmt(val, dec = 2) {
   return Number(val).toLocaleString('en-US', { minimumFractionDigits: dec, maximumFractionDigits: dec });
 }
 
+// Convert commodity price to THB string
+function toThb(price, unit, usdthb) {
+  if (price == null || !usdthb) return null;
+  const fx  = parseFloat(usdthb);
+  const usd = unit.startsWith('USc') ? price / 100 : price; // USc → USD
+  const thb = usd * fx;
+  if (thb >= 1_000_000) return '฿' + (thb / 1_000_000).toFixed(2) + 'M/' + unit.split('/')[1];
+  if (thb >= 1_000)     return '฿' + Math.round(thb).toLocaleString('th-TH') + '/' + unit.split('/')[1];
+  return '฿' + thb.toFixed(2) + '/' + unit.split('/')[1];
+}
+
 function ChangeChip({ change, pct }) {
   if (change == null) return <span style={{ fontSize: 10, color: 'var(--t3)' }}>—</span>;
   const up = change >= 0;
@@ -28,8 +39,9 @@ function ChangeChip({ change, pct }) {
   );
 }
 
-function CommodityCard({ def, q }) {
+function CommodityCard({ def, q, usdthb }) {
   const { price, change, changePct } = q || {};
+  const thbStr = toThb(price, def.unit, usdthb);
   const up = change != null && change >= 0;
   const borderColor = change == null
     ? 'rgba(0,0,0,0.08)'
@@ -58,6 +70,9 @@ function CommodityCard({ def, q }) {
             {price != null ? fmt(price) : '—'}
           </div>
           <div style={{ fontSize: 9.5, color: 'var(--t3)' }}>{def.unit}</div>
+          {thbStr && (
+            <div style={{ fontSize: 10.5, fontWeight: 600, color: '#b45309', marginTop: 1 }}>{thbStr}</div>
+          )}
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -125,8 +140,9 @@ export default function Commodity({ data }) {
   const { quotes, loading, lastUpdate, refresh } = useCommodity();
   const [cat, setCat] = useState('energy');
 
-  const visible = COMMODITY_DEFS.filter(d => d.cat === cat);
-  const retail  = data?.calcThaiRetail?.();
+  const visible  = COMMODITY_DEFS.filter(d => d.cat === cat);
+  const retail   = data?.calcThaiRetail?.();
+  const usdthb   = data?.usdthb;
   const timeStr = lastUpdate
     ? lastUpdate.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })
     : null;
@@ -185,7 +201,7 @@ export default function Commodity({ data }) {
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
           {visible.map(def => (
-            <CommodityCard key={def.id} def={def} q={quotes[def.sym]} />
+            <CommodityCard key={def.id} def={def} q={quotes[def.sym]} usdthb={usdthb} />
           ))}
         </div>
       )}
