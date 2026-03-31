@@ -4,6 +4,15 @@ const IS_LOCAL = typeof window !== 'undefined' &&
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 const CORS_PROXY = IS_LOCAL ? 'https://corsproxy.io/?' : '/api/rss?url=';
 
+function buildFetchUrl(rssUrl) {
+  if (IS_LOCAL) return CORS_PROXY + encodeURIComponent(rssUrl);
+  if (rssUrl.includes('rsshub.app')) {
+    const path = rssUrl.replace('https://rsshub.app/', '');
+    return '/api/rsshub?path=' + encodeURIComponent(path);
+  }
+  return CORS_PROXY + encodeURIComponent(rssUrl);
+}
+
 // Sources with known RSS feeds — deduplicated by logical source
 export const SOCIAL_RSS_SOURCES = [
   // สื่อธุรกิจ-การลงทุน
@@ -50,7 +59,7 @@ async function fetchOneFeed(src) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 12000);
   try {
-    const r = await fetch(CORS_PROXY + encodeURIComponent(src.rss), { signal: ctrl.signal });
+    const r = await fetch(buildFetchUrl(src.rss), { signal: ctrl.signal });
     clearTimeout(timer);
     if (!r.ok) return [];
     const xml = await r.text();
