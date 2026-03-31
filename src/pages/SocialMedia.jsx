@@ -156,33 +156,11 @@ function DirectoryView({ category }) {
   );
 }
 
-// Categories that are social-media-only (no RSS available)
-const NO_RSS_CATS = ['disaster', 'weather', 'accident'];
-
 /* ─── Feed view ─── */
 function FeedView({ category }) {
   const { articles, loading, failedSources, refresh } = useSocialFeed();
 
   const filtered = category === 'all' ? articles : articles.filter(a => a.category === category);
-
-  // Show hint for categories without RSS
-  if (NO_RSS_CATS.includes(category)) {
-    return (
-      <div style={{
-        padding: '32px 20px', textAlign: 'center', borderRadius: 12,
-        background: 'rgba(8,145,178,.04)', border: '1px dashed rgba(8,145,178,.2)',
-      }}>
-        <Rss size={28} style={{ color: 'var(--cyan)', opacity: .4, marginBottom: 12 }} />
-        <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--t2)', marginBottom: 6 }}>
-          แหล่งข้อมูลประเภทนี้เป็น Social Media เท่านั้น
-        </div>
-        <div style={{ fontSize: 11.5, color: 'var(--t3)', lineHeight: 1.6 }}>
-          Facebook / X ไม่เปิด RSS feed สาธารณะ<br />
-          กรุณาดูลิงก์ทั้งหมดในแท็บ <strong>ไดเรกทอรี</strong>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div>

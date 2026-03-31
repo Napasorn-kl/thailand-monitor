@@ -37,6 +37,14 @@ export const SOCIAL_RSS_SOURCES = [
   { name: 'Thai PBS World',      rss: 'https://www.thaipbsworld.com/feed/',                   category: 'business', color: '#0f766e' },
   { name: 'ไทยรัฐ',             rss: 'https://www.thairath.co.th/rss/',                      category: 'business', color: '#dc2626' },
   { name: 'ฐานเศรษฐกิจ',        rss: 'https://www.thansettakij.com/feed',                    category: 'business', color: '#059669' },
+  // 📱 Facebook pages via RSSHub (ต้องตั้ง RSSHUB_URL บน Vercel ก่อน)
+  { name: 'กรมป้องกันสาธารณภัย', rss: 'https://rsshub.app/facebook/page/DDPMNews',            category: 'disaster', color: '#dc2626' },
+  { name: 'กรมอุตุนิยมวิทยา',    rss: 'https://rsshub.app/facebook/page/tmd.go.th',           category: 'weather',  color: '#0891b2' },
+  { name: 'กรมควบคุมมลพิษ',      rss: 'https://rsshub.app/facebook/page/PCD.go.th',           category: 'weather',  color: '#65a30d' },
+  { name: 'JS100Radio',           rss: 'https://rsshub.app/facebook/page/js100radio',          category: 'accident', color: '#d97706' },
+  { name: 'FM91 Trafficpro',      rss: 'https://rsshub.app/facebook/page/fm91trafficpro',      category: 'accident', color: '#7c3aed' },
+  { name: 'ลงทุนแมน',            rss: 'https://rsshub.app/facebook/page/longtunman',          category: 'business', color: '#6366f1' },
+  { name: 'กรุงเทพธุรกิจ',        rss: 'https://rsshub.app/facebook/page/bangkokbiznews',      category: 'business', color: '#b45309' },
 ];
 
 let feedCache = null;

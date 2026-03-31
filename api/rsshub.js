@@ -6,7 +6,8 @@ export default async function handler(req, res) {
   if (!path) return res.status(400).json({ error: 'missing path' });
 
   try {
-    const r = await fetch(`https://rsshub.app/${path}`, {
+    const base = (process.env.RSSHUB_URL || 'https://rsshub.app').replace(/\/$/, '');
+    const r = await fetch(`${base}/${path}`, {
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; RSS reader)' },
       signal: AbortSignal.timeout(15000),
     });
