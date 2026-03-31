@@ -11,6 +11,16 @@ const IS_LOCAL = typeof window !== 'undefined' && (window.location.hostname === 
 const CORS_PROXY = IS_LOCAL ? 'https://corsproxy.io/?' : '/api/rss?url=';
 const CACHE_DURATION_MS = 10 * 60 * 1000; // 10 minutes
 
+// คำที่บ่งบอกว่าข่าวนี้ "ไม่ใช่" อาหาร/เกษตร แม้จะมี keyword food ปรากฏในประโยค
+const FOOD_NEGATIVE_CONTEXT = [
+  'ฟุตบอล','บอล','นักเตะ','ทีมชาติ','ช้างศึก','แข่งขัน','กีฬา','นักกีฬา','แชมป์','ลีก','สโมสร',
+  'มวย','บาสเกตบอล','วอลเลย์บอล','แบดมินตัน','เทนนิส','กอล์ฟ',
+  'การเมือง','พรรค','นายกรัฐมนตรี','รัฐมนตรี','เลือกตั้ง','สส','สว','รัฐสภา','ส.ส.','ส.ว.',
+  'อาชญากรรม','จับกุม','ยาเสพติด','ฆาตกรรม','ลักทรัพย์','โกง','ทุจริต',
+  'ดารา','นักร้อง','บันเทิง','ซีรีส์','หนัง','คอนเสิร์ต',
+  'อุบัติเหตุ','ไฟไหม้','น้ำท่วม','แผ่นดินไหว','พายุ',
+];
+
 // 4 categories only — maps 1:1 to the 4 visible tabs (food, trade, energy, macro)
 // Priority order when scoring: energy > food > trade > macro
 // Articles with no keyword match default to macro (catch-all)
@@ -65,10 +75,16 @@ async function fetchOneRSS(src) {
         }
         if (score > bestScore) { bestScore = score; bestCat = cat; }
       }
-      // ต้องได้ >= 2 คะแนนถึงจะ classify เป็น food/trade/energy
-      // (ป้องกัน false positive จาก keyword สั้นที่ match สำนวน)
-      // macro ไม่มี threshold เพราะเป็น default catch-all
-      const category = (bestScore >= 2 || bestCat === 'macro') ? bestCat : 'macro';
+      // threshold ป้องกัน false positive
+      // - food/trade/energy ต้องได้ >= 3 คะแนน (= keyword ปรากฏใน title อย่างน้อย 1 คำ)
+      // - macro ไม่มี threshold เพราะเป็น default catch-all
+      let category = (bestScore >= 3 || bestCat === 'macro') ? bestCat : 'macro';
+
+      // ตรวจ negative context สำหรับ food: ถ้า title มีคำนอกบริบทอาหาร → ย้ายไป macro
+      if (category === 'food') {
+        const hasNegCtx = FOOD_NEGATIVE_CONTEXT.some(w => titleLow.includes(w));
+        if (hasNegCtx) category = 'macro';
+      }
 
       results.push({
         id: src.name + '_' + idx,
