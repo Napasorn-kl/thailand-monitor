@@ -167,19 +167,22 @@ export default function Settings({ data }) {
             </button>
           </div>
 
-          {/* Gemini Key */}
+          {/* Gemini Key — local dev only */}
           <div className="cc">
-            <div className="cc-title" style={{ marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div className="cc-title" style={{ marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
               <Brain size={13} style={{ color: 'var(--cyan)' }} /> Gemini API Key
+              <span style={{ fontSize: 9, fontWeight: 700, background: 'rgba(0,0,0,.07)', color: 'var(--t3)', borderRadius: 4, padding: '1px 6px', marginLeft: 2 }}>LOCAL DEV</span>
             </div>
             <div style={{ fontSize: 11, color: 'var(--t3)', marginBottom: 10, lineHeight: 1.5 }}>
-              ใส่ key เพื่อใช้ AI Briefing (Gemini 1.5 Flash)
-              <br />สมัครฟรีที่ <span style={{ color: 'var(--cyan)', fontWeight: 600 }}>aistudio.google.com</span>
-              <br /><span style={{ fontSize: 10 }}>ฟรี 1,500 req/วัน · ไม่ต้องใช้บัตรเครดิต</span>
+              ใส้ key สำหรับรันบนเครื่อง (localhost)
+              <br />
+              <span style={{ fontWeight: 600, color: 'var(--t2)' }}>Production (Vercel):</span> ตั้ง env var<br />
+              <code style={{ fontSize: 10, background: 'rgba(0,0,0,.06)', padding: '1px 5px', borderRadius: 3 }}>GEMINI_API_KEY</code>
+              {' '}ใน Vercel Dashboard → Settings → Environment Variables
             </div>
             <input
               type="password"
-              placeholder="AIza..."
+              placeholder="AIza... (local dev only)"
               value={geminiKey}
               onChange={e => setGeminiKeyLocal(e.target.value)}
               style={{
@@ -198,7 +201,7 @@ export default function Settings({ data }) {
                 transition: 'background .2s',
               }}
             >
-              {geminiSaved ? '✓ Saved!' : 'Save Gemini Key'}
+              {geminiSaved ? '✓ Saved!' : 'Save (Local Dev)'}
             </button>
           </div>
 

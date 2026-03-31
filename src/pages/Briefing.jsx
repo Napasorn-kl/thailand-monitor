@@ -92,7 +92,7 @@ async function callGemini(prompt, geminiKey) {
     const r = await fetch(GEMINI_ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt, apiKey: geminiKey }),
+      body: JSON.stringify({ prompt }),
       signal: AbortSignal.timeout(35000),
     });
     if (!r.ok) {
