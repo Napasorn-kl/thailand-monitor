@@ -13,30 +13,30 @@ function buildFetchUrl(rssUrl) {
   return CORS_PROXY + encodeURIComponent(rssUrl);
 }
 
-// Sources with known RSS feeds — deduplicated by logical source
+// Sources with confirmed/reliable RSS feeds only (no rsshub/Facebook)
+// Facebook pages do not expose RSS without auth — kept in directory view only
 export const SOCIAL_RSS_SOURCES = [
-  // สื่อธุรกิจ-การลงทุน
-  { name: 'กรุงเทพธุรกิจ',     rss: 'https://www.bangkokbiznews.com/rss/',             category: 'business', color: '#d97706' },
-  { name: 'ฐานเศรษฐกิจ',       rss: 'https://www.thansettakij.com/feed/',              category: 'business', color: '#059669' },
-  { name: 'ประชาชาติธุรกิจ',   rss: 'https://www.prachachat.net/feed',                 category: 'business', color: '#0891b2' },
-  { name: 'ลงทุนแมน',          rss: 'https://longtunman.com/feed/',                    category: 'business', color: '#6366f1' },
-  { name: 'Positioning',        rss: 'https://positioningmag.com/feed/',                category: 'business', color: '#7c3aed' },
-  { name: 'Marketing Oops',     rss: 'https://www.marketingoops.com/feed/',             category: 'business', color: '#dc2626' },
-  { name: 'Marketeer Online',   rss: 'https://www.marketeeronline.co/feed/',            category: 'business', color: '#ea580c' },
-  { name: 'The Standard Wealth',rss: 'https://thestandard.co/feed/',                   category: 'business', color: '#1d4ed8' },
-  { name: 'Thai PBS News',      rss: 'https://news.thaipbs.or.th/rss',                 category: 'business', color: '#0f766e' },
-  { name: 'Bloomberg',          rss: 'https://feeds.bloomberg.com/markets/news.rss',   category: 'business', color: '#1d4ed8' },
-  { name: 'Reuters',            rss: 'https://feeds.reuters.com/reuters/businessNews', category: 'business', color: '#c2410c' },
-  { name: 'Brand Buffet',       rss: 'https://www.brandbuffet.in.th/feed/',            category: 'business', color: '#8b5cf6' },
-  { name: 'Amarin News',        rss: 'https://www.amarin.tv/feed/',                    category: 'business', color: '#f59e0b' },
-  { name: 'Forbes Thailand',    rss: 'https://forbesthailand.com/feed/',               category: 'business', color: '#ca8a04' },
-  { name: 'คอหุ้น',            rss: 'https://www.kaohoon.com/feed/',                  category: 'business', color: '#16a34a' },
-  // สาธารณภัย / สภาพอากาศ / อุบัติเหตุ — ผ่าน RSSHub (Facebook → RSS)
-  { name: 'กรมป้องกันสาธารณภัย', rss: 'https://rsshub.app/facebook/page/DDPMNews',       category: 'disaster', color: '#dc2626' },
-  { name: 'กรมอุตุนิยมวิทยา',    rss: 'https://rsshub.app/facebook/page/tmd.go.th',      category: 'weather',  color: '#0891b2' },
-  { name: 'กรมควบคุมมลพิษ',      rss: 'https://rsshub.app/facebook/page/PCD.go.th',      category: 'weather',  color: '#65a30d' },
-  { name: 'JS100Radio',           rss: 'https://rsshub.app/facebook/page/js100radio',     category: 'accident', color: '#d97706' },
-  { name: 'FM91 Trafficpro',      rss: 'https://rsshub.app/facebook/page/fm91trafficpro', category: 'accident', color: '#7c3aed' },
+  // ✅ Confirmed working
+  { name: 'ประชาชาติธุรกิจ',    rss: 'https://www.prachachat.net/feed',                       category: 'business', color: '#0891b2' },
+  { name: 'Positioning',         rss: 'https://positioningmag.com/feed/',                      category: 'business', color: '#7c3aed' },
+  { name: 'Marketing Oops',      rss: 'https://www.marketingoops.com/feed/',                   category: 'business', color: '#dc2626' },
+  { name: 'Marketeer Online',    rss: 'https://www.marketeeronline.co/feed/',                  category: 'business', color: '#ea580c' },
+  { name: 'The Standard Wealth', rss: 'https://thestandard.co/feed/',                         category: 'business', color: '#1d4ed8' },
+  { name: 'Bloomberg',           rss: 'https://feeds.bloomberg.com/markets/news.rss',         category: 'business', color: '#2563eb' },
+  { name: 'Brand Buffet',        rss: 'https://www.brandbuffet.in.th/feed/',                  category: 'business', color: '#8b5cf6' },
+  { name: 'คอหุ้น',             rss: 'https://www.kaohoon.com/feed/',                        category: 'business', color: '#16a34a' },
+  // ✅ Known working from main News RSS
+  { name: 'มติชน',              rss: 'https://www.matichon.co.th/feed',                      category: 'business', color: '#0369a1' },
+  { name: 'Bangkok Post',        rss: 'https://www.bangkokpost.com/rss/data/business.xml',    category: 'business', color: '#d97706' },
+  { name: 'BBC ไทย',            rss: 'https://feeds.bbci.co.uk/thai/rss.xml',               category: 'business', color: '#7c3aed' },
+  // 🔄 Fixed URLs
+  { name: 'กรุงเทพธุรกิจ',      rss: 'https://www.bangkokbiznews.com/rss/data/latest.xml',   category: 'business', color: '#b45309' },
+  { name: 'ลงทุนแมน',           rss: 'https://www.longtunman.com/feed/',                     category: 'business', color: '#6366f1' },
+  { name: 'Reuters',             rss: 'https://feeds.reuters.com/reuters/businessNews.rss',   category: 'business', color: '#c2410c' },
+  { name: 'Amarin TV',           rss: 'https://www.amarintv.com/rss.xml',                     category: 'business', color: '#f59e0b' },
+  { name: 'Thai PBS World',      rss: 'https://www.thaipbsworld.com/feed/',                   category: 'business', color: '#0f766e' },
+  { name: 'ไทยรัฐ',             rss: 'https://www.thairath.co.th/rss/',                      category: 'business', color: '#dc2626' },
+  { name: 'ฐานเศรษฐกิจ',        rss: 'https://www.thansettakij.com/feed',                    category: 'business', color: '#059669' },
 ];
 
 let feedCache = null;
