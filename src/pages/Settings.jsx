@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   RefreshCw, CheckCircle, XCircle, Clock, Loader,
   ArrowLeftRight, TrendingUp, Activity, Ship, Briefcase,
-  Plane, Droplets, Fuel, Coins, Circle,
+  Plane, Droplets, Fuel, Coins, Circle, Brain, Key,
 } from 'lucide-react';
 
 const ICON_MAP = {
@@ -20,6 +20,19 @@ const ICON_MAP = {
 export default function Settings({ data }) {
   const { apiStatus, apiConnected, totalApis, fetching, fetchAll, setEiaKey, lastRefresh } = data;
   const [eiaKey, setEiaKeyLocal] = useState('');
+  const [geminiKey, setGeminiKeyLocal] = useState('');
+  const [geminiSaved, setGeminiSaved] = useState(false);
+
+  useEffect(() => {
+    const stored = localStorage.getItem('gemini_api_key');
+    if (stored) setGeminiKeyLocal(stored);
+  }, []);
+
+  const handleSaveGeminiKey = () => {
+    localStorage.setItem('gemini_api_key', geminiKey);
+    setGeminiSaved(true);
+    setTimeout(() => setGeminiSaved(false), 2000);
+  };
   const [saved, setSaved] = useState(false);
 
   const handleSaveKey = () => {
@@ -151,6 +164,41 @@ export default function Settings({ data }) {
               }}
             >
               {saved ? '✓ Saved!' : 'Save Key'}
+            </button>
+          </div>
+
+          {/* Gemini Key */}
+          <div className="cc">
+            <div className="cc-title" style={{ marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Brain size={13} style={{ color: 'var(--cyan)' }} /> Gemini API Key
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--t3)', marginBottom: 10, lineHeight: 1.5 }}>
+              ใส่ key เพื่อใช้ AI Briefing (Gemini 1.5 Flash)
+              <br />สมัครฟรีที่ <span style={{ color: 'var(--cyan)', fontWeight: 600 }}>aistudio.google.com</span>
+              <br /><span style={{ fontSize: 10 }}>ฟรี 1,500 req/วัน · ไม่ต้องใช้บัตรเครดิต</span>
+            </div>
+            <input
+              type="password"
+              placeholder="AIza..."
+              value={geminiKey}
+              onChange={e => setGeminiKeyLocal(e.target.value)}
+              style={{
+                width: '100%', padding: '8px 12px', borderRadius: 8,
+                border: '1px solid rgba(0,0,0,.15)', fontSize: 12,
+                color: 'var(--t1)', background: '#f8fafc', outline: 'none',
+                marginBottom: 8, boxSizing: 'border-box',
+              }}
+            />
+            <button
+              onClick={handleSaveGeminiKey}
+              style={{
+                width: '100%', padding: '8px', borderRadius: 8,
+                border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700,
+                background: geminiSaved ? 'var(--green)' : 'var(--cyan)', color: '#fff',
+                transition: 'background .2s',
+              }}
+            >
+              {geminiSaved ? '✓ Saved!' : 'Save Gemini Key'}
             </button>
           </div>
 
