@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   LayoutDashboard, Network, Layers, Map, Newspaper,
   TrendingUp, Fuel, Coins, SlidersHorizontal, Brain,
-  Landmark, Settings, PackageOpen,
+  Landmark, Settings, PackageOpen, Share2,
 } from 'lucide-react';
 
 import { useData } from './hooks/useData';
@@ -18,6 +18,7 @@ import Commodity   from './pages/Commodity';
 import Simulator   from './pages/Simulator';
 import Briefing    from './pages/Briefing';
 import GovData     from './pages/GovData';
+import SocialMedia  from './pages/SocialMedia';
 import SettingsPage from './pages/Settings';
 
 const NAV_CORE = [
@@ -25,6 +26,7 @@ const NAV_CORE = [
   { id: 'overview',   label: 'Overview',        icon: LayoutDashboard, adv: false },
   { id: 'sectors',    label: 'Sectors',          icon: Layers,          adv: false },
   { id: 'provinces',  label: 'ภูมิภาค',           icon: Map,             adv: false },
+  { id: 'social',     label: 'Social Media',    icon: Share2,          adv: false },
 ];
 
 const NAV_ADV = [
@@ -72,6 +74,7 @@ export default function App() {
       case 'simulator': return <Simulator {...props} />;
       case 'briefing':  return <Briefing  {...props} />;
       case 'govdata':   return <GovData   {...props} />;
+      case 'social':    return <SocialMedia />;
       case 'settings':  return <SettingsPage {...props} />;
       default:          return <Overview  {...props} />;
     }
