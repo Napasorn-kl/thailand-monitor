@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
-import { RefreshCw, CheckCircle, XCircle, Clock, Loader } from 'lucide-react';
+import {
+  RefreshCw, CheckCircle, XCircle, Clock, Loader,
+  ArrowLeftRight, TrendingUp, Activity, Ship, Briefcase,
+  Plane, Droplets, Fuel, Coins, Circle,
+} from 'lucide-react';
 
 const ICON_MAP = {
-  'arrow-left-right': '↔',
-  'trending-up':      '↗',
-  'activity':         '〜',
-  'ship':             '🚢',
-  'briefcase':        '💼',
-  'plane':            '✈',
-  'droplets':         '💧',
-  'fuel':             '⛽',
-  'coins':            '🪙',
+  'arrow-left-right': ArrowLeftRight,
+  'trending-up':      TrendingUp,
+  'activity':         Activity,
+  'ship':             Ship,
+  'briefcase':        Briefcase,
+  'plane':            Plane,
+  'droplets':         Droplets,
+  'fuel':             Fuel,
+  'coins':            Coins,
 };
 
 export default function Settings({ data }) {
@@ -90,7 +94,9 @@ export default function Settings({ data }) {
                   background: isOk ? 'rgba(5,150,105,.04)' : isErr ? 'rgba(220,38,38,.04)' : 'rgba(0,0,0,.02)',
                   border: '1px solid ' + (isOk ? 'rgba(5,150,105,.15)' : isErr ? 'rgba(220,38,38,.15)' : 'rgba(0,0,0,.07)'),
                 }}>
-                  <div style={{ fontSize: 16 }}>{ICON_MAP[api.icon] || '●'}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', color: 'var(--t3)' }}>
+                    {(() => { const I = ICON_MAP[api.icon] || Circle; return <I size={16} />; })()}
+                  </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--t1)', marginBottom: 2 }}>{api.label}</div>
                     <div style={{ fontSize: 10, color: 'var(--t3)' }}>{api.source}</div>

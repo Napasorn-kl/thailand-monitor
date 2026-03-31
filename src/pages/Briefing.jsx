@@ -1,4 +1,5 @@
 import React from 'react';
+import { TrendingUp } from 'lucide-react';
 import { BRIEFING_DATA, SECTORS } from '../data/staticData';
 
 function SignalCard({ item }) {
@@ -94,7 +95,9 @@ export default function Briefing({ data }) {
 
       {/* Trends */}
       <div style={{ marginBottom: 14 }}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cyan)', marginBottom: 8 }}>📈 แนวโน้มสำคัญ</div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cyan)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
+          <TrendingUp size={13} /> แนวโน้มสำคัญ
+        </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 10 }}>
           {BRIEFING_DATA.trends.map((item, i) => <SignalCard key={i} item={item} />)}
         </div>

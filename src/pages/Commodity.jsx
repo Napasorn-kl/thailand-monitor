@@ -1,12 +1,25 @@
 import React, { useState } from 'react';
-import { RefreshCw, TrendingUp, TrendingDown } from 'lucide-react';
+import {
+  RefreshCw, TrendingUp, TrendingDown,
+  Fuel, Wind, Trophy, Gem, Disc3, Wheat, Coffee, Leaf, Beef, Wrench,
+  Zap, Coins, UtensilsCrossed, Circle,
+} from 'lucide-react';
 import { useCommodity, COMMODITY_DEFS } from '../hooks/useCommodity';
 
+const COMMODITY_ICON_MAP = {
+  fuel: Fuel, wind: Wind, trophy: Trophy, gem: Gem, disc: Disc3,
+  wrench: Wrench, wheat: Wheat, coffee: Coffee, leaf: Leaf, beef: Beef,
+};
+function CommodityIcon({ iconKey, size = 18, color }) {
+  const Icon = COMMODITY_ICON_MAP[iconKey] || Circle;
+  return <Icon size={size} color={color || 'currentColor'} />;
+}
+
 const CATS = [
-  { id: 'energy',    label: '⚡ พลังงาน'  },
-  { id: 'metals',    label: '🪙 โลหะ & ทองคำ' },
-  { id: 'agri',      label: '🌾 เกษตร'    },
-  { id: 'livestock', label: '🐄 ปศุสัตว์' },
+  { id: 'energy',    label: 'พลังงาน',      Icon: Zap   },
+  { id: 'metals',    label: 'โลหะ & ทองคำ', Icon: Coins },
+  { id: 'agri',      label: 'เกษตร',         Icon: Wheat },
+  { id: 'livestock', label: 'ปศุสัตว์',      Icon: Beef  },
 ];
 
 function fmt(val, dec = 2) {
@@ -59,7 +72,9 @@ function CommodityCard({ def, q, usdthb }) {
     }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <span style={{ fontSize: 20, lineHeight: 1 }}>{def.emoji}</span>
+          <span style={{ display:'flex', alignItems:'center', color:'var(--t2)' }}>
+            <CommodityIcon iconKey={def.iconKey} size={18} />
+          </span>
           <div>
             <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--t1)', lineHeight: 1.3 }}>{def.labelTH}</div>
             <div style={{ fontSize: 10, color: 'var(--t3)', lineHeight: 1.3 }}>{def.labelEN}</div>
@@ -95,7 +110,9 @@ function ThaiOilSection({ retail }) {
 
   return (
     <div style={{ background: 'rgba(8,145,178,0.04)', border: '1px solid rgba(8,145,178,0.15)', borderRadius: 12, padding: 14, marginTop: 14 }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cyan)', marginBottom: 10 }}>⛽ ราคาน้ำมันไทย ณ วันนี้</div>
+      <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cyan)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 5 }}>
+        <Fuel size={13} /> ราคาน้ำมันไทย ณ วันนี้
+      </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 7 }}>
         {rows.map(r => (
           <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderRadius: 8, padding: '7px 10px' }}>
@@ -122,7 +139,9 @@ function ThaiGoldSection({ goldBar, goldOrn, goldDate, usdthb }) {
 
   return (
     <div style={{ background: 'rgba(183,121,31,0.05)', border: '1px solid rgba(183,121,31,0.2)', borderRadius: 12, padding: 14, marginTop: 14 }}>
-      <div style={{ fontSize: 12, fontWeight: 700, color: '#b7791f', marginBottom: 10 }}>🥇 ราคาทองคำไทย (สมาคมค้าทองคำ)</div>
+      <div style={{ fontSize: 12, fontWeight: 700, color: '#b7791f', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 5 }}>
+        <Trophy size={13} /> ราคาทองคำไทย (สมาคมค้าทองคำ)
+      </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 7 }}>
         {rows.map(r => (
           <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderRadius: 8, padding: '7px 10px' }}>
@@ -181,6 +200,7 @@ export default function Commodity({ data }) {
             key={c.id}
             onClick={() => setCat(c.id)}
             style={{
+              display: 'flex', alignItems: 'center', gap: 5,
               padding: '5px 12px', borderRadius: 20, fontSize: 11.5, cursor: 'pointer',
               border:      cat === c.id ? '1px solid var(--cyan)' : '1px solid rgba(0,0,0,0.1)',
               background:  cat === c.id ? 'rgba(8,145,178,0.08)' : '#fff',
@@ -188,6 +208,7 @@ export default function Commodity({ data }) {
               fontWeight:  cat === c.id ? 700 : 500,
             }}
           >
+            <c.Icon size={13} style={{ flexShrink: 0 }} />
             {c.label}
           </button>
         ))}

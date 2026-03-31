@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Users, Building2, Banknote, MapPin } from 'lucide-react';
 import { PROVINCES_DATA } from '../data/staticData';
 
 const REGION_COLORS = {
@@ -181,17 +182,17 @@ export default function Provinces() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                   {[
-                    { label: 'ประชากร',           val: selProv.pop,                              icon: '👥' },
-                    { label: 'บริษัทจดทะเบียน',   val: selProv.reg.toLocaleString() + ' บริษัท', icon: '🏢' },
-                    { label: 'ทุนจดทะเบียน',       val: '฿' + selProv.cap + 'B',                 icon: '💰' },
-                    { label: 'ความหนาแน่น (DBD)',  val: selProv.dens.toLocaleString() + ' /km²',  icon: '📍' },
+                    { label: 'ประชากร',           val: selProv.pop,                              Icon: Users     },
+                    { label: 'บริษัทจดทะเบียน',   val: selProv.reg.toLocaleString() + ' บริษัท', Icon: Building2 },
+                    { label: 'ทุนจดทะเบียน',       val: '฿' + selProv.cap + 'B',                 Icon: Banknote  },
+                    { label: 'ความหนาแน่น (DBD)',  val: selProv.dens.toLocaleString() + ' /km²',  Icon: MapPin    },
                   ].map(row => (
                     <div key={row.label} style={{
                       display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                       padding: '8px 0', borderBottom: '1px solid rgba(0,0,0,0.05)',
                     }}>
                       <span style={{ fontSize: 11, color: 'var(--t3)', display: 'flex', alignItems: 'center', gap: 5 }}>
-                        <span>{row.icon}</span>{row.label}
+                        <row.Icon size={13} style={{ flexShrink: 0 }} />{row.label}
                       </span>
                       <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--t1)' }}>{row.val}</span>
                     </div>

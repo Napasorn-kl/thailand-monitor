@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Plane, ShoppingCart, Hotel, Package, HardHat, Factory, Building2,
   Wrench, HeartPulse, Wheat, Landmark, Truck, Monitor, BookOpen,
-  Zap, Tv, BarChart2,
+  Zap, Tv, BarChart2, Fuel, Trophy,
 } from 'lucide-react';
 import { SECTORS, GOLD_EXPOSURE } from '../data/staticData';
 
@@ -31,10 +31,10 @@ function SectorIcon({ name, size = 16, style }) {
 }
 
 const OIL_INFO = {
-  H:   { label: 'ต้นทุนสูงตามน้ำมัน',   desc: 'ราคาน้ำมันขึ้น → ต้นทุนเพิ่มมาก',        bg: 'rgba(239,68,68,.07)',   border: 'rgba(239,68,68,.22)',   color: '#ef4444', icon: '🔴' },
-  M:   { label: 'ต้นทุนบางส่วน',         desc: 'ราคาน้ำมันขึ้น → ต้นทุนเพิ่มบางส่วน',    bg: 'rgba(245,158,11,.07)',  border: 'rgba(245,158,11,.22)',  color: '#f59e0b', icon: '🟡' },
-  L:   { label: 'กระทบน้อย',             desc: 'ไม่พึ่งน้ำมันโดยตรง',                     bg: 'rgba(148,163,184,.07)', border: 'rgba(148,163,184,.22)', color: '#94a3b8', icon: '⚪' },
-  '+': { label: 'ได้ประโยชน์',           desc: 'ราคาน้ำมันขึ้น → รายได้เพิ่มขึ้น',       bg: 'rgba(5,150,105,.07)',   border: 'rgba(5,150,105,.22)',   color: '#059669', icon: '🟢' },
+  H:   { label: 'ต้นทุนสูงตามน้ำมัน',   desc: 'ราคาน้ำมันขึ้น → ต้นทุนเพิ่มมาก',        bg: 'rgba(239,68,68,.07)',   border: 'rgba(239,68,68,.22)',   color: '#ef4444' },
+  M:   { label: 'ต้นทุนบางส่วน',         desc: 'ราคาน้ำมันขึ้น → ต้นทุนเพิ่มบางส่วน',    bg: 'rgba(245,158,11,.07)',  border: 'rgba(245,158,11,.22)',  color: '#f59e0b' },
+  L:   { label: 'กระทบน้อย',             desc: 'ไม่พึ่งน้ำมันโดยตรง',                     bg: 'rgba(148,163,184,.07)', border: 'rgba(148,163,184,.22)', color: '#94a3b8' },
+  '+': { label: 'ได้ประโยชน์',           desc: 'ราคาน้ำมันขึ้น → รายได้เพิ่มขึ้น',       bg: 'rgba(5,150,105,.07)',   border: 'rgba(5,150,105,.22)',   color: '#059669' },
 };
 
 const METRICS = [
@@ -218,8 +218,9 @@ export default function Sectors({ data }) {
                   background: selOil.bg, borderRadius: 8, padding: '9px 11px',
                   border: `1px solid ${selOil.border}`, marginBottom: 8,
                 }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: selOil.color, marginBottom: 3 }}>
-                    {selOil.icon} น้ำมัน: {selOil.label}
+                  <div style={{ fontSize: 10, fontWeight: 700, color: selOil.color, marginBottom: 3, display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <Fuel size={12} style={{ flexShrink: 0 }} />
+                    <span>น้ำมัน: {selOil.label}</span>
                   </div>
                   <div style={{ fontSize: 11, color: 'var(--t2)' }}>{selOil.desc}</div>
                 </div>
@@ -233,7 +234,9 @@ export default function Sectors({ data }) {
                       padding: '9px 11px', border: '1px solid rgba(217,119,6,.2)',
                     }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 5 }}>
-                        <span style={{ fontSize: 10, fontWeight: 700, color: '#b7791f' }}>🥇 ความเกี่ยวข้องกับทองคำ</span>
+                        <span style={{ fontSize: 10, fontWeight: 700, color: '#b7791f', display: 'flex', alignItems: 'center', gap: 4 }}>
+                          <Trophy size={12} style={{ flexShrink: 0 }} /> ความเกี่ยวข้องกับทองคำ
+                        </span>
                         <span style={{
                           fontSize: 10.5, fontWeight: 800, padding: '1px 8px', borderRadius: 10,
                           background: gl.bg, color: gl.color,
@@ -255,14 +258,18 @@ export default function Sectors({ data }) {
               <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--t2)', marginBottom: 10 }}>ราคาตลาดวันนี้</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: 10.5, color: 'var(--t3)' }}>🛢️ Brent Crude</span>
+                  <span style={{ fontSize: 10.5, color: 'var(--t3)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Fuel size={12} /> Brent Crude
+                  </span>
                   <span style={{ fontSize: 13, fontWeight: 800, color: '#d97706' }}>
                     ${parseFloat(brent) || 74.2}
                     <span style={{ fontSize: 10, color: 'var(--t3)', fontWeight: 400 }}>/bbl</span>
                   </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: 10.5, color: 'var(--t3)' }}>🥇 ทองแท่ง (ขายออก)</span>
+                  <span style={{ fontSize: 10.5, color: 'var(--t3)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <Trophy size={12} /> ทองแท่ง (ขายออก)
+                  </span>
                   <span style={{ fontSize: 13, fontWeight: 800, color: '#b7791f' }}>
                     {goldBar?.sell ? goldBar.sell.toLocaleString('th-TH') : '—'}
                     <span style={{ fontSize: 10, color: 'var(--t3)', fontWeight: 400 }}>฿</span>

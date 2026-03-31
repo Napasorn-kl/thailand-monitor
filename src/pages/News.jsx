@@ -1,14 +1,17 @@
 import React from 'react';
-import { RefreshCw, ExternalLink, Loader } from 'lucide-react';
+import {
+  RefreshCw, ExternalLink, Loader,
+  Fuel, Coins, BarChart2, Ship, TrendingUp, UtensilsCrossed, List,
+} from 'lucide-react';
 
 const CATS = [
-  { id: 'all',    label: 'ทั้งหมด'    },
-  { id: 'energy', label: '⛽ น้ำมัน'  },
-  { id: 'gold',   label: '🪙 ทองคำ'   },
-  { id: 'macro',  label: '📊 เศรษฐกิจ' },
-  { id: 'trade',  label: '🚢 การค้า'  },
-  { id: 'invest', label: '📈 ตลาดทุน' },
-  { id: 'food',   label: '🍽️ อาหาร & เครื่องดื่ม' },
+  { id: 'all',    label: 'ทั้งหมด',              Icon: List            },
+  { id: 'energy', label: 'น้ำมัน',               Icon: Fuel            },
+  { id: 'gold',   label: 'ทองคำ',                Icon: Coins           },
+  { id: 'macro',  label: 'เศรษฐกิจ',             Icon: BarChart2       },
+  { id: 'trade',  label: 'การค้า',               Icon: Ship            },
+  { id: 'invest', label: 'ตลาดทุน',              Icon: TrendingUp      },
+  { id: 'food',   label: 'อาหาร & เครื่องดื่ม',  Icon: UtensilsCrossed },
 ];
 
 export default function News({ newsHook }) {
@@ -57,6 +60,7 @@ export default function News({ newsHook }) {
             fontSize: 11.5, fontWeight: category === c.id ? 700 : 500, cursor: 'pointer',
             display: 'flex', alignItems: 'center', gap: 4,
           }}>
+            <c.Icon size={12} style={{ flexShrink: 0 }} />
             {c.label}
             <span style={{
               background: category === c.id ? 'var(--cyan)' : 'rgba(0,0,0,.08)',

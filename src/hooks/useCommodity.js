@@ -25,26 +25,26 @@ async function fetchOneSymbol(sym) {
 
 export const COMMODITY_DEFS = [
   // Energy
-  { id: 'brent',    sym: 'BZ=F',  labelTH: 'น้ำมันดิบ Brent',  labelEN: 'Brent Crude',  unit: 'USD/bbl',   cat: 'energy',    emoji: '🛢️' },
-  { id: 'wti',      sym: 'CL=F',  labelTH: 'น้ำมันดิบ WTI',    labelEN: 'WTI Crude',    unit: 'USD/bbl',   cat: 'energy',    emoji: '🛢️' },
-  { id: 'natgas',   sym: 'NG=F',  labelTH: 'ก๊าซธรรมชาติ',     labelEN: 'Natural Gas',  unit: 'USD/MMBtu', cat: 'energy',    emoji: '💨' },
+  { id: 'brent',    sym: 'BZ=F',  labelTH: 'น้ำมันดิบ Brent',  labelEN: 'Brent Crude',  unit: 'USD/bbl',   cat: 'energy',    iconKey: 'fuel'   },
+  { id: 'wti',      sym: 'CL=F',  labelTH: 'น้ำมันดิบ WTI',    labelEN: 'WTI Crude',    unit: 'USD/bbl',   cat: 'energy',    iconKey: 'fuel'   },
+  { id: 'natgas',   sym: 'NG=F',  labelTH: 'ก๊าซธรรมชาติ',     labelEN: 'Natural Gas',  unit: 'USD/MMBtu', cat: 'energy',    iconKey: 'wind'   },
   // Metals
-  { id: 'gold',     sym: 'GC=F',  labelTH: 'ทองคำ',             labelEN: 'Gold',         unit: 'USD/oz',    cat: 'metals',    emoji: '🥇' },
-  { id: 'silver',   sym: 'SI=F',  labelTH: 'เงิน (Silver)',     labelEN: 'Silver',       unit: 'USD/oz',    cat: 'metals',    emoji: '🥈' },
-  { id: 'platinum', sym: 'PL=F',  labelTH: 'แพลทินัม',          labelEN: 'Platinum',     unit: 'USD/oz',    cat: 'metals',    emoji: '💿' },
-  { id: 'copper',   sym: 'HG=F',  labelTH: 'ทองแดง',            labelEN: 'Copper',       unit: 'USD/lb',    cat: 'metals',    emoji: '🔩' },
+  { id: 'gold',     sym: 'GC=F',  labelTH: 'ทองคำ',             labelEN: 'Gold',         unit: 'USD/oz',    cat: 'metals',    iconKey: 'trophy' },
+  { id: 'silver',   sym: 'SI=F',  labelTH: 'เงิน (Silver)',     labelEN: 'Silver',       unit: 'USD/oz',    cat: 'metals',    iconKey: 'gem'    },
+  { id: 'platinum', sym: 'PL=F',  labelTH: 'แพลทินัม',          labelEN: 'Platinum',     unit: 'USD/oz',    cat: 'metals',    iconKey: 'disc'   },
+  { id: 'copper',   sym: 'HG=F',  labelTH: 'ทองแดง',            labelEN: 'Copper',       unit: 'USD/lb',    cat: 'metals',    iconKey: 'wrench' },
   // Agricultural
-  { id: 'corn',     sym: 'ZC=F',  labelTH: 'ข้าวโพด',           labelEN: 'Corn',         unit: 'USc/bu',    cat: 'agri',      emoji: '🌽' },
-  { id: 'wheat',    sym: 'ZW=F',  labelTH: 'ข้าวสาลี',          labelEN: 'Wheat',        unit: 'USc/bu',    cat: 'agri',      emoji: '🌾' },
-  { id: 'soy',      sym: 'ZS=F',  labelTH: 'ถั่วเหลือง',         labelEN: 'Soybeans',     unit: 'USc/bu',    cat: 'agri',      emoji: '🫘' },
-  { id: 'rice',     sym: 'ZR=F',  labelTH: 'ข้าว (Rough Rice)', labelEN: 'Rice',         unit: 'USD/cwt',   cat: 'agri',      emoji: '🍚' },
-  { id: 'coffee',   sym: 'KC=F',  labelTH: 'กาแฟ',              labelEN: 'Coffee',       unit: 'USc/lb',    cat: 'agri',      emoji: '☕' },
-  { id: 'cocoa',    sym: 'CC=F',  labelTH: 'โกโก้',             labelEN: 'Cocoa',        unit: 'USD/MT',    cat: 'agri',      emoji: '🍫' },
-  { id: 'sugar',    sym: 'SB=F',  labelTH: 'น้ำตาล',            labelEN: 'Sugar #11',    unit: 'USc/lb',    cat: 'agri',      emoji: '🍬' },
-  { id: 'cotton',   sym: 'CT=F',  labelTH: 'ฝ้าย',              labelEN: 'Cotton',       unit: 'USc/lb',    cat: 'agri',      emoji: '🌱' },
+  { id: 'corn',     sym: 'ZC=F',  labelTH: 'ข้าวโพด',           labelEN: 'Corn',         unit: 'USc/bu',    cat: 'agri',      iconKey: 'wheat'  },
+  { id: 'wheat',    sym: 'ZW=F',  labelTH: 'ข้าวสาลี',          labelEN: 'Wheat',        unit: 'USc/bu',    cat: 'agri',      iconKey: 'wheat'  },
+  { id: 'soy',      sym: 'ZS=F',  labelTH: 'ถั่วเหลือง',         labelEN: 'Soybeans',     unit: 'USc/bu',    cat: 'agri',      iconKey: 'leaf'   },
+  { id: 'rice',     sym: 'ZR=F',  labelTH: 'ข้าว (Rough Rice)', labelEN: 'Rice',         unit: 'USD/cwt',   cat: 'agri',      iconKey: 'wheat'  },
+  { id: 'coffee',   sym: 'KC=F',  labelTH: 'กาแฟ',              labelEN: 'Coffee',       unit: 'USc/lb',    cat: 'agri',      iconKey: 'coffee' },
+  { id: 'cocoa',    sym: 'CC=F',  labelTH: 'โกโก้',             labelEN: 'Cocoa',        unit: 'USD/MT',    cat: 'agri',      iconKey: 'leaf'   },
+  { id: 'sugar',    sym: 'SB=F',  labelTH: 'น้ำตาล',            labelEN: 'Sugar #11',    unit: 'USc/lb',    cat: 'agri',      iconKey: 'leaf'   },
+  { id: 'cotton',   sym: 'CT=F',  labelTH: 'ฝ้าย',              labelEN: 'Cotton',       unit: 'USc/lb',    cat: 'agri',      iconKey: 'leaf'   },
   // Livestock
-  { id: 'cattle',   sym: 'LE=F',  labelTH: 'เนื้อวัว',          labelEN: 'Live Cattle',  unit: 'USc/lb',    cat: 'livestock', emoji: '🐄' },
-  { id: 'hogs',     sym: 'HE=F',  labelTH: 'เนื้อหมู',          labelEN: 'Lean Hogs',    unit: 'USc/lb',    cat: 'livestock', emoji: '🐷' },
+  { id: 'cattle',   sym: 'LE=F',  labelTH: 'เนื้อวัว',          labelEN: 'Live Cattle',  unit: 'USc/lb',    cat: 'livestock', iconKey: 'beef'   },
+  { id: 'hogs',     sym: 'HE=F',  labelTH: 'เนื้อหมู',          labelEN: 'Lean Hogs',    unit: 'USc/lb',    cat: 'livestock', iconKey: 'beef'   },
 ];
 
 let cache = null;
