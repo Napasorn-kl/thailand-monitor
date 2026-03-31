@@ -135,7 +135,14 @@ export function useNews() {
     return () => clearInterval(interval);
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
-  const filtered = category === 'all' ? articles : articles.filter(a => a.category === category);
+  // เศรษฐกิจ (macro) รวม invest, trade, gold เข้าด้วยกัน
+  const CATEGORY_GROUPS = { macro: ['macro', 'invest', 'trade', 'gold'] };
+  const filtered = category === 'all'
+    ? articles
+    : articles.filter(a => {
+        const group = CATEGORY_GROUPS[category];
+        return group ? group.includes(a.category) : a.category === category;
+      });
 
   return { articles: filtered, allArticles: articles, loading, category, setCategory, refresh: () => fetchAll(true) };
 }

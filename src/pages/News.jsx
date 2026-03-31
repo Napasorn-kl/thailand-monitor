@@ -1,17 +1,15 @@
 import React from 'react';
 import {
   RefreshCw, ExternalLink, Loader,
-  Fuel, Coins, BarChart2, Ship, TrendingUp, UtensilsCrossed, List,
+  Fuel, BarChart2, Ship, UtensilsCrossed, List,
 } from 'lucide-react';
 
 const CATS = [
   { id: 'all',    label: 'ทั้งหมด',              Icon: List            },
-  { id: 'energy', label: 'น้ำมัน',               Icon: Fuel            },
-  { id: 'gold',   label: 'ทองคำ',                Icon: Coins           },
-  { id: 'macro',  label: 'เศรษฐกิจ',             Icon: BarChart2       },
-  { id: 'trade',  label: 'การค้า',               Icon: Ship            },
-  { id: 'invest', label: 'ตลาดทุน',              Icon: TrendingUp      },
   { id: 'food',   label: 'อาหาร & เครื่องดื่ม',  Icon: UtensilsCrossed },
+  { id: 'trade',  label: 'การค้า',               Icon: Ship            },
+  { id: 'macro',  label: 'เศรษฐกิจ',             Icon: BarChart2       },
+  { id: 'energy', label: 'น้ำมัน',               Icon: Fuel            },
 ];
 
 export default function News({ newsHook }) {
