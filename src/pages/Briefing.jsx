@@ -5,7 +5,7 @@ import { BRIEFING_DATA } from '../data/staticData';
 const IS_LOCAL = typeof window !== 'undefined' &&
   (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
 const GEMINI_ENDPOINT = IS_LOCAL
-  ? 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent'
+  ? 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent'
   : '/api/gemini';
 
 function SignalCard({ item }) {
