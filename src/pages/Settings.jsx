@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   RefreshCw, CheckCircle, XCircle, Clock, Loader,
   ArrowLeftRight, TrendingUp, Activity, Ship, Briefcase,
-  Plane, Droplets, Fuel, Coins, Circle, Brain, Key,
+  Plane, Droplets, Fuel, Coins, Circle,
 } from 'lucide-react';
 
 const ICON_MAP = {
@@ -20,19 +20,6 @@ const ICON_MAP = {
 export default function Settings({ data }) {
   const { apiStatus, apiConnected, totalApis, fetching, fetchAll, setEiaKey, lastRefresh } = data;
   const [eiaKey, setEiaKeyLocal] = useState('');
-  const [geminiKey, setGeminiKeyLocal] = useState('');
-  const [geminiSaved, setGeminiSaved] = useState(false);
-
-  useEffect(() => {
-    const stored = localStorage.getItem('gemini_api_key');
-    if (stored) setGeminiKeyLocal(stored);
-  }, []);
-
-  const handleSaveGeminiKey = () => {
-    localStorage.setItem('gemini_api_key', geminiKey);
-    setGeminiSaved(true);
-    setTimeout(() => setGeminiSaved(false), 2000);
-  };
   const [saved, setSaved] = useState(false);
 
   const handleSaveKey = () => {
@@ -164,44 +151,6 @@ export default function Settings({ data }) {
               }}
             >
               {saved ? '✓ Saved!' : 'Save Key'}
-            </button>
-          </div>
-
-          {/* Gemini Key — local dev only */}
-          <div className="cc">
-            <div className="cc-title" style={{ marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Brain size={13} style={{ color: 'var(--cyan)' }} /> Gemini API Key
-              <span style={{ fontSize: 9, fontWeight: 700, background: 'rgba(0,0,0,.07)', color: 'var(--t3)', borderRadius: 4, padding: '1px 6px', marginLeft: 2 }}>LOCAL DEV</span>
-            </div>
-            <div style={{ fontSize: 11, color: 'var(--t3)', marginBottom: 10, lineHeight: 1.5 }}>
-              ใส้ key สำหรับรันบนเครื่อง (localhost)
-              <br />
-              <span style={{ fontWeight: 600, color: 'var(--t2)' }}>Production (Vercel):</span> ตั้ง env var<br />
-              <code style={{ fontSize: 10, background: 'rgba(0,0,0,.06)', padding: '1px 5px', borderRadius: 3 }}>GEMINI_API_KEY</code>
-              {' '}ใน Vercel Dashboard → Settings → Environment Variables
-            </div>
-            <input
-              type="password"
-              placeholder="AIza... (local dev only)"
-              value={geminiKey}
-              onChange={e => setGeminiKeyLocal(e.target.value)}
-              style={{
-                width: '100%', padding: '8px 12px', borderRadius: 8,
-                border: '1px solid rgba(0,0,0,.15)', fontSize: 12,
-                color: 'var(--t1)', background: '#f8fafc', outline: 'none',
-                marginBottom: 8, boxSizing: 'border-box',
-              }}
-            />
-            <button
-              onClick={handleSaveGeminiKey}
-              style={{
-                width: '100%', padding: '8px', borderRadius: 8,
-                border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: 700,
-                background: geminiSaved ? 'var(--green)' : 'var(--cyan)', color: '#fff',
-                transition: 'background .2s',
-              }}
-            >
-              {geminiSaved ? '✓ Saved!' : 'Save (Local Dev)'}
             </button>
           </div>
 
