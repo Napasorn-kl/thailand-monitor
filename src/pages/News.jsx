@@ -15,18 +15,11 @@ const CATS = [
 export default function News({ newsHook }) {
   const { articles, allArticles, loading, category, setCategory, refresh } = newsHook;
 
-  const CATEGORY_GROUPS = { macro: ['macro', 'invest', 'trade', 'gold'] };
-
   const counts = {};
   CATS.forEach(c => {
-    if (c.id === 'all') {
-      counts[c.id] = allArticles.length;
-    } else {
-      const group = CATEGORY_GROUPS[c.id];
-      counts[c.id] = group
-        ? allArticles.filter(a => group.includes(a.category)).length
-        : allArticles.filter(a => a.category === c.id).length;
-    }
+    counts[c.id] = c.id === 'all'
+      ? allArticles.length
+      : allArticles.filter(a => a.category === c.id).length;
   });
 
   return (

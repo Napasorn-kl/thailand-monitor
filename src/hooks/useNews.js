@@ -11,13 +11,14 @@ const IS_LOCAL = typeof window !== 'undefined' && (window.location.hostname === 
 const CORS_PROXY = IS_LOCAL ? 'https://corsproxy.io/?' : '/api/rss?url=';
 const CACHE_DURATION_MS = 10 * 60 * 1000; // 10 minutes
 
+// 4 categories only — maps 1:1 to the 4 visible tabs (food, trade, energy, macro)
+// Priority order when scoring: energy > food > trade > macro
+// Articles with no keyword match default to macro (catch-all)
 const NEWS_CATEGORY_KEYWORDS = {
   energy: ['น้ำมัน','energy','oil','brent','crude','petroleum','ปิโตรเลียม','พลังงาน','ptt','fuel','ราคาน้ำมัน','opec','ก๊าซ','lpg','lng','solar','renewable','พลังงานหมุนเวียน','โซลาร์','egat','การไฟฟ้า','ngv','ค่าไฟ','ไฟฟ้า','กฟผ','กฟน','กฟภ','ปตท','โรงไฟฟ้า','coal','ถ่านหิน','ไฮโดรเจน'],
-  gold:   ['ราคาทอง','ทองคำ','gold','precious metal','xau','bullion','สมาคมค้าทองคำ','ราคาทองวันนี้','silver','platinum'],
-  macro:  ['gdp','เศรษฐกิจ','economy','inflation','เงินเฟ้อ','ธนาคารแห่งประเทศไทย','fed','interest rate','ดอกเบี้ย','เศรษฐกิจไทย','thb','ค่าเงินบาท','อัตราแลกเปลี่ยน','imf','world bank','ธปท','mpc','cpi','pmi','นโยบายการเงิน','กระตุ้นเศรษฐกิจ','งบประมาณ','กระทรวงการคลัง','การคลัง','สภาพัฒน์','nesdb','สศช','ธุรกิจ','บริษัท','กำไร','ขาดทุน','รายได้','รายจ่าย','ราคาสินค้า','ตลาด','ภาษี','เงินเดือน','ค่าแรง','แรงงาน','ว่างงาน','ส่งออก','นำเข้า','การค้า','อุตสาหกรรม','หอการค้า','สภาอุตสาหกรรม','ลงทุน','นักลงทุน','หุ้น','ตลาดหลักทรัพย์','set','กองทุน','bond','ตราสาร','ธนาคาร','สินเชื่อ','กู้','หนี้','เงินกู้','รัฐบาล','นโยบาย','เอกชน','สมาคม','ดัชนี','ราคา','ตัวเลข','ครัวเรือน','ผู้บริโภค','กำลังซื้อ'],
-  trade:  ['ส่งออก','export','import','นำเข้า','trade','customs','ศุลกากร','fta','wto','tariff','ภาษีนำเข้า','trade war','rcep','ท่าเรือ','logistics','supply chain','พาณิชย์','กระทรวงพาณิชย์','ดุลการค้า','ตลาดต่างประเทศ','ตลาดส่งออก'],
-  invest: ['หุ้น','stock','set index','ตลาดหลักทรัพย์','fdi','bond','กองทุน','etf','ลงทุน','crypto','mai','ipo','ปันผล','dividend','ก.ล.ต.','private equity'],
   food:   ['อาหาร','food','beverage','เครื่องดื่ม','restaurant','cpf','อุตสาหกรรมอาหาร','ข้าวสาร','น้ำตาลทราย','เนื้อสัตว์','dairy','snack','fnb','f&b','ประมง','seafood','กุ้ง','ทูน่า','tuna','thai union','betagro','oishi','singha','chang','เบียร์','นม','สุรา','เกษตร','ข้าว','ยางพารา','มันสำปะหลัง','อ้อย','ปาล์ม','ไก่','สุกร','ปศุสัตว์','ผักผลไม้','ราคาพืช','เกษตรกร'],
+  trade:  ['ส่งออก','export','import','นำเข้า','trade','customs','ศุลกากร','fta','wto','tariff','ภาษีนำเข้า','trade war','rcep','ท่าเรือ','logistics','supply chain','พาณิชย์','กระทรวงพาณิชย์','ดุลการค้า','ตลาดต่างประเทศ','ตลาดส่งออก'],
+  macro:  ['gdp','เศรษฐกิจ','economy','inflation','เงินเฟ้อ','ธนาคารแห่งประเทศไทย','fed','interest rate','ดอกเบี้ย','เศรษฐกิจไทย','thb','ค่าเงินบาท','อัตราแลกเปลี่ยน','imf','world bank','ธปท','mpc','cpi','pmi','นโยบายการเงิน','กระตุ้นเศรษฐกิจ','งบประมาณ','กระทรวงการคลัง','การคลัง','สภาพัฒน์','ธุรกิจ','บริษัท','กำไร','ขาดทุน','รายได้','ภาษี','ค่าแรง','แรงงาน','ว่างงาน','อุตสาหกรรม','หอการค้า','สภาอุตสาหกรรม','ลงทุน','หุ้น','ตลาดหลักทรัพย์','set','กองทุน','bond','ธนาคาร','สินเชื่อ','หนี้','รัฐบาล','นโยบาย','เอกชน','ดัชนี','ผู้บริโภค','กำลังซื้อ','ราคาทอง','ทองคำ','gold','ตลาดทุน','ipo','dividend','ปันผล','fdi','นักลงทุน'],
 };
 
 let newsCache = null;
@@ -54,7 +55,7 @@ async function fetchOneRSS(src) {
       // detect category: score-based, title match = 3pts, desc match = 1pt
       const titleLow = title.toLowerCase();
       const descLow  = desc.toLowerCase();
-      let bestCat = 'other';
+      let bestCat = 'macro'; // default: ข่าวที่ไม่ตรง category ใดเลยให้ไปอยู่เศรษฐกิจ
       let bestScore = 0;
       for (const [cat, kws] of Object.entries(NEWS_CATEGORY_KEYWORDS)) {
         let score = 0;
@@ -135,14 +136,10 @@ export function useNews() {
     return () => clearInterval(interval);
   }, []);  // eslint-disable-line react-hooks/exhaustive-deps
 
-  // เศรษฐกิจ (macro) รวม invest, trade, gold เข้าด้วยกัน
-  const CATEGORY_GROUPS = { macro: ['macro', 'invest', 'trade', 'gold'] };
+  // category ตรงกับ tab 1:1 (food, trade, energy, macro) ไม่มี group ซับซ้อน
   const filtered = category === 'all'
     ? articles
-    : articles.filter(a => {
-        const group = CATEGORY_GROUPS[category];
-        return group ? group.includes(a.category) : a.category === category;
-      });
+    : articles.filter(a => a.category === category);
 
   return { articles: filtered, allArticles: articles, loading, category, setCategory, refresh: () => fetchAll(true) };
 }
