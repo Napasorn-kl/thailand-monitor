@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   RefreshCw, ExternalLink, Loader,
   Fuel, BarChart2, Ship, UtensilsCrossed, List,
@@ -11,6 +11,128 @@ const CATS = [
   { id: 'macro',  label: 'เศรษฐกิจ',             Icon: BarChart2       },
   { id: 'energy', label: 'น้ำมัน',               Icon: Fuel            },
 ];
+
+const CATEGORY_COLOR = {
+  'สาธารณภัย': '#ef4444',
+  'สภาพอากาศ': '#3b82f6',
+  'สิ่งแวดล้อม': '#22c55e',
+  'การลงทุน': '#f59e0b',
+  'ธุรกิจ': '#8b5cf6',
+  'การตลาด': '#ec4899',
+};
+
+const FBIcon = ({ size = 13 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="#1877f2">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+
+function FBCard({ item }) {
+  const catColor = CATEGORY_COLOR[item.category] || '#6b7280';
+  const ts = item.timestamp ? new Date(item.timestamp) : null;
+  const timeStr = ts ? ts.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
+
+  return (
+    <div className="cc" style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+        <FBIcon size={13} />
+        <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--t1)', flex: 1 }}>{item.source_name}</span>
+        <span style={{
+          fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 4,
+          background: catColor + '20', color: catColor, border: '1px solid ' + catColor + '40',
+        }}>{item.category}</span>
+      </div>
+      <div style={{ fontSize: 11.5, color: 'var(--t2)', lineHeight: 1.55 }}>
+        {item.post_text.length > 160 ? item.post_text.substring(0, 160) + '…' : item.post_text}
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 2 }}>
+        <span style={{ fontSize: 10, color: 'var(--t3)' }}>{timeStr}</span>
+        <a href={item.post_url} target="_blank" rel="noopener noreferrer"
+          style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 10, color: '#1877f2', fontWeight: 600, textDecoration: 'none' }}>
+          ดูโพสต์ <ExternalLink size={10} />
+        </a>
+      </div>
+    </div>
+  );
+}
+
+function FacebookSection() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filter, setFilter] = useState('ทั้งหมด');
+
+  const fetchPosts = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/data/fb_news.json?t=' + Date.now());
+      if (!res.ok) throw new Error('ไม่พบข้อมูล');
+      const data = await res.json();
+      setPosts([...data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => { fetchPosts(); }, []);
+
+  const categories = ['ทั้งหมด', ...new Set(posts.map(p => p.category))];
+  const filtered = filter === 'ทั้งหมด' ? posts : posts.filter(p => p.category === filter);
+
+  return (
+    <div style={{ marginTop: 24 }}>
+      {/* Section header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <FBIcon size={14} />
+        <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--t1)', flex: 1 }}>
+          โพสต์ Facebook ล่าสุด
+        </div>
+        <button onClick={fetchPosts} style={{
+          display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--t3)',
+          background: 'transparent', border: '1px solid rgba(0,0,0,.12)', borderRadius: 5,
+          padding: '3px 8px', cursor: 'pointer',
+        }}>
+          <RefreshCw size={10} /> รีเฟรช
+        </button>
+      </div>
+
+      {/* Category filter */}
+      {!loading && posts.length > 0 && (
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+          {categories.map(c => (
+            <button key={c} onClick={() => setFilter(c)} style={{
+              fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 20, cursor: 'pointer',
+              background: filter === c ? '#1877f2' : 'transparent',
+              color: filter === c ? '#fff' : 'var(--t3)',
+              border: '1px solid ' + (filter === c ? '#1877f2' : 'rgba(0,0,0,.12)'),
+            }}>{c}</button>
+          ))}
+        </div>
+      )}
+
+      {/* Content */}
+      {loading && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: 30, color: 'var(--t3)' }}>
+          <Loader size={14} className="animate-spin-slow" />
+          <span style={{ fontSize: 12 }}>กำลังโหลด…</span>
+        </div>
+      )}
+      {error && (
+        <div style={{ textAlign: 'center', padding: 16, fontSize: 12, color: 'var(--red)' }}>
+          ⚠️ {error}
+        </div>
+      )}
+      {!loading && !error && filtered.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 10 }}>
+          {filtered.slice(0, 9).map((item, i) => <FBCard key={i} item={item} />)}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function News({ newsHook }) {
   const { articles, allArticles, loading, category, setCategory, refresh } = newsHook;
@@ -141,6 +263,9 @@ export default function News({ newsHook }) {
           ))}
         </div>
       )}
+
+      {/* Facebook Posts Section */}
+      <FacebookSection />
     </div>
   );
 }
