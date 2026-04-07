@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   BarChart, Bar, LineChart, Line, RadarChart, Radar, PolarGrid,
   PolarAngleAxis, PolarRadiusAxis, XAxis, YAxis, Tooltip,
@@ -440,10 +440,10 @@ function CustomRiskBar(props) {
   return <rect x={x} y={y} width={width} height={height} fill={RISK_COLOR[level] || '#3b82f6'} rx={4} />;
 }
 
-function OverviewBarChart() {
+function OverviewBarChart({ data = RISK_BREAKDOWN }) {
   return (
     <ResponsiveContainer width="100%" height={340}>
-      <BarChart data={RISK_BREAKDOWN} layout="vertical" margin={{ top: 0, right: 20, bottom: 0, left: 110 }}>
+      <BarChart data={data} layout="vertical" margin={{ top: 0, right: 20, bottom: 0, left: 110 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" horizontal={false} />
         <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: 'var(--t3)' }} tickLine={false} axisLine={false} />
         <YAxis type="category" dataKey="name" tick={{ fontSize: 10.5, fill: 'var(--t2)' }} tickLine={false} axisLine={false} width={105} />
@@ -454,7 +454,19 @@ function OverviewBarChart() {
   );
 }
 
-function OverviewTabFixed() {
+function OverviewTabFixed({ liveData }) {
+  // Merge real commodity data into RISK_BREAKDOWN
+  const effectiveBreakdown = RISK_BREAKDOWN.map(item => {
+    const key = item.name === 'น้ำตาลทราย' ? 'sugar'
+              : item.name === 'อลูมิเนียมกระป๋อง' ? 'aluminum'
+              : item.name === 'PET Resin' ? 'crude_oil'
+              : null;
+    const mat = key && liveData?.materials?.[key];
+    if (!mat) return item;
+    return { ...item, score: mat.risk_score, level: mat.risk_level };
+  });
+  const effectiveScore = liveData?.composite_score ?? COMPOSITE_SCORE;
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       {/* Risk Index Summary Cards */}
@@ -477,8 +489,11 @@ function OverviewTabFixed() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {/* Gauge */}
           <div className="cc" style={{ textAlign: 'center' }}>
-            <div className="cc-title">🎯 Supply Shock Composite Score</div>
-            <GaugeMeter score={COMPOSITE_SCORE} />
+            <div className="cc-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              🎯 Supply Shock Composite Score
+              {liveData && <span style={{ fontSize: 9, fontWeight: 700, background: '#22c55e15', color: '#22c55e', border: '1px solid #22c55e40', borderRadius: 4, padding: '1px 5px' }}>🟢 Live</span>}
+            </div>
+            <GaugeMeter score={effectiveScore} />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 4, marginTop: 8 }}>
               {[['Low','<50','#22c55e'],['Medium','50-65','#3b82f6'],['High','65-80','#f59e0b'],['Critical','>80','#ef4444']].map(([l,r,c]) => (
                 <div key={l} style={{ textAlign: 'center', fontSize: 8.5, color: c, fontWeight: 600 }}>
@@ -513,7 +528,7 @@ function OverviewTabFixed() {
         {/* Risk Breakdown Bar Chart */}
         <div className="cc">
           <div className="cc-title">📊 Risk Breakdown by Material</div>
-          <OverviewBarChart />
+          <OverviewBarChart data={effectiveBreakdown} />
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginTop: 8, flexWrap: 'wrap' }}>
             {Object.entries(RISK_COLOR).map(([level, color]) => (
               <div key={level} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 10, color: 'var(--t2)' }}>
@@ -911,40 +926,66 @@ function SupplierTab() {
   );
 }
 
-function CategoryTab() {
+function CategoryTab({ liveData }) {
+  // Map liveData to override price/change for specific materials
+  const liveOverride = {
+    'น้ำตาลทราย': liveData?.materials?.sugar ? {
+      price:       `${liveData.materials.sugar.price} ¢/lb`,
+      priceChange: `${liveData.materials.sugar.change_pct > 0 ? '+' : ''}${liveData.materials.sugar.change_pct}% (3M)`,
+      risk:        liveData.materials.sugar.risk_level,
+    } : null,
+    'อลูมิเนียมกระป๋อง': liveData?.materials?.aluminum ? {
+      price:       `$${liveData.materials.aluminum.price}/ตัน`,
+      priceChange: `${liveData.materials.aluminum.change_pct > 0 ? '+' : ''}${liveData.materials.aluminum.change_pct}% (3M)`,
+      risk:        liveData.materials.aluminum.risk_level,
+    } : null,
+    'PET Resin': liveData?.materials?.crude_oil ? {
+      priceChange: `Oil ${liveData.materials.crude_oil.change_pct > 0 ? '+' : ''}${liveData.materials.crude_oil.change_pct}% (3M proxy)`,
+      risk:        liveData.materials.crude_oil.risk_level,
+    } : null,
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 14 }}>
-        {CATEGORY_CARDS.map(c => (
-          <div key={c.material} className="cc" style={{ border: `1.5px solid ${RISK_BORDER[c.risk]}`, position: 'relative', overflow: 'hidden' }}>
+        {CATEGORY_CARDS.map(c => {
+          const ov = liveOverride[c.material];
+          const displayPrice  = ov?.price       ?? c.price;
+          const displayChange = ov?.priceChange  ?? c.priceChange;
+          const displayRisk   = ov?.risk         ?? c.risk;
+          return (
+          <div key={c.material} className="cc" style={{ border: `1.5px solid ${RISK_BORDER[displayRisk]}`, position: 'relative', overflow: 'hidden' }}>
             {/* Top accent */}
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: RISK_COLOR[c.risk], borderRadius: '14px 14px 0 0' }} />
+            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: RISK_COLOR[displayRisk], borderRadius: '14px 14px 0 0' }} />
 
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12, paddingTop: 4 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
                 <span style={{ fontSize: 24 }}>{c.icon}</span>
                 <div>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--t1)' }}>{c.material}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--t1)', display: 'flex', alignItems: 'center', gap: 5 }}>
+                    {c.material}
+                    {ov && <span style={{ fontSize: 8, fontWeight: 700, background: '#22c55e15', color: '#22c55e', border: '1px solid #22c55e40', borderRadius: 3, padding: '1px 4px' }}>🟢 Live</span>}
+                  </div>
                   <div style={{ fontSize: 9.5, color: 'var(--t3)', marginTop: 1 }}>{c.days} วันของสต็อกคงเหลือ</div>
                 </div>
               </div>
-              <RiskBadge level={c.risk} size="md" />
+              <RiskBadge level={displayRisk} size="md" />
             </div>
 
             {/* Price + status row */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
               <div style={{ background: 'var(--card2)', borderRadius: 8, padding: '8px 12px' }}>
                 <div style={{ fontSize: 9, color: 'var(--t3)', marginBottom: 3 }}>ราคาปัจจุบัน</div>
-                <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--t1)' }}>{c.price}</div>
+                <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--t1)' }}>{displayPrice}</div>
                 <div style={{ fontSize: 10, fontWeight: 600, color: '#ef4444', marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
-                  <TrendingUp size={10} />{c.priceChange}
+                  <TrendingUp size={10} />{displayChange}
                 </div>
               </div>
               <div style={{ background: 'var(--card2)', borderRadius: 8, padding: '8px 12px' }}>
                 <div style={{ fontSize: 9, color: 'var(--t3)', marginBottom: 3 }}>สถานะอุปทาน</div>
-                <div style={{ fontSize: 11.5, fontWeight: 700, color: RISK_COLOR[c.risk] }}>{c.status}</div>
+                <div style={{ fontSize: 11.5, fontWeight: 700, color: RISK_COLOR[displayRisk] }}>{c.status}</div>
                 <div style={{ marginTop: 5 }}>
-                  <ProgressBar value={c.days} max={60} color={RISK_COLOR[c.risk]} />
+                  <ProgressBar value={c.days} max={60} color={RISK_COLOR[displayRisk]} />
                 </div>
               </div>
             </div>
@@ -968,14 +1009,15 @@ function CategoryTab() {
             </div>
 
             {/* Action */}
-            <div style={{ background: RISK_BG[c.risk], borderRadius: 8, padding: '9px 12px', border: `1px solid ${RISK_BORDER[c.risk]}` }}>
-              <div style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.5px', color: RISK_COLOR[c.risk], marginBottom: 4 }}>
+            <div style={{ background: RISK_BG[displayRisk], borderRadius: 8, padding: '9px 12px', border: `1px solid ${RISK_BORDER[displayRisk]}` }}>
+              <div style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.5px', color: RISK_COLOR[displayRisk], marginBottom: 4 }}>
                 💡 การดำเนินการที่แนะนำ
               </div>
               <div style={{ fontSize: 10.5, color: 'var(--t1)', lineHeight: 1.5 }}>{c.action}</div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -995,7 +1037,15 @@ const TABS = [
 // ─── Main Component ───────────────────────────────────────────────────────────
 export default function BeverageShock() {
   const [activeTab, setActiveTab] = useState('overview');
+  const [liveData, setLiveData]   = useState(null);
   const ActiveComponent = TABS.find(t => t.id === activeTab)?.Component || OverviewTabFixed;
+
+  useEffect(() => {
+    fetch('/data/commodity_prices.json?t=' + Date.now())
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d) setLiveData(d); })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="page-enter" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
@@ -1015,14 +1065,22 @@ export default function BeverageShock() {
           </div>
           {/* Overall risk badge */}
           <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',
-              background: 'rgba(239,68,68,0.10)', border: '1px solid rgba(239,68,68,0.30)',
-              borderRadius: 8, fontSize: 11, fontWeight: 700, color: '#ef4444',
-            }}>
-              <AlertTriangle size={13} />
-              Overall: CRITICAL · Score 72/100
-            </div>
+            {(() => {
+              const risk  = liveData?.overall_risk ?? 'Critical';
+              const score = liveData?.composite_score ?? 72;
+              const col   = RISK_COLOR[risk] ?? '#ef4444';
+              return (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px',
+                  background: col + '1a', border: `1px solid ${col}4d`,
+                  borderRadius: 8, fontSize: 11, fontWeight: 700, color: col,
+                }}>
+                  <AlertTriangle size={13} />
+                  Overall: {risk.toUpperCase()} · Score {score}/100
+                  {liveData && <span style={{ fontSize: 9, background: '#22c55e15', color: '#22c55e', border: '1px solid #22c55e40', borderRadius: 3, padding: '1px 4px', marginLeft: 2 }}>🟢 Live</span>}
+                </div>
+              );
+            })()}
             <div style={{
               display: 'flex', alignItems: 'center', gap: 5, padding: '5px 10px',
               background: 'rgba(8,145,178,0.08)', border: '1px solid rgba(8,145,178,0.2)',
@@ -1070,7 +1128,7 @@ export default function BeverageShock() {
 
       {/* Tab Content */}
       <div className="content-scroll" style={{ flex: 1, overflowY: 'auto', overflowX: 'hidden' }}>
-        <ActiveComponent />
+        <ActiveComponent liveData={liveData} />
       </div>
     </div>
   );
