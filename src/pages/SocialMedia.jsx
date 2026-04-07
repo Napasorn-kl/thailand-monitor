@@ -388,60 +388,8 @@ function FeedView({ category }) {
 
 /* ─── Main page ─── */
 export default function SocialMedia() {
-  const [view, setView] = useState('feed');   // 'feed' | 'directory'
-  const [category, setCategory] = useState('all');
-
-  const dirCounts = {};
-  CATS.forEach(c => {
-    dirCounts[c.id] = c.id === 'all' ? DIR_DATA.length : DIR_DATA.filter(d => d.category === c.id).length;
-  });
-
   return (
     <div>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-        <Share2 size={16} style={{ color: 'var(--cyan)', flexShrink: 0 }} />
-        <div>
-          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--t1)' }}>Social Media & Feeds</div>
-          <div style={{ fontSize: 11, color: 'var(--t3)', marginTop: 2 }}>
-            {DIR_DATA.length} แหล่งข้อมูล · {SOCIAL_RSS_SOURCES.length} RSS feeds
-          </div>
-        </div>
-
-        {/* View toggle */}
-        <div style={{ marginLeft: 'auto', display: 'flex', borderRadius: 8, border: '1px solid rgba(0,0,0,.1)', overflow: 'hidden' }}>
-          {[
-            { id: 'feed',      label: 'ฟีดข่าว',    Icon: Rss  },
-            { id: 'directory', label: 'ไดเรกทอรี', Icon: List },
-          ].map(v => (
-            <button key={v.id} onClick={() => setView(v.id)} style={{
-              display: 'flex', alignItems: 'center', gap: 5,
-              padding: '6px 13px', border: 'none', cursor: 'pointer',
-              background: view === v.id ? 'var(--cyan)' : '#fff',
-              color: view === v.id ? '#fff' : 'var(--t2)',
-              fontSize: 11.5, fontWeight: 600, transition: 'background .15s',
-            }}>
-              <v.Icon size={12} /> {v.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Category tabs */}
-      <CatTabs
-        cats={CATS}
-        active={category}
-        onSelect={setCategory}
-        counts={view === 'directory' ? dirCounts : null}
-      />
-
-      {/* View content */}
-      {view === 'feed'
-        ? <FeedView category={category} />
-        : <DirectoryView category={category} />
-      }
-
-      {/* Facebook posts */}
       <FacebookSection />
     </div>
   );
