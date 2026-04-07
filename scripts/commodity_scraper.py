@@ -12,7 +12,7 @@ GitHub Secrets ที่ต้องตั้ง:
   python3 scripts/commodity_scraper.py
 """
 
-import json, os, requests
+import json, os, time, requests
 from datetime import datetime, timezone
 
 SCRIPT_DIR  = os.path.dirname(os.path.abspath(__file__))
@@ -84,6 +84,9 @@ def fetch_weather():
            f"?q=Bangkok,th&appid={OWM_KEY}&units=metric")
     try:
         d    = requests.get(url, timeout=10).json()
+        if d.get('cod') != 200:
+            print(f"  ⚠️  Weather API error: {d.get('message', d)}")
+            return None
         temp = d['main']['temp']
         hum  = d['main']['humidity']
         cond = d['weather'][0]['main']
@@ -114,7 +117,9 @@ if __name__ == '__main__':
 
     print('\n📊 ดึงราคา Commodity...')
     sugar = fetch_alpha('SUGAR',         'น้ำตาลทราย (ICE No.11)')
+    time.sleep(15)  # Alpha Vantage free tier: max 5 calls/min
     alum  = fetch_alpha('ALUMINUM',      'อลูมิเนียม (LME)')
+    time.sleep(15)
     crude = fetch_alpha('CRUDE_OIL_WTI', 'น้ำมันดิบ WTI')
 
     print('\n🌤  ดึงสภาพอากาศ...')
