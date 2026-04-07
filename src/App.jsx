@@ -19,7 +19,8 @@ import Simulator   from './pages/Simulator';
 import Briefing    from './pages/Briefing';
 import GovData     from './pages/GovData';
 import SocialMedia  from './pages/SocialMedia';
-import SettingsPage from './pages/Settings';
+import SettingsPage    from './pages/Settings';
+import BeverageShock  from './pages/BeverageShock';
 
 const NAV_CORE = [
   { id: 'news',       label: 'News Highlights', icon: Newspaper,       adv: false },
@@ -35,6 +36,7 @@ const NAV_ADV = [
   { id: 'simulator',  label: 'Simulator',       icon: SlidersHorizontal, adv: true },
   { id: 'briefing',   label: 'AI Briefing',     icon: Brain,             adv: true },
   { id: 'govdata',    label: 'Gov Data',        icon: Landmark,          adv: true },
+  { id: 'beverage',  label: 'Beverage Shock',  icon: PackageOpen,       adv: true },
 ];
 
 function Clock() {
@@ -75,6 +77,7 @@ export default function App() {
       case 'briefing':  return <Briefing  {...props} />;
       case 'govdata':   return <GovData   {...props} />;
       case 'social':    return <SocialMedia />;
+      case 'beverage':  return <BeverageShock />;
       case 'settings':  return <SettingsPage {...props} />;
       default:          return <Overview  {...props} />;
     }
