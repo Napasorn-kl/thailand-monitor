@@ -926,98 +926,81 @@ function SupplierTab() {
   );
 }
 
-function CategoryTab({ liveData }) {
-  // Map liveData to override price/change for specific materials
-  const liveOverride = {
-    'น้ำตาลทราย': liveData?.materials?.sugar ? {
-      price:       `${liveData.materials.sugar.price} ¢/lb`,
-      priceChange: `${liveData.materials.sugar.change_pct > 0 ? '+' : ''}${liveData.materials.sugar.change_pct}% (3M)`,
-      risk:        liveData.materials.sugar.risk_level,
-    } : null,
-    'อลูมิเนียมกระป๋อง': liveData?.materials?.aluminum ? {
-      price:       `$${liveData.materials.aluminum.price}/ตัน`,
-      priceChange: `${liveData.materials.aluminum.change_pct > 0 ? '+' : ''}${liveData.materials.aluminum.change_pct}% (3M)`,
-      risk:        liveData.materials.aluminum.risk_level,
-    } : null,
-    'PET Resin': liveData?.materials?.crude_oil ? {
-      priceChange: `Oil ${liveData.materials.crude_oil.change_pct > 0 ? '+' : ''}${liveData.materials.crude_oil.change_pct}% (3M proxy)`,
-      risk:        liveData.materials.crude_oil.risk_level,
-    } : null,
-  };
+function CategoryCard({ c, ov }) {
+  const displayPrice  = ov?.price       ?? c.price;
+  const displayChange = ov?.priceChange  ?? c.priceChange;
+  const displayRisk   = ov?.risk         ?? c.risk;
+  return (
+    <div className="cc" style={{ border: `1.5px solid ${RISK_BORDER[displayRisk]}`, position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: RISK_COLOR[displayRisk], borderRadius: '14px 14px 0 0' }} />
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12, paddingTop: 4 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+          <span style={{ fontSize: 24 }}>{c.icon}</span>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--t1)', display: 'flex', alignItems: 'center', gap: 5 }}>
+              {c.material}
+              {ov && <span style={{ fontSize: 8, fontWeight: 700, background: '#22c55e15', color: '#22c55e', border: '1px solid #22c55e40', borderRadius: 3, padding: '1px 4px' }}>🟢 Live</span>}
+            </div>
+            <div style={{ fontSize: 9.5, color: 'var(--t3)', marginTop: 1 }}>{c.days} วันของสต็อกคงเหลือ</div>
+          </div>
+        </div>
+        <RiskBadge level={displayRisk} size="md" />
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
+        <div style={{ background: 'var(--card2)', borderRadius: 8, padding: '8px 12px' }}>
+          <div style={{ fontSize: 9, color: 'var(--t3)', marginBottom: 3 }}>ราคาปัจจุบัน</div>
+          <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--t1)' }}>{displayPrice}</div>
+          <div style={{ fontSize: 10, fontWeight: 600, color: '#ef4444', marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
+            <TrendingUp size={10} />{displayChange}
+          </div>
+        </div>
+        <div style={{ background: 'var(--card2)', borderRadius: 8, padding: '8px 12px' }}>
+          <div style={{ fontSize: 9, color: 'var(--t3)', marginBottom: 3 }}>สถานะอุปทาน</div>
+          <div style={{ fontSize: 11.5, fontWeight: 700, color: RISK_COLOR[displayRisk] }}>{c.status}</div>
+          <div style={{ marginTop: 5 }}>
+            <ProgressBar value={c.days} max={60} color={RISK_COLOR[displayRisk]} />
+          </div>
+        </div>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+        <span style={{ fontSize: 9.5, color: 'var(--t3)' }}>Risk Trend (6 เดือน)</span>
+        <MiniSparkline data={c.trend} color={RISK_COLOR[displayRisk]} />
+      </div>
+      <div style={{ marginBottom: 10 }}>
+        <div style={{ fontSize: 9.5, color: 'var(--t3)', marginBottom: 4 }}>🏭 Suppliers หลัก</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+          {c.suppliers.split(', ').map(sup => (
+            <span key={sup} style={{ fontSize: 9.5, background: 'rgba(0,0,0,0.05)', color: 'var(--t2)', borderRadius: 5, padding: '2px 7px', border: '1px solid rgba(0,0,0,0.07)' }}>
+              {sup}
+            </span>
+          ))}
+        </div>
+      </div>
+      <div style={{ background: RISK_BG[displayRisk], borderRadius: 8, padding: '9px 12px', border: `1px solid ${RISK_BORDER[displayRisk]}` }}>
+        <div style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.5px', color: RISK_COLOR[displayRisk], marginBottom: 4 }}>
+          💡 การดำเนินการที่แนะนำ
+        </div>
+        <div style={{ fontSize: 10.5, color: 'var(--t1)', lineHeight: 1.5 }}>{c.action}</div>
+      </div>
+    </div>
+  );
+}
 
+function CategoryTab({ liveData }) {
+  const s = liveData?.materials?.sugar;
+  const al = liveData?.materials?.aluminum;
+  const cr = liveData?.materials?.crude_oil;
+  const liveOverride = {
+    'น้ำตาลทราย':        s  ? { price: `${s.price} ¢/lb`,   priceChange: `${s.change_pct > 0 ? '+' : ''}${s.change_pct}% (3M)`,          risk: s.risk_level  } : null,
+    'อลูมิเนียมกระป๋อง': al ? { price: `$${al.price}/ตัน`, priceChange: `${al.change_pct > 0 ? '+' : ''}${al.change_pct}% (3M)`,         risk: al.risk_level } : null,
+    'PET Resin':         cr ? {                              priceChange: `Oil ${cr.change_pct > 0 ? '+' : ''}${cr.change_pct}% (3M proxy)`, risk: cr.risk_level } : null,
+  };
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 14 }}>
-        {CATEGORY_CARDS.map(c => {
-          const ov = liveOverride[c.material];
-          const displayPrice  = ov?.price       ?? c.price;
-          const displayChange = ov?.priceChange  ?? c.priceChange;
-          const displayRisk   = ov?.risk         ?? c.risk;
-          return (
-          <div key={c.material} className="cc" style={{ border: `1.5px solid ${RISK_BORDER[displayRisk]}`, position: 'relative', overflow: 'hidden' }}>
-            {/* Top accent */}
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: RISK_COLOR[displayRisk], borderRadius: '14px 14px 0 0' }} />
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12, paddingTop: 4 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-                <span style={{ fontSize: 24 }}>{c.icon}</span>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--t1)', display: 'flex', alignItems: 'center', gap: 5 }}>
-                    {c.material}
-                    {ov && <span style={{ fontSize: 8, fontWeight: 700, background: '#22c55e15', color: '#22c55e', border: '1px solid #22c55e40', borderRadius: 3, padding: '1px 4px' }}>🟢 Live</span>}
-                  </div>
-                  <div style={{ fontSize: 9.5, color: 'var(--t3)', marginTop: 1 }}>{c.days} วันของสต็อกคงเหลือ</div>
-                </div>
-              </div>
-              <RiskBadge level={displayRisk} size="md" />
-            </div>
-
-            {/* Price + status row */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 10 }}>
-              <div style={{ background: 'var(--card2)', borderRadius: 8, padding: '8px 12px' }}>
-                <div style={{ fontSize: 9, color: 'var(--t3)', marginBottom: 3 }}>ราคาปัจจุบัน</div>
-                <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--t1)' }}>{displayPrice}</div>
-                <div style={{ fontSize: 10, fontWeight: 600, color: '#ef4444', marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
-                  <TrendingUp size={10} />{displayChange}
-                </div>
-              </div>
-              <div style={{ background: 'var(--card2)', borderRadius: 8, padding: '8px 12px' }}>
-                <div style={{ fontSize: 9, color: 'var(--t3)', marginBottom: 3 }}>สถานะอุปทาน</div>
-                <div style={{ fontSize: 11.5, fontWeight: 700, color: RISK_COLOR[displayRisk] }}>{c.status}</div>
-                <div style={{ marginTop: 5 }}>
-                  <ProgressBar value={c.days} max={60} color={RISK_COLOR[displayRisk]} />
-                </div>
-              </div>
-            </div>
-
-            {/* Trend mini sparkline */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-              <span style={{ fontSize: 9.5, color: 'var(--t3)' }}>Risk Trend (6 เดือน)</span>
-              <MiniSparkline data={c.trend} color={RISK_COLOR[c.risk]} />
-            </div>
-
-            {/* Suppliers */}
-            <div style={{ marginBottom: 10 }}>
-              <div style={{ fontSize: 9.5, color: 'var(--t3)', marginBottom: 4 }}>🏭 Suppliers หลัก</div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                {c.suppliers.split(', ').map(sup => (
-                  <span key={sup} style={{ fontSize: 9.5, background: 'rgba(0,0,0,0.05)', color: 'var(--t2)', borderRadius: 5, padding: '2px 7px', border: '1px solid rgba(0,0,0,0.07)' }}>
-                    {sup}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Action */}
-            <div style={{ background: RISK_BG[displayRisk], borderRadius: 8, padding: '9px 12px', border: `1px solid ${RISK_BORDER[displayRisk]}` }}>
-              <div style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.5px', color: RISK_COLOR[displayRisk], marginBottom: 4 }}>
-                💡 การดำเนินการที่แนะนำ
-              </div>
-              <div style={{ fontSize: 10.5, color: 'var(--t1)', lineHeight: 1.5 }}>{c.action}</div>
-            </div>
-          </div>
-          );
-        })}
+        {CATEGORY_CARDS.map(c => (
+          <CategoryCard key={c.material} c={c} ov={liveOverride[c.material] ?? null} />
+        ))}
       </div>
     </div>
   );
