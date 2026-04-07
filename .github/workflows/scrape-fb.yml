@@ -21,10 +21,11 @@ jobs:
         with:
           python-version: '3.11'
           cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
 
       - name: Install dependencies
         run: |
-          pip install facebook-scraper lxml_html_clean requests
+          pip install -r scripts/requirements.txt
 
       - name: Run Facebook scraper
         env:
