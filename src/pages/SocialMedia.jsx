@@ -1,9 +1,131 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Share2, Globe, ExternalLink, AlertTriangle, Cloud, Zap,
   TrendingUp, RefreshCw, Loader, List, Rss, AlertCircle,
 } from 'lucide-react';
 import { useSocialFeed, SOCIAL_RSS_SOURCES } from '../hooks/useSocialFeed';
+
+/* ─── Facebook icon ─── */
+const FBIcon = ({ size = 13 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="#1877f2">
+    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+  </svg>
+);
+
+const FB_CAT_COLOR = {
+  'สาธารณภัย': '#ef4444', 'สภาพอากาศ': '#3b82f6', 'สิ่งแวดล้อม': '#22c55e',
+  'การลงทุน': '#f59e0b', 'ธุรกิจ': '#8b5cf6', 'การตลาด': '#ec4899', 'ท่องเที่ยว': '#06b6d4',
+};
+
+/* ─── Facebook card with image ─── */
+function FBCard({ item }) {
+  const catColor = FB_CAT_COLOR[item.category] || '#6b7280';
+  const ts = item.timestamp ? new Date(item.timestamp) : null;
+  const timeStr = ts ? ts.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
+
+  return (
+    <a href={item.post_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+      <div className="cc" style={{ padding: 0, overflow: 'hidden', display: 'flex', flexDirection: 'column', height: '100%', cursor: 'pointer' }}>
+        {/* Image */}
+        {item.image_url ? (
+          <img src={item.image_url} alt="" style={{ width: '100%', height: 160, objectFit: 'cover', display: 'block', flexShrink: 0 }}
+            onError={e => { e.target.style.display = 'none'; }} />
+        ) : (
+          <div style={{ width: '100%', height: 60, background: 'linear-gradient(135deg,#1877f215,#1877f205)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <FBIcon size={20} />
+          </div>
+        )}
+        {/* Body */}
+        <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+            <FBIcon size={13} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--t1)', flex: 1 }}>{item.source_name}</span>
+            <span style={{ fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 4, background: catColor + '20', color: catColor, border: '1px solid ' + catColor + '40' }}>
+              {item.category}
+            </span>
+          </div>
+          <div style={{ fontSize: 12, color: 'var(--t1)', lineHeight: 1.55, flex: 1, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 4, WebkitBoxOrient: 'vertical' }}>
+            {item.post_text}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 2 }}>
+            <span style={{ fontSize: 10, color: 'var(--t3)' }}>{timeStr}</span>
+            <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 10, color: '#1877f2', fontWeight: 600 }}>
+              ดูโพสต์ <ExternalLink size={10} />
+            </span>
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+}
+
+/* ─── Facebook posts section ─── */
+function FacebookSection() {
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [filter, setFilter] = useState('ทั้งหมด');
+
+  const fetchPosts = async () => {
+    setLoading(true); setError(null);
+    try {
+      const res = await fetch('/data/fb_news.json?t=' + Date.now());
+      if (!res.ok) throw new Error('ไม่พบข้อมูล');
+      const data = await res.json();
+      setPosts([...data].sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+    } catch (e) { setError(e.message); }
+    finally { setLoading(false); }
+  };
+
+  useEffect(() => { fetchPosts(); }, []);
+
+  const categories = ['ทั้งหมด', ...new Set(posts.map(p => p.category))];
+  const filtered = filter === 'ทั้งหมด' ? posts : posts.filter(p => p.category === filter);
+
+  return (
+    <div style={{ marginTop: 28 }}>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+        <FBIcon size={15} />
+        <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--t1)', flex: 1 }}>โพสต์ Facebook ล่าสุด</div>
+        <button onClick={fetchPosts} style={{
+          display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--t3)',
+          background: 'transparent', border: '1px solid rgba(0,0,0,.12)', borderRadius: 5,
+          padding: '3px 8px', cursor: 'pointer',
+        }}>
+          <RefreshCw size={10} /> รีเฟรช
+        </button>
+      </div>
+
+      {/* Category filter */}
+      {!loading && posts.length > 0 && (
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+          {categories.map(c => (
+            <button key={c} onClick={() => setFilter(c)} style={{
+              fontSize: 10, fontWeight: 600, padding: '3px 10px', borderRadius: 20, cursor: 'pointer',
+              background: filter === c ? '#1877f2' : 'transparent',
+              color: filter === c ? '#fff' : 'var(--t3)',
+              border: '1px solid ' + (filter === c ? '#1877f2' : 'rgba(0,0,0,.12)'),
+            }}>{c}</button>
+          ))}
+        </div>
+      )}
+
+      {loading && (
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, padding: 30, color: 'var(--t3)' }}>
+          <Loader size={14} className="animate-spin-slow" />
+          <span style={{ fontSize: 12 }}>กำลังโหลด…</span>
+        </div>
+      )}
+      {error && <div style={{ textAlign: 'center', padding: 16, fontSize: 12, color: 'var(--red)' }}>⚠️ {error}</div>}
+      {!loading && !error && filtered.length > 0 && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 12 }}>
+          {filtered.slice(0, 18).map((item, i) => <FBCard key={i} item={item} />)}
+        </div>
+      )}
+    </div>
+  );
+}
 
 /* ─── Date formatter ─── */
 function formatDate(dateStr) {
@@ -318,6 +440,9 @@ export default function SocialMedia() {
         ? <FeedView category={category} />
         : <DirectoryView category={category} />
       }
+
+      {/* Facebook posts */}
+      <FacebookSection />
     </div>
   );
 }
