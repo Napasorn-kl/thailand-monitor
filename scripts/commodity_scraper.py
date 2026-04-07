@@ -32,47 +32,53 @@ def risk_from_pct(pct):
     return 'Low', 30
 
 
-def fetch_alpha(function, label):
-    """ดึงราคา commodity รายเดือนจาก Alpha Vantage"""
+def fetch_alpha(function, label, retries=2):
+    """ดึงราคา commodity รายเดือนจาก Alpha Vantage (retry on rate limit)"""
     url = (f"https://www.alphavantage.co/query"
            f"?function={function}&interval=monthly&apikey={ALPHA_KEY}")
-    try:
-        resp  = requests.get(url, timeout=20)
-        body  = resp.json()
+    for attempt in range(retries):
+        try:
+            resp = requests.get(url, timeout=20)
+            body = resp.json()
 
-        # Alpha Vantage rate-limit message
-        if 'Note' in body or 'Information' in body:
-            msg = body.get('Note') or body.get('Information', '')
-            print(f"  ⚠️  {label}: rate limit — {msg[:80]}")
+            # Rate limit — wait 65s then retry
+            if 'Note' in body or 'Information' in body:
+                msg = body.get('Note') or body.get('Information', '')
+                if attempt < retries - 1:
+                    print(f"  ⏳ {label}: rate limit — รอ 65s แล้ว retry...")
+                    time.sleep(65)
+                    continue
+                print(f"  ⚠️  {label}: rate limit หมด retry — {msg[:60]}")
+                return None
+
+            items = body.get('data', [])
+            if len(items) < 3:
+                print(f"  ⚠️  {label}: ข้อมูลไม่เพียงพอ ({len(items)} records)")
+                return None
+
+            cur  = float(items[0]['value'])
+            prev = float(items[2]['value'])
+            pct  = (cur - prev) / prev * 100
+            level, score = risk_from_pct(pct)
+
+            print(f"  ✅ {label}: {cur:.2f} {body.get('unit','')} "
+                  f"({pct:+.1f}% / 3M) → {level} (score {score})")
+
+            return {
+                'price':      round(cur, 2),
+                'unit':       body.get('unit', ''),
+                'change_pct': round(pct, 1),
+                'risk_level': level,
+                'risk_score': score,
+                'history': [
+                    {'date': x['date'], 'value': float(x['value'])}
+                    for x in items[:12]
+                ],
+            }
+        except Exception as e:
+            print(f"  ❌ {label}: {e}")
             return None
-
-        items = body.get('data', [])
-        if len(items) < 3:
-            print(f"  ⚠️  {label}: ข้อมูลไม่เพียงพอ ({len(items)} records)")
-            return None
-
-        cur  = float(items[0]['value'])
-        prev = float(items[2]['value'])   # 3 months ago
-        pct  = (cur - prev) / prev * 100
-        level, score = risk_from_pct(pct)
-
-        print(f"  ✅ {label}: {cur:.2f} {body.get('unit','')} "
-              f"({pct:+.1f}% / 3M) → {level} (score {score})")
-
-        return {
-            'price':      round(cur, 2),
-            'unit':       body.get('unit', ''),
-            'change_pct': round(pct, 1),
-            'risk_level': level,
-            'risk_score': score,
-            'history': [
-                {'date': x['date'], 'value': float(x['value'])}
-                for x in items[:12]
-            ],
-        }
-    except Exception as e:
-        print(f"  ❌ {label}: {e}")
-        return None
+    return None
 
 
 def fetch_weather():
