@@ -26,20 +26,22 @@ COOKIES_FILE = os.path.join(SCRIPT_DIR, 'fb_cookies.txt')
 APIFY_TOKEN = os.environ.get('APIFY_TOKEN', '').strip()
 APIFY_ACTOR = 'apify~facebook-posts-scraper'
 
-# เพจที่ใช้ Apify
+# เพจที่ใช้ Apify (ตรงกับที่ตั้งค่าใน Apify Console)
 APIFY_PAGES = [
-    {"url": "https://www.facebook.com/longtunman",    "name": "ลงทุนแมน",      "category": "การลงทุน"},
-    {"url": "https://www.facebook.com/thestandardth", "name": "THE STANDARD",   "category": "ธุรกิจ"},
-    {"url": "https://www.facebook.com/brandbuffet",   "name": "Brand Buffet",   "category": "การตลาด"},
+    {"url": "https://www.facebook.com/longtunman",       "name": "ลงทุนแมน",           "category": "การลงทุน"},
+    {"url": "https://www.facebook.com/thestandardwealth","name": "THE STANDARD Wealth", "category": "การลงทุน"},
+    {"url": "https://www.facebook.com/bangkokbiznews",   "name": "กรุงเทพธุรกิจ",       "category": "ธุรกิจ"},
+    {"url": "https://www.facebook.com/brandbuffet",      "name": "Brand Buffet",        "category": "การตลาด"},
+    {"url": "https://www.facebook.com/theadaddict",      "name": "The Addict Guide",    "category": "ท่องเที่ยว"},
+    {"url": "https://www.facebook.com/bloombergnews",    "name": "Bloomberg",           "category": "การลงทุน"},
+    {"url": "https://www.facebook.com/forbesthailand",   "name": "Forbes Thailand",     "category": "ธุรกิจ"},
 ]
 
-# เพจที่ใช้ facebook-scraper (ต้องการ FB_COOKIES)
+# เพจที่ใช้ facebook-scraper (หน่วยงานรัฐ ต้องการ FB_COOKIES)
 FB_SCRAPER_PAGES = [
-    {"page": "DDPMNews",       "name": "กรมป้องกันและบรรเทาสาธารณภัย", "category": "สาธารณภัย"},
-    {"page": "tmd.go.th",      "name": "กรมอุตุนิยมวิทยา",             "category": "สภาพอากาศ"},
-    {"page": "PCD.go.th",      "name": "กรมควบคุมมลพิษ",               "category": "สิ่งแวดล้อม"},
-    {"page": "bangkokbiznews", "name": "กรุงเทพธุรกิจ",                 "category": "ธุรกิจ"},
-    {"page": "PositioningMag", "name": "Positioning",                   "category": "ธุรกิจ"},
+    {"page": "DDPMNews",  "name": "กรมป้องกันและบรรเทาสาธารณภัย", "category": "สาธารณภัย"},
+    {"page": "tmd.go.th", "name": "กรมอุตุนิยมวิทยา",             "category": "สภาพอากาศ"},
+    {"page": "PCD.go.th", "name": "กรมควบคุมมลพิษ",               "category": "สิ่งแวดล้อม"},
 ]
 
 POSTS_PER_PAGE = 3
