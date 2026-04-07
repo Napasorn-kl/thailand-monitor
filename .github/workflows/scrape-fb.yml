@@ -6,6 +6,9 @@ on:
     - cron: '0 0,6,12,18 * * *'
   workflow_dispatch: # รันด้วยตนเองได้จาก GitHub Actions UI
 
+permissions:
+  contents: write
+
 jobs:
   scrape:
     runs-on: ubuntu-latest
