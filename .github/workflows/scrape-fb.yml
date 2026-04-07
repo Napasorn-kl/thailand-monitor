@@ -24,13 +24,14 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install facebook-scraper lxml_html_clean
+          pip install facebook-scraper lxml_html_clean requests
 
       - name: Run Facebook scraper
         env:
-          FB_COOKIES: ${{ secrets.FB_COOKIES }}
+          APIFY_TOKEN: ${{ secrets.APIFY_TOKEN }}
+          FB_COOKIES:  ${{ secrets.FB_COOKIES }}
         run: |
-          python3 scripts/fb_scraper.py --cookies
+          python3 scripts/fb_scraper.py
 
       - name: Check for changes
         id: changes
