@@ -26,7 +26,7 @@ const NAV_CORE = [
   { id: 'news',       label: 'News Highlights', icon: Newspaper,       adv: false },
   { id: 'overview',   label: 'Overview',        icon: LayoutDashboard, adv: false },
   { id: 'sectors',    label: 'Sectors',          icon: Layers,          adv: false },
-  { id: 'provinces',  label: 'Provinces',        icon: Map,             adv: false },
+  { id: 'provinces',  label: 'Provincial Business', icon: Map,             adv: false },
   { id: 'social',     label: 'Social Media',    icon: Share2,          adv: false },
 ];
 
