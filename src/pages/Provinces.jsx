@@ -57,7 +57,7 @@ export default function Provinces() {
       </div>
 
       {/* KPI Summary */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 14 }}>
+      <div className="g-kpi3" style={{ marginBottom: 14 }}>
         {[
           { label: 'บริษัทจดทะเบียนทั้งหมด', val: totalReg.toLocaleString() + ' บริษัท', color: '#0891b2' },
           { label: 'ทุนจดทะเบียนรวม',         val: '฿' + totalCap.toLocaleString() + 'B',  color: '#059669' },
@@ -111,7 +111,7 @@ export default function Provinces() {
         })}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 290px', gap: 14 }}>
+      <div className="g-side-r">
         {/* Province ranked list */}
         <div className="cc">
           <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--t2)', marginBottom: 12 }}>

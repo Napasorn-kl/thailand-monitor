@@ -113,7 +113,7 @@ function ThaiOilSection({ retail }) {
       <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--cyan)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 5 }}>
         <Fuel size={13} /> ราคาน้ำมันไทย ณ วันนี้
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 7 }}>
+      <div className="g-2sm">
         {rows.map(r => (
           <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderRadius: 8, padding: '7px 10px' }}>
             <span style={{ fontSize: 11.5, color: 'var(--t2)' }}>{r.label}</span>
@@ -142,7 +142,7 @@ function ThaiGoldSection({ goldBar, goldOrn, goldDate, usdthb }) {
       <div style={{ fontSize: 12, fontWeight: 700, color: '#b7791f', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 5 }}>
         <Trophy size={13} /> ราคาทองคำไทย (สมาคมค้าทองคำ)
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 7 }}>
+      <div className="g-2sm">
         {rows.map(r => (
           <div key={r.label} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: '#fff', borderRadius: 8, padding: '7px 10px' }}>
             <span style={{ fontSize: 11.5, color: 'var(--t2)' }}>{r.label}</span>
@@ -220,7 +220,7 @@ export default function Commodity({ data }) {
           กำลังโหลดราคา...
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+        <div className="g-1-1">
           {visible.map(def => (
             <CommodityCard key={def.id} def={def} q={quotes[def.sym]} usdthb={usdthb} />
           ))}

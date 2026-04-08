@@ -86,7 +86,7 @@ export default function App() {
   return (
     <div style={{ height: '100dvh', display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
       {/* HEADER */}
-      <header style={{
+      <header className="app-header" style={{
         background: 'rgba(255,255,255,0.96)',
         backdropFilter: 'blur(16px)',
         borderBottom: '1px solid rgba(0,0,0,0.07)',
@@ -212,12 +212,12 @@ export default function App() {
       {/* BOTTOM NAV (mobile only) */}
       <nav className="bottom-nav">
         {[
-          { id: 'overview',  icon: LayoutDashboard, label: 'Overview' },
-          { id: 'news',      icon: Newspaper,       label: 'News' },
-          { id: 'oil',       icon: Fuel,            label: 'Oil', adv: true },
-          { id: 'gold',      icon: Coins,           label: 'Gold', adv: true },
-          { id: 'simulator', icon: SlidersHorizontal, label: 'Sim', adv: true },
-          { id: 'settings',  icon: Settings,        label: 'Settings' },
+          { id: 'overview',  icon: LayoutDashboard,   label: 'Overview' },
+          { id: 'news',      icon: Newspaper,          label: 'News' },
+          { id: 'sectors',   icon: Layers,             label: 'Sectors' },
+          { id: 'social',    icon: Share2,             label: 'Social' },
+          { id: 'commodity', icon: PackageOpen,        label: 'Prices', adv: true },
+          { id: 'settings',  icon: Settings,           label: 'Settings' },
         ].map(item => (
           <button
             key={item.id}

@@ -245,7 +245,7 @@ export default function Graph({ data }) {
   }, [overlay, selected]);  // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 270px', gap: 14, height: 'calc(100dvh - 100px)' }}>
+    <div className="g-side" style={{ height: 'calc(100dvh - 100px)' }}>
       <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, gap: 8 }}>
         <div style={{ flex: 1, position: 'relative' }}>
           <canvas ref={canvasRef} style={{ borderRadius: 10, border: '1px solid rgba(0,0,0,.07)', display: 'block', width: '100%', height: '100%', boxShadow: '0 1px 3px rgba(0,0,0,.05)' }} />

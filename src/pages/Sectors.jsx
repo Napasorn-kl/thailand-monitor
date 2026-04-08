@@ -79,7 +79,7 @@ export default function Sectors({ data }) {
       </div>
 
       {/* KPI Summary */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 14 }}>
+      <div className="g-kpi3" style={{ marginBottom: 14 }}>
         {[
           { label: 'นิติบุคคลทั้งหมด',  val: totalReg.toLocaleString() + ' บริษัท', color: '#0891b2' },
           { label: 'การเติบโตเฉลี่ย',    val: (parseFloat(avgGrowth) >= 0 ? '+' : '') + avgGrowth + '%', color: parseFloat(avgGrowth) >= 0 ? '#16a34a' : '#dc2626' },
@@ -108,7 +108,7 @@ export default function Sectors({ data }) {
       </div>
 
       {/* Two-panel layout */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 256px', gap: 14 }}>
+      <div className="g-side">
 
         {/* LEFT: Ranked list */}
         <div className="cc">
@@ -198,7 +198,7 @@ export default function Sectors({ data }) {
                 </div>
 
                 {/* Metrics grid */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
+                <div className="g-1-1" style={{ marginBottom: 12 }}>
                   {[
                     { label: 'บริษัทจดทะเบียน',  val: selSec.reg.toLocaleString(), unit: 'บริษัท', color: '#0891b2' },
                     { label: 'ทุนจดทะเบียน',      val: '฿' + selSec.cap + 'B',       unit: '',      color: '#d97706' },

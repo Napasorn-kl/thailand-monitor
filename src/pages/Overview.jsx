@@ -104,7 +104,7 @@ export default function Overview({ data }) {
       </div>
 
       {/* Main 2-col row */}
-      <div style={{ display: 'grid', gridTemplateColumns: '3fr 2fr', gap: 14, marginBottom: 14 }}>
+      <div className="g-3-2" style={{ marginBottom: 14 }}>
         {/* Trend chart */}
         <div className="cc" style={{ paddingBottom: 16 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>

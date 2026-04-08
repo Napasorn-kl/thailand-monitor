@@ -69,7 +69,7 @@ export default function Simulator({ data }) {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 14 }}>
+      <div className="g-rhs">
         {/* Sliders */}
         <div className="cc">
           <div className="cc-title" style={{ marginBottom: 16 }}>ปรับตัวแปรเศรษฐกิจ</div>

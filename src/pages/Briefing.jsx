@@ -74,7 +74,7 @@ export default function Briefing({ data }) {
       </div>
 
       {/* Opportunities & Risks */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+      <div className="g-1-1" style={{ marginBottom: 14 }}>
         <div>
           <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--green)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
             ▲ โอกาส

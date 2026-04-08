@@ -51,7 +51,7 @@ export default function GovData() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+      <div className="g-1-1" style={{ marginBottom: 14 }}>
         <div className="cc">
           <div className="cc-title" style={{ marginBottom: 12 }}>บริษัทจดทะเบียนใหม่รายเดือน (DBD)</div>
           <ResponsiveContainer width="100%" height={150}>
@@ -77,7 +77,7 @@ export default function GovData() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+      <div className="g-1-1" style={{ marginBottom: 14 }}>
         <div className="cc">
           <div className="cc-title" style={{ marginBottom: 12 }}>สัดส่วนภาคธุรกิจที่จดทะเบียนใหม่</div>
           {sectors.map(s => (

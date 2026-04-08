@@ -56,7 +56,7 @@ export default function Settings({ data }) {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 340px', gap: 14 }}>
+      <div className="g-rhs">
         {/* API Status list */}
         <div className="cc">
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>

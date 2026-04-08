@@ -333,7 +333,7 @@ function OverviewTab() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       {/* Risk Index Summary Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
+      <div className="g-kpi4">
         {Object.entries(RISK_COUNTS).map(([level, count]) => (
           <div key={level} className="kpi-card" style={{ borderLeftColor: RISK_COLOR[level] }}>
             <div className="kpi-glow" style={{ background: RISK_COLOR[level] }} />
@@ -348,7 +348,7 @@ function OverviewTab() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 14 }}>
+      <div className="g-2c-wide">
         {/* Gauge + Alerts */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {/* Gauge */}
@@ -470,7 +470,7 @@ function OverviewTabFixed({ liveData }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       {/* Risk Index Summary Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 12 }}>
+      <div className="g-kpi4">
         {Object.entries(RISK_COUNTS).map(([level, count]) => (
           <div key={level} className="kpi-card" style={{ borderLeftColor: RISK_COLOR[level] }}>
             <div className="kpi-glow" style={{ background: RISK_COLOR[level] }} />
@@ -485,7 +485,7 @@ function OverviewTabFixed({ liveData }) {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: 14 }}>
+      <div className="g-2c-wide">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
           {/* Gauge */}
           <div className="cc" style={{ textAlign: 'center' }}>
@@ -668,7 +668,7 @@ function InventoryTab() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       {/* Header stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
+      <div className="g-3col">
         {[
           { label: 'วัสดุในภาวะวิกฤต (<21 วัน)', val: '3', color: '#ef4444', icon: '🔴' },
           { label: 'วัสดุเฝ้าระวัง (21–35 วัน)',  val: '2', color: '#f59e0b', icon: '🟡' },
@@ -728,7 +728,7 @@ function InventoryTab() {
       {/* Region Impact */}
       <div className="cc">
         <div className="cc-title">🌏 Impact by Region</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
+        <div className="g-3col">
           {[
             { region: 'ไทย (Thailand)', score: 82, materials: ['น้ำตาล','CO₂','น้ำสะอาด'], level: 'Critical' },
             { region: 'SEA (อาเซียน)',  score: 70, materials: ['อลูมิเนียม','ขวดแก้ว','CO₂'], level: 'High' },
@@ -759,7 +759,7 @@ function OTIFTab() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
       {/* Summary */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
+      <div className="g-3col">
         {[
           { label: 'Average OTIF Score', val: `${Math.round(OTIF_DATA.reduce((s,x)=>s+x.otif,0)/OTIF_DATA.length)}%`, color: '#f59e0b', sub: 'ต่ำกว่าเป้า 80%' },
           { label: 'Suppliers At Risk',  val: `${OTIF_DATA.filter(x=>x.otif<threshold).length}`,      color: '#ef4444', sub: 'คะแนน OTIF <80%' },
@@ -774,7 +774,7 @@ function OTIFTab() {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.8fr 1fr', gap: 14 }}>
+      <div className="g-2c-left">
         {/* OTIF Bar Chart */}
         <div className="cc">
           <div className="cc-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -839,7 +839,7 @@ function OTIFTab() {
 function SupplierTab() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 14 }}>
+      <div className="g-2c-r">
         {/* Radar */}
         <div className="cc">
           <div className="cc-title">🕸 Supplier Performance Radar</div>

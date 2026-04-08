@@ -63,7 +63,7 @@ export default function Capital({ data }) {
       </div>
 
       {/* FDI breakdowns */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+      <div className="g-1-1">
         <div className="cc">
           <div className="cc-title" style={{ marginBottom: 8 }}>FDI แหล่งที่มา (%)</div>
           <DonutChart data={FDI_ORIGIN} />
