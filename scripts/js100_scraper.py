@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 """
-Thailand Monitor — JS100 News Scraper
-ดึงข่าวจาก js100.com/en/site/news/index → public/data/js100_news.json
+Thailand Monitor — JS100 Traffic Scraper
+ดึงสถานการณ์จราจรจาก js100.com/en/site/traffic → public/data/js100_news.json
 
 วิธีรัน local:
   python3 scripts/js100_scraper.py
 """
 
-import json, os, re, sys, time
+import json, os, re, sys
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime, timedelta, timezone
@@ -16,16 +16,16 @@ SCRIPT_DIR  = os.path.dirname(os.path.abspath(__file__))
 PROJECT_DIR = os.path.dirname(SCRIPT_DIR)
 OUTPUT_FILE = os.path.join(PROJECT_DIR, 'public', 'data', 'js100_news.json')
 
-BASE_URL  = 'https://www.js100.com'
-LIST_URL  = f'{BASE_URL}/en/site/news/index'
-HEADERS   = {
+BASE_URL     = 'https://www.js100.com'
+TRAFFIC_URL  = f'{BASE_URL}/en/site/traffic'
+HEADERS      = {
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) '
                   'AppleWebKit/537.36 (KHTML, like Gecko) '
                   'Chrome/124.0.0.0 Safari/537.36',
     'Accept-Language': 'th-TH,th;q=0.9,en;q=0.8',
 }
-TZ_BKK  = timezone(timedelta(hours=7))
-MAX_ARTICLES = 30
+TZ_BKK       = timezone(timedelta(hours=7))
+MAX_ARTICLES = 40
 
 
 def parse_timestamp(raw: str) -> str:
@@ -57,10 +57,28 @@ def parse_timestamp(raw: str) -> str:
     return d.isoformat()
 
 
-def scrape_news() -> list:
-    print(f'  📡 ดึง {LIST_URL}')
+def detect_traffic_type(text: str) -> str:
+    """ตรวจสอบประเภทของรายงานจราจร"""
+    t = text.lower()
+    if 'อุบัติเหตุ' in t:
+        return 'อุบัติเหตุ'
+    if 'ติดขัดสะสม' in t or 'ติดขัดมาก' in t:
+        return 'ติดขัดสะสม'
+    if 'ติดขัด' in t:
+        return 'ติดขัด'
+    if 'เคลื่อนตัวได้' in t or 'คล่องตัว' in t or 'ไหลลื่น' in t:
+        return 'ปกติ'
+    if 'ปิดช่องทาง' in t or 'ปิดถนน' in t:
+        return 'ปิดช่องทาง'
+    if 'ก่อสร้าง' in t or 'ซ่อมแซม' in t:
+        return 'ก่อสร้าง'
+    return 'รายงานจราจร'
+
+
+def scrape_traffic() -> list:
+    print(f'  📡 ดึง {TRAFFIC_URL}')
     try:
-        r = requests.get(LIST_URL, headers=HEADERS, timeout=20)
+        r = requests.get(TRAFFIC_URL, headers=HEADERS, timeout=20)
         r.raise_for_status()
         r.encoding = 'utf-8'
     except Exception as e:
@@ -68,74 +86,48 @@ def scrape_news() -> list:
         return []
 
     soup = BeautifulSoup(r.text, 'html.parser')
-    seen_ids, articles = set(), []
+    seen, articles = set(), []
 
-    # หา <a> ที่ลิงก์ไปหน้าข่าว (ไม่ใช่ลิงก์รูปภาพ)
-    for a in soup.find_all('a', href=re.compile(r'/en/site/news/view/\d+')):
-        if a.find('img'):
-            continue  # ข้าม link ที่มีแค่รูป
-        title = a.get_text(strip=True)
-        if not title or len(title) < 5:
+    # แต่ละรายการจราจรอยู่ใน <li> ที่มี <h4> timestamp
+    for li in soup.find_all('li'):
+        h4 = li.find('h4')
+        if not h4:
+            continue
+        timestamp_raw = h4.get_text(strip=True)
+        if not re.search(r'\d{1,2}:\d{2}', timestamp_raw):
             continue
 
-        href = a['href']
-        id_m = re.search(r'/view/(\d+)', href)
-        if not id_m:
+        # ดึงข้อความรายงาน (ทั้งหมดใน <li> ยกเว้น h4)
+        h4.extract()
+        desc = li.get_text(separator=' ', strip=True)
+        # คืน h4 กลับ (ป้องกัน side-effect ถ้ามีการวนซ้ำ)
+        li.insert(0, h4)
+
+        desc = re.sub(r'\s+', ' ', desc).strip()
+        if not desc or len(desc) < 8:
             continue
-        article_id = id_m.group(1)
-        if article_id in seen_ids:
+
+        key = timestamp_raw + desc[:40]
+        if key in seen:
             continue
-        seen_ids.add(article_id)
+        seen.add(key)
 
-        full_url = BASE_URL + href if href.startswith('/') else href
-
-        # ขยับขึ้นหา container (<li> หรือ <div>) ที่มี h4 อยู่ด้วย
-        container = a.parent
-        for _ in range(6):
-            if container is None:
-                break
-            if container.find('h4'):
-                break
-            container = container.parent
-
-        # ดึง timestamp
-        timestamp_raw = ''
-        if container:
-            h4 = container.find('h4')
-            if h4:
-                timestamp_raw = h4.get_text(strip=True)
-
-        # ดึงรูปภาพ
-        image_url = None
-        if container:
-            img = container.find('img')
-            if img:
-                src = img.get('src') or img.get('data-src') or ''
-                if src and not src.startswith('data:'):
-                    image_url = src if src.startswith('http') else BASE_URL + src
-
-        # ดึง category
-        categories = []
-        if container:
-            for ca in container.find_all('a', href=re.compile(r'/infilter/')):
-                ct = ca.get_text(strip=True)
-                if ct:
-                    categories.append(ct)
-
-        ts_iso = parse_timestamp(timestamp_raw) if timestamp_raw else datetime.now(TZ_BKK).isoformat()
+        ts_iso      = parse_timestamp(timestamp_raw)
+        traffic_type = detect_traffic_type(desc)
+        article_id  = str(abs(hash(key)) % 10**9)
 
         articles.append({
             'id':            article_id,
-            'title':         title,
-            'url':           full_url,
-            'image':         image_url,
-            'category':      categories[0] if categories else 'ทั่วไป',
-            'categories':    categories,
+            'title':         desc,
+            'url':           TRAFFIC_URL,
+            'image':         None,
+            'category':      traffic_type,
+            'categories':    [traffic_type],
             'timestamp':     ts_iso,
             'timestamp_raw': timestamp_raw,
             'source':        'จส.100',
         })
-        print(f'    [{article_id}] {title[:55]}')
+        print(f'    [{traffic_type}] {desc[:60]}')
 
         if len(articles) >= MAX_ARTICLES:
             break
@@ -145,13 +137,13 @@ def scrape_news() -> list:
 
 if __name__ == '__main__':
     print('=' * 55)
-    print('Thailand Monitor — JS100 News Scraper')
+    print('Thailand Monitor — JS100 Traffic Scraper')
     print('=' * 55)
 
-    items = scrape_news()
+    items = scrape_traffic()
 
     if not items:
-        print('\n⚠️  ไม่พบข่าว — ไฟล์เดิมยังคงอยู่')
+        print('\n⚠️  ไม่พบข้อมูลจราจร — ไฟล์เดิมยังคงอยู่')
         sys.exit(0)
 
     items.sort(key=lambda x: x['timestamp'], reverse=True)
@@ -160,4 +152,4 @@ if __name__ == '__main__':
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         json.dump(items, f, ensure_ascii=False, indent=2)
 
-    print(f'\n✅ บันทึก {len(items)} ข่าว → {OUTPUT_FILE}')
+    print(f'\n✅ บันทึก {len(items)} รายการ → {OUTPUT_FILE}')

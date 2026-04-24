@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   RefreshCw, ExternalLink, Loader,
-  Fuel, BarChart2, Ship, UtensilsCrossed, List, Radio,
+  Fuel, BarChart2, Ship, UtensilsCrossed, List, Car,
 } from 'lucide-react';
 
 const CATS = [
@@ -10,7 +10,7 @@ const CATS = [
   { id: 'trade',  label: 'การค้า',               Icon: Ship,            group: 'rss'   },
   { id: 'macro',  label: 'เศรษฐกิจ',             Icon: BarChart2,       group: 'rss'   },
   { id: 'energy', label: 'น้ำมัน',               Icon: Fuel,            group: 'rss'   },
-  { id: 'js100',  label: 'จส.100',               Icon: Radio,           group: 'js100' },
+  { id: 'js100',  label: 'สภาพจราจร',             Icon: Car,             group: 'js100' },
 ];
 
 
@@ -58,7 +58,18 @@ function ArticleCard({ a }) {
             </span>
             {a.ago && <span style={{ fontSize: 10, color: 'var(--t3)' }}>{a.ago}</span>}
             {a.js100Cat && (
-              <span style={{ fontSize: 10, color: 'var(--t3)', background: 'rgba(229,62,62,.08)', borderRadius: 4, padding: '2px 6px' }}>
+              <span style={{
+                fontSize: 10, borderRadius: 4, padding: '2px 6px', fontWeight: 600,
+                ...(a.js100Cat === 'อุบัติเหตุ'
+                  ? { color: '#c53030', background: 'rgba(229,62,62,.12)' }
+                  : a.js100Cat === 'ติดขัดสะสม'
+                  ? { color: '#c05621', background: 'rgba(237,137,54,.12)' }
+                  : a.js100Cat === 'ติดขัด'
+                  ? { color: '#b7791f', background: 'rgba(246,173,85,.15)' }
+                  : a.js100Cat === 'ปกติ'
+                  ? { color: '#276749', background: 'rgba(72,187,120,.12)' }
+                  : { color: 'var(--t3)', background: 'rgba(0,0,0,.06)' }),
+              }}>
                 {a.js100Cat}
               </span>
             )}
@@ -100,11 +111,11 @@ export default function News({ newsHook }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
         <div>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--t1)' }}>
-            {isJS100 ? 'สถานการณ์จาก จส.100' : 'ข่าวสารเศรษฐกิจไทย'}
+            {isJS100 ? 'สถานการณ์จราจร จส.100' : 'ข่าวสารเศรษฐกิจไทย'}
           </div>
           <div style={{ fontSize: 11, color: 'var(--t3)', marginTop: 2 }}>
             {isJS100
-              ? `${js100Articles.length} ข่าว · จส.100 FM · อัปเดตทุก 2 ชั่วโมง`
+              ? `${js100Articles.length} รายการ · จส.100 FM · รายงานสดสถานการณ์จราจร`
               : `${rssArticles.length} ข่าว · มติชน · ประชาชาติ · Bangkok Post · BBC ไทย`
             }
           </div>

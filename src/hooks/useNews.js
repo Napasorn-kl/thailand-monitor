@@ -51,6 +51,7 @@ async function fetchJS100() {
       sourceColor: '#e53e3e',
       sourceDot:   '#fc8181',
       category:    'js100',
+      js100Cat:    item.category || undefined,
       ago:         relativeTime(item.timestamp),
     }));
   } catch { return []; }
