@@ -1,3 +1,4 @@
 facebook-scraper
 lxml_html_clean
 requests
+beautifulsoup4

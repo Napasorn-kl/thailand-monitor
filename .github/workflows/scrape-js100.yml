@@ -1,0 +1,51 @@
+name: JS100 News Scraper — Auto Update
+
+on:
+  schedule:
+    # รันทุก 2 ชั่วโมง (ICT = UTC+7)
+    - cron: '0 1,3,5,7,9,11,13,15,17,19,21,23 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: scripts/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run JS100 scraper
+        run: python3 scripts/js100_scraper.py
+
+      - name: Check for changes
+        id: changes
+        run: |
+          git add public/data/js100_news.json
+          git diff --cached --quiet || echo "changed=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: update JS100 news [$(date +'%Y-%m-%d %H:%M')]"
+          git push
+
+      - name: No changes
+        if: steps.changes.outputs.changed != 'true'
+        run: echo "ℹ️  ไม่มีข่าวใหม่"

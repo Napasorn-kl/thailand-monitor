@@ -34,6 +34,28 @@ const NEWS_CATEGORY_KEYWORDS = {
 let newsCache = null;
 let newsCacheTime = 0;
 
+// ── JS100 static JSON ─────────────────────────────────────────────────────────
+async function fetchJS100() {
+  try {
+    const r = await fetch('/data/js100_news.json?t=' + Math.floor(Date.now() / 300000));
+    if (!r.ok) return [];
+    const items = await r.json();
+    return items.map((item, idx) => ({
+      id:          'js100_' + item.id,
+      title:       item.title,
+      link:        item.url,
+      desc:        '',
+      pubDate:     item.timestamp,
+      image:       item.image || null,
+      source:      'จส.100',
+      sourceColor: '#e53e3e',
+      sourceDot:   '#fc8181',
+      category:    'js100',
+      ago:         relativeTime(item.timestamp),
+    }));
+  } catch { return []; }
+}
+
 async function fetchOneRSS(src) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 12000);
@@ -132,14 +154,17 @@ export function useNews() {
     }
     setLoading(true);
     try {
-      const results = await Promise.allSettled(RSS_SOURCES.map(fetchOneRSS));
-      const all = results
+      const [rssResults, js100Articles] = await Promise.all([
+        Promise.allSettled(RSS_SOURCES.map(fetchOneRSS)),
+        fetchJS100(),
+      ]);
+      const rssArticles = rssResults
         .filter(r => r.status === 'fulfilled')
         .flatMap(r => r.value)
-        .sort((a, b) => {
-          const da = new Date(a.pubDate), db = new Date(b.pubDate);
-          return db - da;
-        });
+        .sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+      // JS100 articles kept separate (category='js100'), sort by timestamp
+      const js100Sorted = js100Articles.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+      const all = [...rssArticles, ...js100Sorted];
       newsCache = all;
       newsCacheTime = Date.now();
       setArticles(all);
