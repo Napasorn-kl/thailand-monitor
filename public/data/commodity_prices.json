@@ -1,16 +1,128 @@
 {
-  "updated_at": "2026-05-09T04:22:24.565622+00:00",
-  "composite_score": 50,
-  "overall_risk": "Medium",
+  "updated_at": "2026-05-09T10:00:54.369348+00:00",
+  "composite_score": 42,
+  "overall_risk": "Low",
   "materials": {
-    "sugar": null,
-    "aluminum": null,
+    "sugar": {
+      "price": 14.8,
+      "unit": "cents per pound",
+      "change_pct": 0.1,
+      "risk_level": "Low",
+      "risk_score": 30,
+      "history": [
+        {
+          "date": "2026-03-01",
+          "value": 14.79636363636364
+        },
+        {
+          "date": "2026-02-01",
+          "value": 14.2015
+        },
+        {
+          "date": "2026-01-01",
+          "value": 14.78590909090909
+        },
+        {
+          "date": "2025-12-01",
+          "value": 14.935
+        },
+        {
+          "date": "2025-11-01",
+          "value": 14.623
+        },
+        {
+          "date": "2025-10-01",
+          "value": 15.55869565217391
+        },
+        {
+          "date": "2025-09-01",
+          "value": 15.79
+        },
+        {
+          "date": "2025-08-01",
+          "value": 16.38952380952381
+        },
+        {
+          "date": "2025-07-01",
+          "value": 16.36478260869565
+        },
+        {
+          "date": "2025-06-01",
+          "value": 16.22619047619048
+        },
+        {
+          "date": "2025-05-01",
+          "value": 17.43136363636364
+        },
+        {
+          "date": "2025-04-01",
+          "value": 18.17181818181818
+        }
+      ]
+    },
+    "aluminum": {
+      "price": 3372.95,
+      "unit": "dollar per metric ton",
+      "change_pct": 7.6,
+      "risk_level": "Medium",
+      "risk_score": 55,
+      "history": [
+        {
+          "date": "2026-03-01",
+          "value": 3372.952727272727
+        },
+        {
+          "date": "2026-02-01",
+          "value": 3065.1885
+        },
+        {
+          "date": "2026-01-01",
+          "value": 3133.982727272727
+        },
+        {
+          "date": "2025-12-01",
+          "value": 2875.897727272727
+        },
+        {
+          "date": "2025-11-01",
+          "value": 2819.0615
+        },
+        {
+          "date": "2025-10-01",
+          "value": 2793.086956521739
+        },
+        {
+          "date": "2025-09-01",
+          "value": 2654.479090909091
+        },
+        {
+          "date": "2025-08-01",
+          "value": 2598.735714285714
+        },
+        {
+          "date": "2025-07-01",
+          "value": 2606.370869565217
+        },
+        {
+          "date": "2025-06-01",
+          "value": 2525.959047619048
+        },
+        {
+          "date": "2025-05-01",
+          "value": 2447.344090909091
+        },
+        {
+          "date": "2025-04-01",
+          "value": 2367.800454545455
+        }
+      ]
+    },
     "crude_oil": null
   },
   "weather": {
-    "temp": 37.01,
-    "humidity": 51,
+    "temp": 37.25,
+    "humidity": 46,
     "condition": "Clouds",
-    "drought_risk": "Medium"
+    "drought_risk": "High"
   }
 }
