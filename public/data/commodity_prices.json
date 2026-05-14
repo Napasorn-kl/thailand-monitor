@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-14T04:37:16.916725+00:00",
+  "updated_at": "2026-05-14T11:09:38.677143+00:00",
   "composite_score": 42,
   "overall_risk": "Low",
   "materials": {
@@ -121,7 +121,7 @@
   },
   "weather": {
     "temp": 32.94,
-    "humidity": 53,
+    "humidity": 66,
     "condition": "Clouds",
     "drought_risk": "Medium"
   }
