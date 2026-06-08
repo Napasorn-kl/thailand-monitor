@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-06-08T12:58:56.700755+00:00",
+  "updated_at": "2026-06-08T19:15:35.083517+00:00",
   "composite_score": 42,
   "overall_risk": "Low",
   "materials": {
@@ -120,9 +120,9 @@
     "crude_oil": null
   },
   "weather": {
-    "temp": 32.31,
-    "humidity": 80,
+    "temp": 29.39,
+    "humidity": 82,
     "condition": "Clouds",
-    "drought_risk": "Medium"
+    "drought_risk": "Low"
   }
 }
