@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-07-23T11:00:48.318715+00:00",
+  "updated_at": "2026-07-23T18:07:28.227739+00:00",
   "composite_score": 30,
   "overall_risk": "Low",
   "materials": {
@@ -121,8 +121,8 @@
   },
   "weather": {
     "temp": 28.28,
-    "humidity": 82,
-    "condition": "Rain",
+    "humidity": 81,
+    "condition": "Clouds",
     "drought_risk": "Low"
   }
 }
