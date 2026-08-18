@@ -1,15 +1,19 @@
 {
-  "updated_at": "2026-08-17T17:17:41.397404+00:00",
-  "composite_score": 30,
-  "overall_risk": "Low",
+  "updated_at": "2026-08-18T02:09:54.130367+00:00",
+  "composite_score": 50,
+  "overall_risk": "Medium",
   "materials": {
     "sugar": {
-      "price": 13.91,
+      "price": 14.81,
       "unit": "cents per pound",
-      "change_pct": -1.3,
+      "change_pct": 0.3,
       "risk_level": "Low",
       "risk_score": 30,
       "history": [
+        {
+          "date": "2026-07-01",
+          "value": 14.81227272727273
+        },
         {
           "date": "2026-06-01",
           "value": 13.90772727272727
@@ -53,20 +57,20 @@
         {
           "date": "2025-08-01",
           "value": 16.38952380952381
-        },
-        {
-          "date": "2025-07-01",
-          "value": 16.36478260869565
         }
       ]
     },
     "aluminum": {
-      "price": 3438.85,
+      "price": 3158.26,
       "unit": "dollar per metric ton",
-      "change_pct": -4.3,
-      "risk_level": "Low",
-      "risk_score": 30,
+      "change_pct": -13.7,
+      "risk_level": "High",
+      "risk_score": 70,
       "history": [
+        {
+          "date": "2026-07-01",
+          "value": 3158.265
+        },
         {
           "date": "2026-06-01",
           "value": 3438.847272727273
@@ -110,19 +114,15 @@
         {
           "date": "2025-08-01",
           "value": 2598.735714285714
-        },
-        {
-          "date": "2025-07-01",
-          "value": 2606.370869565217
         }
       ]
     },
     "crude_oil": null
   },
   "weather": {
-    "temp": 29.2,
-    "humidity": 87,
-    "condition": "Rain",
+    "temp": 30.45,
+    "humidity": 68,
+    "condition": "Clouds",
     "drought_risk": "Low"
   }
 }
