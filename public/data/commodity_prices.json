@@ -1,15 +1,23 @@
 {
-  "updated_at": "2026-10-22T20:21:19.588568+00:00",
-  "composite_score": 50,
+  "updated_at": "2026-10-23T05:34:55.097066+00:00",
+  "composite_score": 58,
   "overall_risk": "Medium",
   "materials": {
     "sugar": {
-      "price": 14.81,
+      "price": 17.94,
       "unit": "cents per pound",
-      "change_pct": 0.3,
-      "risk_level": "Low",
-      "risk_score": 30,
+      "change_pct": 21.1,
+      "risk_level": "Critical",
+      "risk_score": 85,
       "history": [
+        {
+          "date": "2026-09-01",
+          "value": 17.93714285714286
+        },
+        {
+          "date": "2026-08-01",
+          "value": 16.82619047619048
+        },
         {
           "date": "2026-07-01",
           "value": 14.81227272727273
@@ -49,24 +57,24 @@
         {
           "date": "2025-10-01",
           "value": 15.55869565217391
-        },
-        {
-          "date": "2025-09-01",
-          "value": 15.79
-        },
-        {
-          "date": "2025-08-01",
-          "value": 16.38952380952381
         }
       ]
     },
     "aluminum": {
-      "price": 3158.26,
+      "price": 3283.05,
       "unit": "dollar per metric ton",
-      "change_pct": -13.7,
-      "risk_level": "High",
-      "risk_score": 70,
+      "change_pct": 4.0,
+      "risk_level": "Low",
+      "risk_score": 30,
       "history": [
+        {
+          "date": "2026-09-01",
+          "value": 3283.054285714286
+        },
+        {
+          "date": "2026-08-01",
+          "value": 3250.121428571429
+        },
         {
           "date": "2026-07-01",
           "value": 3158.265
@@ -106,23 +114,15 @@
         {
           "date": "2025-10-01",
           "value": 2793.086956521739
-        },
-        {
-          "date": "2025-09-01",
-          "value": 2654.479090909091
-        },
-        {
-          "date": "2025-08-01",
-          "value": 2598.735714285714
         }
       ]
     },
     "crude_oil": null
   },
   "weather": {
-    "temp": 27.56,
-    "humidity": 87,
+    "temp": 34.69,
+    "humidity": 55,
     "condition": "Clouds",
-    "drought_risk": "Low"
+    "drought_risk": "Medium"
   }
 }
